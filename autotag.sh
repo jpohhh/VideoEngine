@@ -26,9 +26,9 @@ do
 	shortlog=$HOME/Library/Logs/autotag-short.log
 	#parse filename
 		first_character=$(echo $episode | cut -c 1)
-		season_episode=$(basename "$1" | sed 's/\./ /g' | sed 's/.*\([Ss][0-9][0-9][Ee][0-9][0-9]\).*/\1/')
-		season=$(echo $season_episode | awk -F[Ee] '{print $1}'| awk -F[Ss] '{print $2}' | sed 's/0\(**\)/\1/')
-		episode=$(echo $season_episode | awk -F[Ee] '{print $2}')
+		season_episode=$(basename "$1" | sed 's/\./ /g' | sed 's/.*\([Ss][0-9][0-9][EeXx][0-9][0-9]\).*/\1/')
+		season=$(echo $season_episode | awk -F[EeXx] '{print $1}'| awk -F[Ss] '{print $2}' | sed 's/0\(**\)/\1/')
+		episode=$(echo $season_episode | awk -F[EeXx] '{print $2}')
 			#strip first 0 of episode number
 			first_character=$(echo $episode | cut -c 1)
 			if [ $first_character == "0" ]
@@ -36,7 +36,7 @@ do
 				episode=$(echo $episode | cut -c 2)
 			fi
 		file_extension=$(basename "$1" | sed 's/\./ /g' | awk '{print $NF}')
-		tv_show=$(basename "$1" | sed 's/\./ /g' | sed 's/ [Ss]..[Ee].*//')
+		tv_show=$(basename "$1" | sed 's/\./ /g' | sed 's/ [Ss]..[EeXx].*//')
 			#strip i at front of TV show -- I use this to denote my iPhone encodes
 			first_character=$(echo $tv_show | cut -c 1)
 			if [ $first_character == "i" ]
