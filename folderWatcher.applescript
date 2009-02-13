@@ -7,12 +7,12 @@
 property extension_list : {"mkv", "avi"}
 property out_folder : "/Volumes/1000/Conversions/Untagged/Dropbox/"
 property handbrake_location : "/Users/jpoleary/Video/HandBrake/HandBrakeCLI"
-property encoding_options : "-f mp4 -4 -e x264 -x bframes=3:ref=3:me=hex:b-adapt=2:subme=7:mixed-refs=1:8x8dct=1 -q 0.55 -E ca_aac,ac3 -B 128 -6 dpl2 -l 0:0:0:0"
+# property encoding_options : "-f mp4 -4 -e x264 -x bframes=3:ref=3:me=hex:b-adapt=2:subme=7:mixed-refs=1:8x8dct=1 -q 0.55 -E ca_aac,ac3 -B 128 -6 dpl2 -l 0:0:0:0"
 property do_second_encode : "yes"
-property second_encoding_options : "-f mp4 -4 -e x264 -x level=30:cabac=0:bframes=0:ref=2:mixed-refs=1:me=hex:subme=5 -q 0.45 -E ca_aac -B 80 -6 dpl2 --width 480"
-# FOR TESTING
-# property encoding_options : "-f mp4 -4 -e x264 -x bframes=0:ref=1:me=dia:subme=0 -q 0.01 -E faac,ac3 -B 128 -6 dpl2"
-
+# property second_encoding_options : "-f mp4 -4 -e x264 -x level=30:cabac=0:bframes=0:ref=2:mixed-refs=1:me=hex:subme=5 -q 0.45 -E ca_aac -B 80 -6 dpl2 --width 480"
+# ONLY CHANGE THESE FOR TESTING
+property encoding_options : "-f mp4 -4 -e x264 -x bframes=0:ref=1:me=dia:subme=0 -q 0.01 -E faac,ac3 -B 128 -6 dpl2"
+property second_encoding_options : "-f mp4 -4 -e x264 -x bframes=0:ref=1:me=dia:subme=0 -q 0.01 -E faac,ac3 -B 128 -6 dpl2"
 property engine_directory : "$HOME/Library/Application\\ Support/Engine/"
 
 on adding folder items to this_folder after receiving added_items
