@@ -65,25 +65,37 @@ do
 		# can't write actors, directors, writers
 		# tvsh = cnam
 		tven=$(grep 'ProductionCode' < "$episode_data" | awk -F\< '{print $2}' | awk -F\> '{print $2}')
+		
+		#some episodes don't have an episode ID, if there isn't one just make the the same as the episode number
+		if [ "$tven" = "" ]
+		then
+			tven=$episode
+		fi
+
 		tvnn=$(grep 'Network' < "$series_data" | awk -F\< '{print $2}' | awk -F\> '{print $2}')
 		tvsn=$season
-		tven=$episode
+		tves=$episode
 		cover_art_url=$(grep 'filename' < "$episode_data" | awk -F\< '{print $2}' | awk -F\> '{print $2}')
 		curl http://images.thetvdb.com/banners/$cover_art_url > $HOME/Library/Application\ Support/Engine/coverart.jpg 2>>/dev/null
 
 		echo "7) PULLED TAGS Show name:"$cart "Episode name:"$cnam "Aired:"$cday "Description:"$desc "Stik:"$stik "tven:"$tven "tvnn:"$tvnn "cover_art_url:"$cover_art_url >> "$logfile"
-		$HOME/Library/Application\ Support/Engine/atomicparsley64 "$1" --title "$cnam" --artist "$cart" --year $cday --longDesc "$desc" --desc "$desc" --stik value=$stik --TVShowName "$cart" --TVEpisode $tven --TVNetwork $tvnn  --TVSeasonNum $season --TVEpisodeNum $episode --artwork $HOME/Library/Application\ Support/Engine/coverart.jpg --overWrite
+		#check if video has width > 1270, if so, tag it as HD with mp4tags
+		res=$(mp4track --list "$1" | grep -m 1 width | awk '{print $3}' | awk -F. '{print $1}')
+		if (($res>1270))
+		then
+			hdvd="1"
+		else
+			hdvd="0"
+		fi
+
+		mp4tags "$1" -H $hdvd -song "$cnam" -a "$cart" -y $cday -m "$desc" -l "$desc" -i tvshow -S "$cart" -M $episode -N $tvnn -n $season -o $tven
+		mp4art --art-any --keepgoing --remove "$1"
+		mp4art --add $HOME/Library/Application\ Support/Engine/coverart.jpg "$1"
 		
 		rm "$series_data"
 		rm $HOME/Library/Application\ Support/Engine/coverart.jpg
 		rm $HOME/Library/Application\ Support/Engine/episode.xml
-	#check if file is HD: if so, tag it with mp4tags
-		res=$(mp4track --list "$1" | grep -m 1 width | awk '{print $3}' | awk -F. '{print $1}')
-		if (($res>1270))
-		then
-			mp4tags -H 1 "$1"
-			echo "tagged as HD" >> "$logfile"
-		fi
+	
 	
 	echo $(date) $(basename "$1") $cart-$season$episode >> "$shortlog"
 	echo >> "$logfile"
