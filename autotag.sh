@@ -110,7 +110,8 @@ do
 		fi
 
 		mp4tags "$1" -H $hdvd -song "$cnam" -a "$cart" -y $cday -m "$desc" -l "$desc" -i tvshow -S "$cart" -M $episode -N $tvnn -n $season -o $tven
-		mp4art --add $HOME/Library/Application\ Support/Engine/coverart.jpg --art-index 0 "$1"
+		mp4art --keepgoing --remove --art-any "$1"
+		mp4art --keepgoing --add $HOME/Library/Application\ Support/Engine/coverart.jpg --art-index 0 "$1"
 		
 		rm "$series_data"
 		rm $HOME/Library/Application\ Support/Engine/coverart.jpg
