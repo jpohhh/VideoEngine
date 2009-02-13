@@ -1,9 +1,25 @@
---ENGINE
---when files are added to a folder, check if they have an extension in extension_list and haven't been seen around (have a green label in finder). If both are true, pass to HandbrakeCLI in handbrake_location using encoding_options, writing a log file to out_folder/source_filename.txt and the video to out_folder/source_filename.m4v. An overall log showing matches and passing off of files to HandbrakeCLI is written to ~/Library/Logs/Engine.log
---by James O'Leary 02-04-2009
---inspired primarily by the sample AppleScript folder actions in /Library/Scripts
---copied and pasted large chunk from http://www.apple.com/applescript/sbrt/index.html to remove the extension from a filename
---TODO FOR YOUR PERSONAL USE: attach this as a folder action to the folder you want to watch, change the extension_list to include whatever file extensions you want to be passed to Handbrake, change out_folder and handbrake_location to be the folders appropriate for them
+--   This file is part of Engine.
+--
+--   Engine is free software: you can redistribute it and/or modify
+--   it under the terms of the GNU General Public License as published by
+--   the Free Software Foundation, either version 2 of the License, or
+--   (at your option) any later version.
+--
+--   Engine is distributed in the hope that it will be useful,
+--   but WITHOUT ANY WARRANTY; without even the implied warranty of
+--   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+--   GNU General Public License for more details.
+--
+--   You should have received a copy of the GNU General Public License
+--   along with Engine.  If not, see <http://www.gnu.org/licenses/>.
+-- 
+--   The initial developer of the original code is James O'Leary.
+--   Portions created by James O'Leary are copyright (C) 2009.
+--   All rights reserved.
+--
+--  Contributors:
+--      James O'Leary, jpo@me.com
+--  TODO FOR YOUR PERSONAL USE: attach this as a folder action to the folder you want to watch, change the extension_list to include whatever file extensions you want to be passed to Handbrake, change out_folder and handbrake_location to be the folders appropriate for them
 property extension_list : {"mkv", "avi"}
 property out_folder : "/Volumes/1000/Conversions/Untagged/Dropbox/"
 property handbrake_location : "/Users/jpoleary/Video/HandBrake/HandBrakeCLI"

@@ -1,3 +1,27 @@
+#   This file is part of Engine.
+#
+#   Engine is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   Engine is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with Engine.  If not, see <http://www.gnu.org/licenses/>.
+# 
+#   The initial developer of the original code is James O'Leary.
+#   Portions created by James O'Leary are copyright (C) 2009.
+#   All rights reserved.
+#
+#  Contributors:
+#      James O'Leary, jpo@me.com
+
+
+
 #!/bin/bash
 echo "Running encoder"
 queue_item=$(head -n1 $HOME/Library/Application\ Support/Engine/queue.txt)
