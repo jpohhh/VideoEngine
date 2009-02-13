@@ -1,0 +1,9 @@
+These scripts can only function on a backbone of several open source projects, the foremost among being the HandBrake video encoder (http://www.handbrake.fr), and close behind libmp4v2 (http://code.google.com/p/mp4v2/).
+
+HandBrake is a program that takes essentially any video format (thanks to another open source project, ffmpeg), and outputs several video formats, most importantly H.264 (thanks to x264) in the MP4 container (thanks to libmp4v2). This is a widely used standardized video format that Apple uses to distribute its video, so all of its devices support its playback. I use the latest code from their SVN repository on my machine for Engine, however they strongly discourage redistributing this code, as their policy is not to support development code, and users can't be trusted to go to them with issues if they misunderstand this policy. Under the terms of the GPL-2.0 that HandBrake uses, I will only distribute binaries that I have compiled myself but not changed, and in deference to HandBrake, I will only distribute binaries they deem appropriate to redistribute. For the exact source to the binary I am distributing, please e-mail me at jpo@me.com. A copy of the GPL-2.0 is available in DOCS/COPYING.txt.
+
+libmp4v2 is a code library that provides numerous functions for creating and manipulating MP4 files. It also contains several utilities for manipulating MP4 metadata that are used heavily in the tagging section of these scripts. I use the latest code from their SVN repository on my machine for Engine (currently r261 as of 02/13/09). Under the terms of the MPL-1.1 that libmp4v2 uses, I will only distribute binaries that I have compiled myself but not changed. For the exact source to the binary I am distributing, please e-mail me at jpo@me.com. A copy of the MPL-1.1 is available in DOCS/MPL11.txt.
+
+Thank you to both projects for their hard work, without it none of mine would be remotely possible.
+
+Written on 02/13/09 at 0756 EST
