@@ -19,10 +19,9 @@
 --
 --  Contributors:
 --      James O'Leary, jpo@me.com
---  TODO FOR YOUR PERSONAL USE: attach this as a folder action to the folder you want to watch, change the extension_list to include whatever file extensions you want to be passed to Handbrake, change out_folder and handbrake_location to be the folders appropriate for them
+--  TODO FOR YOUR PERSONAL USE: attach this as a folder action to the folder you want to watch, change the extension_list to include whatever file extensions you want to be passed to Handbrake, change out_folder to be the folder you want the encode and log to be in
 property extension_list : {"mkv", "avi"}
 property out_folder : "/Volumes/1000/Conversions/Untagged/Dropbox/"
-property handbrake_location : "/Users/jpoleary/Video/HandBrake/HandBrakeCLI"
 # property encoding_options : "-f mp4 -4 -e x264 -x bframes=3:ref=3:me=hex:b-adapt=2:subme=7:mixed-refs=1:8x8dct=1 -q 0.55 -E ca_aac,ac3 -B 128 -6 dpl2 -l 0:0:0:0"
 property do_second_encode : "yes"
 # property second_encoding_options : "-f mp4 -4 -e x264 -x level=30:cabac=0:bframes=0:ref=2:mixed-refs=1:me=hex:subme=5 -q 0.45 -E ca_aac -B 80 -6 dpl2 --width 480"
@@ -120,12 +119,12 @@ on adding folder items to this_folder after receiving added_items
 			--check if we're supposed to encode
 			if do_encode = 1 then
 				--dump parsed filenames to queue.txt, I tried writing CSV for easier editing but this doesn't work because CSV parses the , in encoding options as a separate field
-				do shell script "echo " & sourcename & "\\;" & output_path & "\\;" & handbrake_location & "\\;" & encoding_options & "\\;" & out_logname & " >> $HOME/Library/Application\\ Support/Engine/queue.txt"
+				do shell script "echo " & sourcename & "\\;" & output_path & "\\;" & encoding_options & "\\;" & out_logname & " >> $HOME/Library/Application\\ Support/Engine/queue.txt"
 				--if the second_encode parameter is true, queue another items with the second encoding options
 				if do_second_encode = "yes" then
 					set output_path to the quoted form of ((out_folder) & (out_filename) & "-secondencode.m4v")
 					set out_logname to the quoted form of ((out_folder) & (out_filename) & "-secondencode.txt")
-					do shell script "echo " & sourcename & "\\;" & output_path & "\\;" & handbrake_location & "\\;" & second_encoding_options & "\\;" & out_logname & " >> $HOME/Library/Application\\ Support/Engine/queue.txt"
+					do shell script "echo " & sourcename & "\\;" & output_path & "\\;" & second_encoding_options & "\\;" & out_logname & " >> $HOME/Library/Application\\ Support/Engine/queue.txt"
 				end if
 				
 				set isHandbrakeRunning to do shell script "ps ax | grep HandBrakeCLI | grep -v grep | wc -l | cut -d ' ' -f8"

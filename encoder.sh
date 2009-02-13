@@ -30,9 +30,8 @@ do
 	echo $queue_item
 	sourcename=$(echo $queue_item | awk -F\; '{print $1}')
 	outputname=$(echo $queue_item | awk -F\; '{print $2}')
-	handbrakelocation=$(echo $queue_item | awk -F\; '{print $3}')
-	encodingoptions=$(echo $queue_item | awk -F\; '{print $4}')
-	logname=$(echo $queue_item | awk -F\; '{print $5}')
+	encodingoptions=$(echo $queue_item | awk -F\; '{print $3}')
+	logname=$(echo $queue_item | awk -F\; '{print $4}')
 
 	echo sourcename "$sourcename"
 	echo output name "$outputname"
