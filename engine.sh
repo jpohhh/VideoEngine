@@ -43,7 +43,7 @@ do
 	echo Source: "$sourcename" >> "$logname"
 	echo Output: "$outputname" >> "$logname"
 	echo Encoding options: "$encodingoptions" >> $logname
-	$HOME/Library/Application\ Support/Engine/HandBrakeCLI -i "$sourcename" -o "$outputname" $encodingoptions 1>> $logname 2>> $logname
+	$HOME/Library/Application\ Support/Engine/HandBrakeCLI -i "$sourcename" -o "$outputname" $encodingoptions -v 1>> $logname 2>> $logname
 	echo "ENCODE COMPLETED" >> "$logname"
 	$HOME/Library/Application\ Support/Engine/autotag.sh "$outputname" &> /dev/null & sed -i -e "1d" $HOME/Library/Application\ Support/Engine/queue.txt
 	rm queue.txt-e
