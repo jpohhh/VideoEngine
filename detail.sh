@@ -101,7 +101,7 @@ do
 
 		echo "7) PULLED TAGS Show name:"$cart "Episode name:"$cnam "Aired:"$cday "Description:"$desc "Stik:"$stik "tven:"$tven "tvnn:"$tvnn "cover_art_url:"$cover_art_url >> "$logfile"
 		#check if video has width > 1270, if so, tag it as HD with mp4tags
-		res=$(mp4track --list "$1" | grep -m 1 width | awk '{print $3}' | awk -F. '{print $1}')
+		res=$($HOME/Library/Application\ Support/Engine/mp4track --list "$1" | grep -m 1 width | awk '{print $3}' | awk -F. '{print $1}')
 		if (($res>1270))
 		then
 			hdvd="1"
@@ -109,9 +109,9 @@ do
 			hdvd="0"
 		fi
 
-		mp4tags "$1" -H $hdvd -song "$cnam" -a "$cart" -y $cday -m "$desc" -l "$desc" -i tvshow -S "$cart" -M $episode -N $tvnn -n $season -o $tven
-		mp4art --keepgoing --remove --art-any "$1"
-		mp4art --keepgoing --add $HOME/Library/Application\ Support/Engine/coverart.jpg --art-index 0 "$1"
+		$HOME/Library/Application\ Support/Engine/mp4tags "$1" -H $hdvd -song "$cnam" -a "$cart" -y $cday -m "$desc" -l "$desc" -i tvshow -S "$cart" -M $episode -N $tvnn -n $season -o $tven 1>>"$logfile" 2>>"$logfile" 
+		$HOME/Library/Application\ Support/Engine/mp4art --keepgoing --remove --art-any "$1"
+		$HOME/Library/Application\ Support/Engine/mp4art --keepgoing --add $HOME/Library/Application\ Support/Engine/coverart.jpg --art-index 0 "$1"
 		
 		rm "$series_data"
 		rm $HOME/Library/Application\ Support/Engine/coverart.jpg

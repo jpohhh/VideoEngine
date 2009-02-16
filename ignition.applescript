@@ -132,7 +132,7 @@ on adding folder items to this_folder after receiving added_items
 				if isHandbrakeRunning is equal to "0" then
 					--we're not currently encoding, log it, give the encoding script a kick in the arse
 					do shell script "cd $HOME/Library/Logs; echo Asked queue to start >> Engine.log"
-					do shell script "cd " & engine_directory & "; ./encoder.sh &> /dev/null &"
+					do shell script "cd " & engine_directory & "; ./engine.sh &> /dev/null &"
 				else
 					--already encoding, quietly log this
 					do shell script "cd $HOME/Library/Logs; echo Queue is already running >> Engine.log"
