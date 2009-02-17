@@ -81,9 +81,15 @@ do
 		episode_data=$HOME/Library/Application\ Support/Engine/episode.xml
 		echo "7) EPISODE PULL: "$tvdb/series/$series_id/default/$season/$episode/en.xml to "$episode_data" >> "$logfile"
 		curl $tvdb/series/$series_id/default/$season/$episode/en.xml > "$episode_data" 2>>/dev/null
+		success=$(cat "$episode_data" | grep "not found")
+		if [ "$success" != "" ]
+		then
+			echo "broken episode data, aborting" >> "$logfile"
+			break
+		fi
 		
 	
-	#generate tags and tag with AtomicParsley
+	#generate tags and tag with mp4tags
 		cnam=$(grep 'EpisodeName' < "$episode_data" | awk -F\< '{print $2}' | awk -F\> '{print $2}')
 		cart=$(grep 'SeriesName' < "$series_data" | awk -F\< '{print $2}' | awk -F\> '{print $2}')
 		cday=$(grep 'FirstAired' < "$episode_data" | awk -F\< '{print $2}' | awk -F\> '{print $2}')
