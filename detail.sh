@@ -108,10 +108,11 @@ do
 		else
 			hdvd="0"
 		fi
+		cnid=$(echo "$series_id""$season""$episode")
 
-		$HOME/Library/Application\ Support/Engine/mp4tags "$1" -H $hdvd -song "$cnam" -a "$cart" -y $cday -m "$desc" -l "$desc" -i tvshow -S "$cart" -M $episode -N $tvnn -n $season -o $tven 1>>"$logfile" 2>>"$logfile" 
-		$HOME/Library/Application\ Support/Engine/mp4art --keepgoing --remove --art-any "$1"
-		$HOME/Library/Application\ Support/Engine/mp4art --keepgoing --add $HOME/Library/Application\ Support/Engine/coverart.jpg --art-index 0 "$1"
+		$HOME/Library/Application\ Support/Engine/mp4tags "$1" -I $cnid -H $hdvd -song "$cnam" -a "$cart" -y $cday -m "$desc" -l "$desc" -i tvshow -S "$cart" -M $episode -N $tvnn -n $season -o $tven 1>>"$logfile" 2>>"$logfile" 
+		# $HOME/Library/Application\ Support/Engine/mp4art --keepgoing --remove --art-any "$1"
+		# $HOME/Library/Application\ Support/Engine/mp4art --keepgoing --add $HOME/Library/Application\ Support/Engine/coverart.jpg --art-index 0 "$1"
 		
 		rm "$series_data"
 		rm $HOME/Library/Application\ Support/Engine/coverart.jpg
