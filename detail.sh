@@ -48,6 +48,14 @@ do
 		echo "1) RECEIVED " $1 >> "$logfile"
 		echo "2) PARSED Season: "$season "Episode: "$episode "Extension: "$file_extension "TV show: "$tv_show >> "$logfile"
 
+		if [ "$file_extension" != "m4v" ]
+		then
+			if [ "$file_extension" != "mp4" ]
+			then
+				echo "Not taggable" >> $logfile
+				break
+			fi
+		fi
 	#1a - generate mirror URL
 		curl http://www.thetvdb.com/api/9F21AC232F30F34D/mirrors.xml > mirrors.xml 2>> /dev/null
 		tvdb=$(grep 'mirrorpath' mirrors.xml | awk -F\< '{print $2}' | awk -F\> '{print $2}')
