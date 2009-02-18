@@ -95,7 +95,7 @@ do
 		cday=$(grep 'FirstAired' < "$episode_data" | awk -F\< '{print $2}' | awk -F\> '{print $2}')
 		# can't set content rating
 		# can't set genre
-		desc=$(grep 'Overview' < "$episode_data" | awk -F\< '{print $2}' | awk -F\> '{print $2}')
+		desc=$(grep 'Overview' < "$episode_data" | awk -F\< '{print $2}' | awk -F\> '{print $2}' | sed 's/&quot;/\"/g')
 		stik=$(echo 10)
 		# can't write actors, directors, writers
 		# tvsh = cnam
