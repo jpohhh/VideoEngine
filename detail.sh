@@ -71,8 +71,21 @@ do
 
 	#3 - pull series info from TVDB
 		tv_show=$(echo $tv_show | sed 's/ /%20/g')
+
+		
 		echo "5) SERIES REQUEST" http://www.thetvdb.com/api/GetSeries.php?seriesname=$tv_show >> "$logfile"
 		series_id=$(curl http://www.thetvdb.com/api/GetSeries.php?seriesname=$tv_show | grep -m 1 "seriesid" | awk -F\< '{print $2}' | awk -F\> '{print $2}')
+		
+		# kludgy, hacky, annoying way to get around recently bad results by thetvdb
+		is_this_office=$(echo "$tv_show" | grep -i 'office')
+		if [ "$is_this_office" = "" ]
+		then
+			echo
+		else
+			echo "Series contains Office, manual override to The Office (US)." >> "$logfile"
+			series_id=$(echo "73244")
+		fi
+
 		series_data=$HOME/Library/Application\ Support/Engine/$series_id.xml
 		echo "6) RECEIVED: "$tvdb/series/$series_id/en.xml to "$series_data" >> "$logfile"
 		curl $tvdb/series/$series_id/en.xml > "$series_data" 2>>/dev/null
@@ -116,7 +129,7 @@ do
 		echo "7) PULLED TAGS Show name:"$cart "Episode name:"$cnam "Aired:"$cday "Description:"$desc "Stik:"$stik "tven:"$tven "tvnn:"$tvnn "cover_art_url:"$cover_art_url >> "$logfile"
 		#check if video has width > 1270, if so, tag it as HD with mp4tags
 		res=$($HOME/Library/Application\ Support/Engine/mp4track --list "$1" | grep -m 1 width | awk '{print $3}' | awk -F. '{print $1}')
-		if (($res>1270))
+		if (($res>490))
 		then
 			hdvd="1"
 		else
