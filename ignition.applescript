@@ -43,8 +43,9 @@ on adding folder items to this_folder after receiving added_items
 			do shell script "cd $HOME/Library/Logs; echo PROCESSING " & the quoted form of the POSIX path of this_item & " >> Engine.log"
 			
 			--check to make sure the item has finished moving before we start processing
-			set oldSize to 0
-			set newSize to -1
+			set oldSize to size of item_info
+			delay 5
+			set newSize to size of item_info
 			repeat while newSize is not equal to oldSize
 				-- Get the file size.
 				set oldSize to size of item_info
