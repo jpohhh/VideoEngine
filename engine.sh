@@ -32,10 +32,14 @@ do
 	logname=$(echo $queue_item | awk -F\; '{print $4}')
 
 	echo "BEGINNING ENCODE WORK" > "$logname"
+	time=$(date +%Y%m%d-%H%M%S); echo $time Starting to encode "$sourcename" >> $HOME/Library/Logs/Engine.log
+	time=$(date +%Y%m%d-%H%M%S); echo $time Starting to encode "$sourcename" >> $HOME/Library/Logs/Engine_debug.log
 	echo Source: "$sourcename" >> "$logname"
 	echo Output: "$outputname" >> "$logname"
-	echo Encoding options: "$encodingoptions" >> $logname
-	$HOME/Library/Application\ Support/Engine/HandBrakeCLI -i "$sourcename" -o "$outputname" $encodingoptions -v 1>> $logname 2>> $logname
+	echo Encoding options: "$encodingoptions" >> "$logname"
+	$HOME/Library/Application\ Support/Engine/HandBrakeCLI -i "$sourcename" -o "$outputname" $encodingoptions -v 1>> "$logname" 2>> "$logname"
+	time=$(date +%Y%m%d-%H%M%S); echo $time Finished encoding "$sourcename" >> $HOME/Library/Logs/Engine.log
+	time=$(date +%Y%m%d-%H%M%S); echo $time Finished encoding "$sourcename" >> $HOME/Library/Logs/Engine_debug.log
 	echo "ENCODE COMPLETED" >> "$logname"
 	$HOME/Library/Application\ Support/Engine/detail.sh "$outputname" &> /dev/null & sed -i -e "1d" $HOME/Library/Application\ Support/Engine/queue.txt
 	rm queue.txt-e
