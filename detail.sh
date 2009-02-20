@@ -66,6 +66,7 @@ do
 	#2 - get last update time
 		curl $tvdb/updates > updates.xml 2>> /dev/null
 		previoustime=$(grep 'Data time' updates.xml | awk -F\< '{print $2}' | awk -F\= '{print $2}' | awk -F\" '{print $2}')
+		echo " #workaround xcode seeing \" in the above awk statement and highlighting code poorly
 		echo "4) PREVIOUS_TIME: "$previoustime >> "$logfile"
 		rm updates.xml 
 
@@ -113,21 +114,18 @@ do
 		# can't write actors, directors, writers
 		# tvsh = cnam
 		tven=$(grep 'ProductionCode' < "$episode_data" | awk -F\< '{print $2}' | awk -F\> '{print $2}')
-		
-		#some episodes don't have an episode ID, if there isn't one just make the the same as the episode number
+		#some episodes don't have an episode ID, if there isn't one just make it the same as the episode number
 		if [ "$tven" = "" ]
 		then
 			tven=$episode
 		fi
-
 		tvnn=$(grep 'Network' < "$series_data" | awk -F\< '{print $2}' | awk -F\> '{print $2}')
 		tvsn=$season
 		tves=$episode
 		cover_art_url=$(grep 'filename' < "$episode_data" | awk -F\< '{print $2}' | awk -F\> '{print $2}')
 		curl http://images.thetvdb.com/banners/$cover_art_url > $HOME/Library/Application\ Support/Engine/coverart.jpg 2>>/dev/null
-
-		echo "7) PULLED TAGS Show name:"$cart "Episode name:"$cnam "Aired:"$cday "Description:"$desc "Stik:"$stik "tven:"$tven "tvnn:"$tvnn "cover_art_url:"$cover_art_url >> "$logfile"
-		#check if video has width > 1270, if so, tag it as HD with mp4tags
+	
+	#check if video has width > 1270, if so, tag it as HD with mp4tags
 		res=$($HOME/Library/Application\ Support/Engine/mp4track --list "$1" | grep -m 1 width | awk '{print $3}' | awk -F. '{print $1}')
 		if (($res>490))
 		then
@@ -136,10 +134,33 @@ do
 			hdvd="0"
 		fi
 		cnid=$(echo "$series_id""$season""$episode")
+		
+	#list tags we got, then tag using mp4tags
+		echo "7) PULLED TAGS Show name:"$cart "Episode name:"$cnam "Aired:"$cday "Description:"$desc "Stik:"$stik "tven:"$tven "tvnn:"$tvnn "cover_art_url:"$cover_art_url "hdvd":$hdvd "cnid:"$cnid >> "$logfile"
+		$HOME/Library/Application\ Support/Engine/mp4tags "$1" -I $cnid -H $hdvd -song "$cnam" -a "$cart" -y $cday -m "$desc" -l "$desc" -i tvshow -S "$cart" -M $episode -N $tvnn -n $season -o $tven 1>>"$logfile" 2>>"$logfile"
 
-		$HOME/Library/Application\ Support/Engine/mp4tags "$1" -I $cnid -H $hdvd -song "$cnam" -a "$cart" -y $cday -m "$desc" -l "$desc" -i tvshow -S "$cart" -M $episode -N $tvnn -n $season -o $tven 1>>"$logfile" 2>>"$logfile" 
-		# $HOME/Library/Application\ Support/Engine/mp4art --keepgoing --remove --art-any "$1"
-		# $HOME/Library/Application\ Support/Engine/mp4art --keepgoing --add $HOME/Library/Application\ Support/Engine/coverart.jpg --art-index 0 "$1"
+
+	#begin art logic
+		last_covr_index=$(mp4art --list "$1" | tail -1 | awk '{print $1}')
+		echo $last_covr_index >> "$logfile"
+	#if there's no covr-box, add one with pulled art
+		if [ "$last_covr_index" = "----------------------------------------------------------------------" ]
+		then
+			echo "No art yet, adding art from TheTVDB" >> "$logfile"
+			$HOME/Library/Application\ Support/Engine/mp4art --keepgoing --add $HOME/Library/Application\ Support/Engine/coverart.jpg --art-index 0 "$1"
+		fi
+	#if there's more than one covr-box, remove all and add one with pulled art
+		if (($last_covr_index>0))
+		then
+			echo "Multiple artwork on this file, removing all and adding art from TheTVDB" >> "$logfile"
+			$HOME/Library/Application\ Support/Engine/mp4art --keepgoing --remove --art-any "$1"
+			$HOME/Library/Application\ Support/Engine/mp4art --keepgoing --add $HOME/Library/Application\ Support/Engine/coverart.jpg --art-index 0 "$1"
+		fi
+	#if there already is cover-art, cool!
+		if (($last_covr_index==0))
+		then
+			echo "Already art on this file, skipping adding art" >> "$logfile"
+		fi
 		
 		rm "$series_data"
 		rm $HOME/Library/Application\ Support/Engine/coverart.jpg
