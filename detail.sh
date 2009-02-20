@@ -142,13 +142,13 @@ do
 
 	#begin art logic
 		last_covr_index=$(mp4art --list "$1" | tail -1 | awk '{print $1}')
-		echo $last_covr_index >> "$logfile"
 	#if there's no covr-box, add one with pulled art
 		if [ "$last_covr_index" = "----------------------------------------------------------------------" ]
 		then
 			echo "No art yet, adding art from TheTVDB" >> "$logfile"
 			$HOME/Library/Application\ Support/Engine/mp4art --keepgoing --add $HOME/Library/Application\ Support/Engine/coverart.jpg --art-index 0 "$1"
 		fi
+		last_covr_index=$(mp4art --list "$1" | tail -1 | awk '{print $1}')
 	#if there's more than one covr-box, remove all and add one with pulled art
 		if (($last_covr_index>0))
 		then
