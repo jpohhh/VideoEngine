@@ -29,43 +29,45 @@ property do_second_encode : "no"
 property encoding_options : "-f mp4 -4 -e x264 -x bframes=0:ref=1:me=dia:subme=0:cabac=0 -q 0.01 -E faac -B 128 -6 dpl2 --width 480"
 property second_encoding_options : "-f mp4 -4 -e x264 -x bframes=0:ref=1:me=dia:subme=0 -q 0.01 -E faac,ac3 -B 128 -6 dpl2"
 property engine_directory : "$HOME/Library/Application\\ Support/Engine/"
+property engine_shortlog : "$HOME/Library/Logs/Engine.log"
+property engine_longlog : "$HOME/Library/Logs/Engine_debug.log"
 
 on adding folder items to this_folder after receiving added_items
 	try
 		--log that an event occured to trigger this script
-		do shell script "cd $HOME/Library/Logs; echo >> Engine.log; date | awk '{print $4}' >> Engine.log; echo " & number of items in added_items & " items added >> Engine.log"
+		do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time " & (number of items of added_items) & " items added >> " & engine_shortlog
 		--iterate through all the files added to this folder
 		set i to 1
-		repeat until i > the number of items in added_items
+		repeat until i > the (number of items of added_items)
 			set this_item to item i of added_items
 			set the item_info to the info for this_item
 			--log that we're processing the current item
-			do shell script "cd $HOME/Library/Logs; echo PROCESSING " & the quoted form of the POSIX path of this_item & " >> Engine.log"
+			do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time PROCESSING " & the quoted form of the POSIX path of this_item & " >> " & engine_longlog
 			
 			--check to make sure the item has finished moving before we start processing
 			set oldSize to size of item_info
-			delay 5
+			delay 3
 			set newSize to size of item_info
 			repeat while newSize is not equal to oldSize
+				do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time Throttling processing until moving has settled. >> " & engine_longlog
 				-- Get the file size.
 				set oldSize to size of item_info
-				delay 5
+				delay 3
 				-- Sample the size again after delay for comparison.
 				set newSize to size of item_info
-				do shell script "cd $HOME/Library/Logs; echo Throttled processing until file has settled. >> Engine.log"
 			end repeat
 			
 			--Check if one of the added items is a folder, if it is get all the files in that folder too, and add them to our item array
 			if (the kind of the item_info is "Folder") then
-				do shell script "cd $HOME/Library/Logs; echo This item is a folder, check whats inside >> Engine.log"
+				do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time This is a folder, so check what\\'s inside >> " & engine_longlog
 				tell application "Finder"
 					set item_number to the number of items in folder this_item
-					do shell script "cd $HOME/Library/Logs; echo Number of items in folder? " & item_number & " >> Engine.log"
+					do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time Number of items in folder? " & item_number & " >> " & engine_longlog
 					repeat with j from 1 to item_number
 						set folder_item to item j in folder this_item
 						set added_items to added_items & (folder_item as alias)
-						do shell script "cd $HOME/Library/Logs; echo Added " & the quoted form of the POSIX path of (folder_item as alias) & " >> Engine.log"
-						do shell script "cd $HOME/Library/Logs; echo Now there are " & number of items in added_items & " items in added_items >> Engine.log"
+						do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time Added " & the quoted form of the POSIX path of (folder_item as alias) & " >> " & engine_longlog
+						do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time Now there are " & number of items in added_items & " items in added_items >> " & engine_longlog
 					end repeat
 				end tell
 			end if
@@ -75,18 +77,19 @@ on adding folder items to this_folder after receiving added_items
 				--check if the label is green for the file
 				if (the label index of this_item) as integer is not 6 then
 					--log that we passed the color filter
-					do shell script "cd $HOME/Library/Logs; echo PASSED label color filter >> Engine.log"
+					do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time PASSED label color filter >> " & engine_longlog
 					--check if the file has one of our desired extensions
 					if (the name extension of the item_info is in the extension_list) then
 						--log that we passed the extension filter
-						do shell script "cd $HOME/Library/Logs; echo PASSED extension filter >> Engine.log"
+						do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time PASSED extension filter >> " & engine_longlog
 						
 						--need some way to only invoke HandbrakeCLI if the file is in the extension list, otherwise the script crashes
 						set do_encode to 1
 						
 						--generate input path, and log it
 						set sourcename to the quoted form of the POSIX path of this_item
-						do shell script "cd $HOME/Library/Logs; echo Source file: " & sourcename & " >> Engine.log"
+						do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time Source file: " & sourcename & " >> " & engine_longlog
+						do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time File passed filters, " & sourcename & " is being queued >> " & engine_shortlog
 						
 						--generate output path by removing the extension from the input filename, add the prefix of the directory to put it in, and adding m4v at the end
 						-- generate a log output path similarly (txt at end)
@@ -98,8 +101,8 @@ on adding folder items to this_folder after receiving added_items
 						set output_path to the quoted form of ((out_folder) & (out_filename) & ".m4v")
 						
 						--log the encode output and the log output paths
-						do shell script "cd $HOME/Library/Logs; echo Encode output going to: " & output_path & " >> Engine.log"
-						do shell script "cd $HOME/Library/Logs; echo Encode log going to: " & out_logname & " >> Engine.log"
+						do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time Encode going to: " & output_path & " >> " & engine_longlog
+						do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time Log going to: " & out_logname & " >> " & engine_longlog
 						
 						--color the file we're about to convert green so the script recognizes it as processed later
 						tell application "Finder"
@@ -108,12 +111,12 @@ on adding folder items to this_folder after receiving added_items
 					else
 						--we didn't pass the extension filter, signal the encode code to be blocked and log the failure
 						set do_encode to 0
-						do shell script "cd $HOME/Library/Logs; echo FAILED EXTENSION FILTER >> Engine.log"
+						do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time FAILED extension filter >> " & engine_longlog
 					end if
 				else
 					--we didn't pass the label filter (the file was already processed or someone is too organized), signal the encode code to be blocked and log the failure
 					set do_encode to 0
-					do shell script "cd $HOME/Library/Logs; echo FAILED LABEL COLOR FILTER >> Engine.log"
+					do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time FAILED label color >> " & engine_longlog
 				end if
 			end tell
 			
@@ -132,24 +135,22 @@ on adding folder items to this_folder after receiving added_items
 				-- isHandbrakeRunning returns the number of HandBrakeCLI processes running
 				if isHandbrakeRunning is equal to "0" then
 					--we're not currently encoding, log it, give the encoding script a kick in the arse
-					do shell script "cd $HOME/Library/Logs; echo Asked queue to start >> Engine.log"
+					do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time " & isHandbrakeRunning & " instances reporting running, so asking encoder to start... >> " & engine_longlog
 					do shell script "cd " & engine_directory & "; ./engine.sh &> /dev/null &"
 				else
 					--already encoding, quietly log this
-					do shell script "cd $HOME/Library/Logs; echo Queue is already running >> Engine.log"
+					do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time " & isHandbrakeRunning & " instances reporting running, so not asking encoder to start... >> " & engine_longlog
 				end if
 			end if
 			
 			--note for the loop that we passed through index 1 of the added files
 			set i to i + 1
 		end repeat
-		do shell script "cd $HOME/Library/Logs; date | awk '{print $4}' >> Engine.log"
-		do shell script "cd $HOME/Library/Logs; echo Exited repeat loop, should have handled all added files >> Engine.log"
-		
+		do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time Exited repeat loop, all files should be handled >> " & engine_longlog
 		
 		--handle errors
 	on error error_message number error_number
-		do shell script "cd $HOME/Library/Logs; echo " & error_message & " >> Engine.log"
+		do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time " & error_message & " >> " & engine_longlog
 		tell application "Finder"
 			activate
 			display dialog error_message buttons {"Cancel"} default button 1 giving up after 120
