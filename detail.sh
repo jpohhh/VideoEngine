@@ -66,7 +66,7 @@ do
 	#2 - get last update time
 		curl $tvdb/updates > updates.xml 2>> /dev/null
 		previoustime=$(grep 'Data time' updates.xml | awk -F\< '{print $2}' | awk -F\= '{print $2}' | awk -F\" '{print $2}')
-		echo " #workaround xcode seeing \" in the above awk statement and highlighting code poorly
+		echo "\"" > /dev/null #workaround xcode seeing \" in the above awk statement and highlighting code poorly
 		echo "4) PREVIOUS_TIME: "$previoustime >> "$logfile"
 		rm updates.xml 
 
