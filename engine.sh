@@ -37,7 +37,7 @@ do
 	echo Source: "$sourcename" >> "$logname"
 	echo Output: "$outputname" >> "$logname"
 	echo Encoding options: "$encodingoptions" >> "$logname"
-	$HOME/Library/Application\ Support/Engine/HandBrakeCLI -i "$sourcename" -o "$outputname" $encodingoptions -v 1>> "$logname" 2>> "$logname"
+	nice $HOME/Library/Application\ Support/Engine/HandBrakeCLI -i "$sourcename" -o "$outputname" $encodingoptions -v 1>> "$logname" 2>> "$logname"
 	time=$(date +%Y%m%d-%H%M%S); echo $time Finished encoding "$sourcename" >> $HOME/Library/Logs/Engine.log
 	time=$(date +%Y%m%d-%H%M%S); echo $time Finished encoding "$sourcename" >> $HOME/Library/Logs/Engine_debug.log
 	echo "ENCODE COMPLETED" >> "$logname"
