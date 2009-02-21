@@ -22,8 +22,8 @@
 #!/bin/bash
 until [ "$*" = "" ]
 do
-	logfile=$HOME/Library/Logs/autotag-long.log
-	shortlog=$HOME/Library/Logs/autotag-short.log
+	logfile=$HOME/Library/Logs/Engine_debug.log
+	shortlog=$HOME/Library/Logs/Engine.log
 	#parse filename
 		first_character=$(echo $episode | cut -c 1)
 		season_episode=$(basename "$1" | sed 's/\./ /g' | sed 's/.*\([Ss][0-9][0-9][EeXx][0-9][0-9]\).*/\1/')
@@ -44,15 +44,15 @@ do
 				length=${#tv_show}
 				tv_show=$(echo $tv_show | cut -c2-$length)
 			fi
-		echo "+++++++++++++++++++++++++++++++" >> "$logfile"
-		echo "1) RECEIVED " $1 >> "$logfile"
-		echo "2) PARSED Season: "$season "Episode: "$episode "Extension: "$file_extension "TV show: "$tv_show >> "$logfile"
+		time=$(date +%Y%m%d-%H%M%S); echo $time "1) RECEIVED " "$1" >> "$logfile"
+		time=$(date +%Y%m%d-%H%M%S); echo $time "2) PARSED Season: "$season "Episode: "$episode "Extension: "$file_extension "TV show: "$tv_show >> "$logfile"
 
 		if [ "$file_extension" != "m4v" ]
 		then
 			if [ "$file_extension" != "mp4" ]
 			then
-				echo "Not taggable" >> $logfile
+				time=$(date +%Y%m%d-%H%M%S); echo $time "Non-MP4 in input, script halted" >> "$logfile"
+				time=$(date +%Y%m%d-%H%M%S); echo $time "$1" ":Non-MP4 in input, script halted" >> "$shortlog"
 				break
 			fi
 		fi
@@ -60,21 +60,21 @@ do
 		curl http://www.thetvdb.com/api/9F21AC232F30F34D/mirrors.xml > mirrors.xml 2>> /dev/null
 		tvdb=$(grep 'mirrorpath' mirrors.xml | awk -F\< '{print $2}' | awk -F\> '{print $2}')
 		tvdb=$tvdb/api/9F21AC232F30F34D
-		echo "3) GOT MIRROR URL: "$tvdb >> "$logfile"
+		time=$(date +%Y%m%d-%H%M%S); echo $time "3) GOT MIRROR URL: "$tvdb >> "$logfile"
 		rm mirrors.xml
 
 	#2 - get last update time
 		curl $tvdb/updates > updates.xml 2>> /dev/null
 		previoustime=$(grep 'Data time' updates.xml | awk -F\< '{print $2}' | awk -F\= '{print $2}' | awk -F\" '{print $2}')
 		echo "\"" > /dev/null #workaround xcode seeing \" in the above awk statement and highlighting code poorly
-		echo "4) PREVIOUS_TIME: "$previoustime >> "$logfile"
+		time=$(date +%Y%m%d-%H%M%S); echo $time "4) PREVIOUS_TIME: "$previoustime >> "$logfile"
 		rm updates.xml 
 
 	#3 - pull series info from TVDB
 		tv_show=$(echo $tv_show | sed 's/ /%20/g')
 
 		
-		echo "5) SERIES REQUEST" http://www.thetvdb.com/api/GetSeries.php?seriesname=$tv_show >> "$logfile"
+		time=$(date +%Y%m%d-%H%M%S); echo $time "5) SERIES REQUEST" http://www.thetvdb.com/api/GetSeries.php?seriesname=$tv_show >> "$logfile"
 		series_id=$(curl http://www.thetvdb.com/api/GetSeries.php?seriesname=$tv_show | grep -m 1 "seriesid" | awk -F\< '{print $2}' | awk -F\> '{print $2}')
 		
 		# kludgy, hacky, annoying way to get around recently bad results by thetvdb
@@ -83,22 +83,22 @@ do
 		then
 			echo
 		else
-			echo "Series contains Office, manual override to The Office (US)." >> "$logfile"
+			time=$(date +%Y%m%d-%H%M%S); echo $time "Series contains Office, manual override to The Office (US)." >> "$logfile"
 			series_id=$(echo "73244")
 		fi
 
 		series_data=$HOME/Library/Application\ Support/Engine/$series_id.xml
-		echo "6) RECEIVED: "$tvdb/series/$series_id/en.xml to "$series_data" >> "$logfile"
+		time=$(date +%Y%m%d-%H%M%S); echo $time "6) RECEIVED: "$tvdb/series/$series_id/en.xml to "$series_data" >> "$logfile"
 		curl $tvdb/series/$series_id/en.xml > "$series_data" 2>>/dev/null
 
 	#4 - pull episode in from from TVDB
 		episode_data=$HOME/Library/Application\ Support/Engine/episode.xml
-		echo "7) EPISODE PULL: "$tvdb/series/$series_id/default/$season/$episode/en.xml to "$episode_data" >> "$logfile"
+		time=$(date +%Y%m%d-%H%M%S); echo $time "7) EPISODE PULL: "$tvdb/series/$series_id/default/$season/$episode/en.xml to "$episode_data" >> "$logfile"
 		curl $tvdb/series/$series_id/default/$season/$episode/en.xml > "$episode_data" 2>>/dev/null
 		success=$(cat "$episode_data" | grep "not found")
 		if [ "$success" != "" ]
 		then
-			echo "broken episode data, aborting" >> "$logfile"
+			time=$(date +%Y%m%d-%H%M%S); echo $time "broken episode data, aborting" >> "$logfile"
 			break
 		fi
 		
@@ -136,7 +136,7 @@ do
 		cnid=$(echo "$series_id""$season""$episode")
 		
 	#list tags we got, then tag using mp4tags
-		echo "7) PULLED TAGS Show name:"$cart "Episode name:"$cnam "Aired:"$cday "Description:"$desc "Stik:"$stik "tven:"$tven "tvnn:"$tvnn "cover_art_url:"$cover_art_url "hdvd":$hdvd "cnid:"$cnid >> "$logfile"
+		time=$(date +%Y%m%d-%H%M%S); echo $time "7) PULLED TAGS Show name:"$cart "Episode name:"$cnam "Aired:"$cday "Description:"$desc "Stik:"$stik "tven:"$tven "tvnn:"$tvnn "cover_art_url:"$cover_art_url "hdvd":$hdvd "cnid:"$cnid >> "$logfile"
 		$HOME/Library/Application\ Support/Engine/mp4tags "$1" -I $cnid -H $hdvd -song "$cnam" -a "$cart" -y $cday -m "$desc" -l "$desc" -i tvshow -S "$cart" -M $episode -N $tvnn -n $season -o $tven 1>>"$logfile" 2>>"$logfile"
 
 
@@ -145,21 +145,21 @@ do
 	#if there's no covr-box, add one with pulled art
 		if [ "$last_covr_index" = "----------------------------------------------------------------------" ]
 		then
-			echo "No art yet, adding art from TheTVDB" >> "$logfile"
+			time=$(date +%Y%m%d-%H%M%S); echo $time "No art yet, adding art from TheTVDB" >> "$logfile"
 			$HOME/Library/Application\ Support/Engine/mp4art --keepgoing --add $HOME/Library/Application\ Support/Engine/coverart.jpg --art-index 0 "$1"
 		fi
 		last_covr_index=$(mp4art --list "$1" | tail -1 | awk '{print $1}')
 	#if there's more than one covr-box, remove all and add one with pulled art
 		if (($last_covr_index>0))
 		then
-			echo "Multiple artwork on this file, removing all and adding art from TheTVDB" >> "$logfile"
+			time=$(date +%Y%m%d-%H%M%S); echo $time "Multiple artwork on this file, removing all and adding art from TheTVDB" >> "$logfile"
 			$HOME/Library/Application\ Support/Engine/mp4art --keepgoing --remove --art-any "$1"
 			$HOME/Library/Application\ Support/Engine/mp4art --keepgoing --add $HOME/Library/Application\ Support/Engine/coverart.jpg --art-index 0 "$1"
 		fi
 	#if there already is cover-art, cool!
 		if (($last_covr_index==0))
 		then
-			echo "Already art on this file, skipping adding art" >> "$logfile"
+			time=$(date +%Y%m%d-%H%M%S); echo $time "Already art on this file, skipping adding art" >> "$logfile"
 		fi
 		
 		rm "$series_data"
@@ -167,8 +167,7 @@ do
 		rm $HOME/Library/Application\ Support/Engine/episode.xml
 	
 	
-	echo $(date) $(basename "$1") $cart-$season$episode >> "$shortlog"
-	echo >> "$logfile"
+	time=$(date +%Y%m%d-%H%M%S); echo $time Tagged $cart-$season$episode to "$1" >> "$shortlog"
 	#go to next file
 	shift
 done
