@@ -28,7 +28,7 @@ property do_second_encode : "no"
 # ONLY CHANGE THESE FOR TESTING
 # property encoding_options : "-f mp4 -4 -e x264 -x bframes=0:ref=1:me=dia:subme=0:cabac=0 -q 0.01 -E faac -B 128 -6 dpl2 --width 480"
 # property second_encoding_options : "-f mp4 -4 -e x264 -x bframes=0:ref=1:me=dia:subme=0 -q 0.01 -E faac,ac3 -B 128 -6 dpl2"
-# property engine_directory : "$HOME/Library/Application\\ Support/Engine/"
+property engine_directory : "$HOME/Library/Application\\ Support/Engine/"
 property engine_shortlog : "$HOME/Library/Logs/Engine.log"
 property engine_longlog : "$HOME/Library/Logs/Engine_debug.log"
 
