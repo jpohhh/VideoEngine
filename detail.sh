@@ -146,20 +146,25 @@ do
 		if [ "$last_covr_index" = "----------------------------------------------------------------------" ]
 		then
 			time=$(date +%Y%m%d-%H%M%S); echo $time "No art yet, adding art from TheTVDB" >> "$logfile"
-			$HOME/Library/Application\ Support/Engine/mp4art --keepgoing --add $HOME/Library/Application\ Support/Engine/coverart.jpg --art-index 0 "$1"
-		fi
-		last_covr_index=$(mp4art --list "$1" | tail -1 | awk '{print $1}')
+			art_size=$(ls -l $HOME/Library/Application\ Support/Engine/coverart.jpg | awk '{print $5}')
+			if (($art_size>999))
+			then
+				$HOME/Library/Application\ Support/Engine/mp4art --keepgoing --add $HOME/Library/Application\ Support/Engine/coverart.jpg --art-index 0 "$1"
+			else
+				time=$(date +%Y%m%d-%H%M%S); echo $time "Art is smaller than a kilobyte, highly likely its garbage so skipping." >> "$logfile"
+			fi
 	#if there's more than one covr-box, remove all and add one with pulled art
-		if (($last_covr_index>0))
+		elif (($last_covr_index>0))
 		then
 			time=$(date +%Y%m%d-%H%M%S); echo $time "Multiple artwork on this file, removing all and adding art from TheTVDB" >> "$logfile"
 			$HOME/Library/Application\ Support/Engine/mp4art --keepgoing --remove --art-any "$1"
 			$HOME/Library/Application\ Support/Engine/mp4art --keepgoing --add $HOME/Library/Application\ Support/Engine/coverart.jpg --art-index 0 "$1"
-		fi
 	#if there already is cover-art, cool!
-		if (($last_covr_index==0))
+		elif (($last_covr_index==0))
 		then
 			time=$(date +%Y%m%d-%H%M%S); echo $time "Already art on this file, skipping adding art" >> "$logfile"
+		else
+			time=$(date +%Y%m%d-%H%M%S); echo $time "Art parsing broken, the value for $last_cover index we got is:" $last_covr_index >> "$logfile" 
 		fi
 		
 		rm "$series_data"
