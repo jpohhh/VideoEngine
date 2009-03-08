@@ -1,0 +1,228 @@
+// !$*UTF8*$!
+{
+	089C165DFE840E0CC02AAC07 /* English */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {800, 581}}";
+			sepNavSelRange = "{106, 0}";
+			sepNavVisRange = "{0, 110}";
+			sepNavWindowFrame = "{{130, 59}, {859, 709}}";
+		};
+	};
+	257572C2072881A4000BE9CA /* Breakfast */ = {
+		activeExec = 0;
+		executables = (
+			25D9445407B1533600FF306F /* Breakfast */,
+		);
+	};
+	257572D5072881A4000BE9CA /* Info.plist */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {800, 581}}";
+			sepNavSelRange = "{341, 0}";
+			sepNavVisRange = "{0, 949}";
+			sepNavWindowFrame = "{{61, 122}, {859, 709}}";
+		};
+	};
+	25D9445407B1533600FF306F /* Breakfast */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+			"PBXLSLaunchAction-1" = {
+				PBXLSLaunchAction = 1;
+				PBXLSLaunchStartAction = 1;
+				PBXLSLaunchStdioStyle = 2;
+				PBXLSLaunchStyle = 0;
+				class = ASKDebuggerLaunchConfig;
+				displayName = "AppleScript Debugger";
+				identifier = com.apple.AppleScriptStudio.ASKDebugLaunchConfig;
+				remoteHostInfo = "";
+				startActionInfo = "";
+			};
+		};
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = ASKDebugger;
+		disassemblyDisplayState = 0;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+			{
+				active = NO;
+				name = AEDebug;
+				value = 1;
+			},
+			{
+				active = NO;
+				name = AEDebugSends;
+				value = 1;
+			},
+			{
+				active = NO;
+				name = AEDebugReceives;
+				value = 1;
+			},
+			{
+				active = NO;
+				name = AEDebugVerbose;
+				value = 1;
+			},
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = Breakfast;
+		sourceDirectories = (
+		);
+	};
+	25D9445A07B1533700FF306F /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+		};
+		scmType = "";
+	};
+	25D9445B07B1533700FF306F /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	27A0D1F40F635ABA00C7E917 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = DA206CF3015C4E8B03C91932 /* Breakfast.applescript */;
+		name = "Breakfast.applescript: 327";
+		rLen = 0;
+		rLoc = 13899;
+		rType = 0;
+		vrLen = 1385;
+		vrLoc = 5967;
+	};
+	27A0D1F90F635C0E00C7E917 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = DA206CF3015C4E8B03C91932 /* Breakfast.applescript */;
+		name = "Breakfast.applescript: 327";
+		rLen = 0;
+		rLoc = 13899;
+		rType = 0;
+		vrLen = 1329;
+		vrLoc = 6247;
+	};
+	27F017E70F60AA2600328CB6 /* engine.sh */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1022, 896}}";
+			sepNavSelRange = "{2612, 0}";
+			sepNavVisRange = "{1037, 2133}";
+			sepNavWindowFrame = "{{498, 114}, {859, 709}}";
+		};
+	};
+	27F017E80F60AA2600328CB6 /* detail.sh */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1784, 3794}}";
+			sepNavSelRange = "{9360, 0}";
+			sepNavVisRange = "{10675, 2339}";
+			sepNavWindowFrame = "{{408, 149}, {859, 709}}";
+		};
+	};
+	27F017E90F60AA2700328CB6 /* queue.txt */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {800, 581}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 0}";
+			sepNavWindowFrame = "{{15, 164}, {859, 709}}";
+		};
+	};
+	29B97313FDCFA39411CA2CEA /* Project object */ = {
+		activeArchitecture = i386;
+		activeBuildConfigurationName = Release;
+		activeExecutable = 25D9445407B1533600FF306F /* Breakfast */;
+		activeTarget = 257572C2072881A4000BE9CA /* Breakfast */;
+		addToTargets = (
+			257572C2072881A4000BE9CA /* Breakfast */,
+		);
+		codeSenseManager = 25D9445B07B1533700FF306F /* Code sense */;
+		executables = (
+			25D9445407B1533600FF306F /* Breakfast */,
+		);
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					289,
+					20,
+					48,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXConfiguration.PBXFileTableDataSource3.PBXSymbolsDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXSymbolsDataSource_SymbolNameID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					16,
+					200,
+					50,
+					304,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXSymbolsDataSource_SymbolTypeIconID,
+					PBXSymbolsDataSource_SymbolNameID,
+					PBXSymbolsDataSource_SymbolTypeID,
+					PBXSymbolsDataSource_ReferenceNameID,
+				);
+			};
+			PBXConfiguration.PBXTargetDataSource.PBXTargetDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					249,
+					60,
+					20,
+					48,
+					43,
+					43,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXTargetDataSource_PrimaryAttribute,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 258170246;
+			PBXWorkspaceStateSaveDate = 258170246;
+		};
+		perUserProjectItems = {
+			27A0D1F40F635ABA00C7E917 = 27A0D1F40F635ABA00C7E917 /* PBXTextBookmark */;
+			27A0D1F90F635C0E00C7E917 = 27A0D1F90F635C0E00C7E917 /* PBXTextBookmark */;
+		};
+		sourceControlManager = 25D9445A07B1533700FF306F /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	DA206CF3015C4E8B03C91932 /* Breakfast.applescript */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1176, 4853}}";
+			sepNavSelRange = "{13899, 0}";
+			sepNavVisRect = "{{0, 1946}, {820, 581}}";
+			sepNavWindowFrame = "{{388, 169}, {859, 709}}";
+		};
+	};
+}
