@@ -27,6 +27,7 @@
 #!/bin/bash
 logfile=$HOME/Library/Logs/Breakfast_debug.log
 shortlog=$HOME/Library/Logs/Breakfast.log
+mainscript=$(defaults read com.Breakfast.engine AppPath)
 resource_path=$(defaults read com.Breakfast.engine ResourcePath)
 queue_item=$(head -n1 ${resource_path}/queue.txt)
 until [ "$queue_item" = "" ]
@@ -35,6 +36,9 @@ do
 	outputname=$(echo $queue_item | awk -F\; '{print $2}')
 	encodingoptions=$(echo $queue_item | awk -F\; '{print $3}')
 	logname=$(echo $queue_item | awk -F\; '{print $4}')
+	time=$(date +%Y%m%d-%H%M%S); echo $time ENGINE.SH Will try to call osacript >> "$logfile"
+	#Tell the GUI's main script what we're working on. 
+	osascript -e "tell application \"""$mainscript""\"" -e "set content of text field \"EncodeFileText\" of window \"ProgressWindow\" to \"""$outputname""\"" -e 'end tell' 1>> "$logfile" 2>> "$logfile"
 	echo "BEGINNING ENCODE WORK" > "$logname"
 	time=$(date +%Y%m%d-%H%M%S); echo $time Starting to encode "$sourcename" >> "$shortlog"
 	time=$(date +%Y%m%d-%H%M%S); echo $time Starting to encode "$sourcename" >> "$logfile"
@@ -44,7 +48,7 @@ do
 	$resource_path/HandBrakeCLI -i "$sourcename" -o "$outputname" $encodingoptions -v 1>> "$logname" 2>> "$logname"
 	time=$(date +%Y%m%d-%H%M%S); echo $time Finished encoding "$sourcename" >> "$shortlog"
 	time=$(date +%Y%m%d-%H%M%S); echo $time Finished encoding "$sourcename" >> "$logfile"
-	endMessage=$(tail -c 22 $logname | sed 's/\ //g')
+	endMessage=$(tail -c 22 "$logname" | sed 's/\ //g')
 	time=$(date +%Y%m%d-%H%M%S); echo $time Received endMessage "$endMessage" >> "$logfile"
 	if [ $endMessage == "HandBrakehasexited." ]
 		then
