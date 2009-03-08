@@ -33,14 +33,16 @@
 #		J. Michael Dockery, dockery.michael@gmail.com
 *)
 
-(* Globals *)
-global OldFolder
-
 (* Properties *)
-property ExtensionList : missing value
 property CalledByScript : missing value
+property ExtensionList : missing value
+property OldExtensionList : missing value
 property OutFolder : missing value
+property OldOutFolder : missing value
+property WatchFolder : "-"
+property OldWatchFolder : "-"
 property EncodingOptions : missing value
+property OldEncodingOptions : missing value
 property BreakfastShortLog : missing value
 property BreakfastLongLog : missing value
 property QueuePath : missing value
@@ -54,6 +56,8 @@ property isPaused : false
 property AppPath : missing value
 property countdown : "--h--m--s"
 property donePercentage : 0
+property watcherScript : missing value
+property SaveButtonState : off state
 
 
 on will finish launching theObject
@@ -64,6 +68,7 @@ on will finish launching theObject
 		make new default entry at end of default entries with properties {name:"ExtensionList", contents:"avi"}
 		make new default entry at end of default entries with properties {name:"CalledByScript", contents:"false"}
 		make new default entry at end of default entries with properties {name:"OutFolder", contents:"-"}
+		make new default entry at end of default entries with properties {name:"WatchFolder", contents:"-"}
 		make new default entry at end of default entries with properties {name:"EncodingOptions", contents:"-"}
 		make new default entry at end of default entries with properties {name:"BreakfastShortLog", contents:"$HOME/Library/Logs/Breakfast.log"}
 		make new default entry at end of default entries with properties {name:"BreakfastLongLog", contents:"$HOME/Library/Logs/Breakfast_debug.log"}
@@ -72,25 +77,23 @@ on will finish launching theObject
 		make new default entry at end of default entries with properties {name:"ResourcePath", contents:missing value}
 		make new default entry at end of default entries with properties {name:"TrimFileState", contents:off state}
 		make new default entry at end of default entries with properties {name:"Tags.Stik", contents:10}
-		
 	end tell
 	
 	(*This section sets up our local variables using the default list.*)
 	tell user defaults
-		-- parse the extension list.
-		set OldDelimiters to AppleScript's text item delimiters
-		set AppleScript's text item delimiters to ";"
-		set ExtensionList to every text item of (contents of default entry "ExtensionList" as string)
-		set AppleScript's text item delimiters to OldDelimiters
-		
-		-- set up other variables
 		set CalledByScript to (contents of default entry "CalledByScript" as boolean)
+		set ExtensionList to contents of default entry "ExtensionList"
+		set OldExtensionList to ExtensionList
 		set OutFolder to contents of default entry "OutFolder"
+		set OldOutFolder to OutFolder
+		set WatchFolder to contents of default entry "WatchFolder"
+		set OldWatchFolder to WatchFolder
 		set EncodingOptions to contents of default entry "EncodingOptions"
+		set OldEncodingOptions to EncodingOptions
 		set BreakfastShortLog to contents of default entry "BreakfastShortLog"
 		set BreakfastLongLog to contents of default entry "BreakfastLongLog"
 		set EncodingFile to "Preparing..."
-		set OldFolder to OutFolder
+		
 		
 	end tell
 	
@@ -103,6 +106,7 @@ on awake from nib theObject
 	tell main bundle
 		set QueuePath to path for resource "queue" extension "txt"
 		set EnginePath to path for resource "engine" extension "sh"
+		set watcherScript to path for resource "convert - video to iTunes (Breakfast)" extension "scpt"
 		set ResourcePath to resource path
 	end tell
 	
@@ -115,11 +119,22 @@ on awake from nib theObject
 		-- Show the preference window
 		set visible of window "PrefWindow" to true
 		set content of text field "outFolderText" of window "PrefWindow" to OutFolder
+		set content of text field "ExListText" of window "PrefWindow" to ExtensionList
+		set content of text field "encodeOptions" of window "PrefWindow" to EncodingOptions
+		set content of text field "WatchFolderText" of window "PrefWindow" to WatchFolder
 	end if
 	
 	if CalledByScript = true then
 		try
-			-- Make the status window visible.
+			-- Hide the unneeded menus.
+			set menuItem to second menu item of main menu
+			set saveMenu to first menu item of sub menu of menuItem
+			set resetMenu to second menu item of sub menu of menuItem
+			
+			set enabled of saveMenu to false
+			set enabled of resetMenu to false
+			
+			-- Make the progress window visible.
 			set visible of window "ProgressWindow" to true
 			
 			-- Show the status window.
@@ -158,30 +173,153 @@ on clicked theObject
 	
 	-- If the user clicks on the Choose Path button...
 	if name of theObject is "choosePathButton" then
+		-- If the save button has been pressed, unpress it.
+		if (state of button "saveButton" of window "PrefWindow") = 1 then
+			set (state of button "saveButton" of window "PrefWindow") to 0
+			set (enabled of button "saveButton" of window "PrefWindow") to true
+		end if
 		-- Save the previous folder so we can reset if the user wants to later.
-		set OldFolder to OutFolder
+		set OldOutFolder to OutFolder
 		-- Ask the user for a folder.
 		set OutFolder to choose folder with prompt "Choose a folder:"
 		-- Display that folder.
 		set content of text field "outFolderText" of window of theObject to OutFolder
 	end if
 	
-	-- If the resetPathButton was clicked...
-	if name of theObject is "resetPathButton" then
-		tell user defaults
-			-- Set the folder back to what it was.
-			set OutFolder to OldFolder
-			-- Display the folder.
-			set content of text field "outFolderText" of window of theObject to OutFolder
-		end tell
+	if name of theObject is "chooseWatchButton" then
+		-- If the save button has been pressed, unpress it.
+		if (state of button "saveButton" of window "PrefWindow") = 1 then
+			set (state of button "saveButton" of window "PrefWindow") to 0
+			set (enabled of button "saveButton" of window "PrefWindow") to true
+		end if
+		-- Save the previous folder so we can reset if the user wants to later.
+		set OldWatchFolder to WatchFolder
+		-- Ask the user for a folder.
+		set WatchFolder to choose folder with prompt "Choose a folder:"
+		-- Display that folder.
+		set content of text field "WatchFolderText" of window of theObject to WatchFolder
 	end if
 	
-	-- If the user clicks on the Save Path button, save the displayed folder to the User Defaults.
-	if name of theObject is "savePathButton" then
-		tell user defaults
-			set contents of default entry "OutFolder" to OutFolder
-		end tell
-		call method "synchronize" of object user defaults
+	-- If the resetPathButton was clicked...
+	if name of theObject is "resetButton" then
+		-- Set the variables back to what they were.
+		set OutFolder to OldOutFolder
+		set WatchFolder to OldWatchFolder
+		set EncodingOptions to OldEncodingOptions
+		set ExtensionList to OldExtensionList
+		-- Display the variables in their text fields.
+		set content of text field "outFolderText" of window "PrefWindow" to OutFolder
+		set content of text field "WatchFolderText" of window "PrefWindow" to WatchFolder
+		set content of text field "ExListText" of window "PrefWindow" to ExtensionList
+		set content of text field "encodeOptions" of window "PrefWindow" to EncodingOptions
+		-- If the save button has been pressed, unpress it.
+		if (state of button "saveButton" of window "PrefWindow") = 1 then
+			set (state of button "saveButton" of window "PrefWindow") to 0
+			set (enabled of button "saveButton" of window "PrefWindow") to true
+		end if
+	end if
+	
+	-- If the user clicks on the Save button, save the variables to the User Defaults. 
+	if name of theObject is "saveButton" then
+		set OutFolder to content of text field "outFolderText" of window "PrefWindow"
+		set WatchFolder to content of text field "WatchFolderText" of window "PrefWindow"
+		set ExtensionList to content of text field "ExListText" of window "PrefWindow"
+		set EncodingOptions to content of text field "encodeOptions" of window "PrefWindow"
+		
+		-- If the user has specified a new watching folder, set that up.
+		if OldWatchFolder is not equal to WatchFolder then
+			-- See if our watcher script has been copied to the Folder Actions folder already.
+			set thePath to "file://localhost/Library/Scripts/Folder%20Action%20Scripts/"
+			set theWatcherScript to thePath & "convert%20-%20video%20to%20iTunes%20(Breakfast).scpt"
+			if (theWatcherScript exists) is not equal to true then
+				do shell script "cp " & quoted form of watcherScript & " file://localhost/Library/Scripts/Folder%20Action%20Scripts/"
+				do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Folder Action not found. Copying. >> " & BreakfastLongLog
+			end if
+			
+			-- Remove the script from the OldWatchFolder. 
+			-- First, make sure that there was an OldWatchFolder (there won't be on first run.)
+			if OldWatchFolder is not equal to "-" then
+				tell application "System Events"
+					set theAlias to alias OldWatchFolder
+					set theName to name of theAlias
+					try
+						set theList to attached scripts OldWatchFolder
+					end try
+					try
+						set numberofitems to number of items of theList
+					on error
+						-- there are no attached scripts
+						set numberofitems to 0
+					end try
+					try
+						tell folder action theName
+							set theScripts to scripts
+						end tell
+					end try
+					if numberofitems > 0 then
+						set i to 1
+						repeat until i > numberofitems
+							if (name of item i of theScripts) = "convert - video to iTunes (Breakfast).scpt" then
+								remove action from OldWatchFolder using action name "convert - video to iTunes (Breakfast).scpt"
+							end if
+							set i to i + 1
+						end repeat
+					end if
+				end tell
+			end if
+			
+			-- Add the script to the new watch folder.
+			-- First, if it's already there just pull it off.
+			tell application "System Events"
+				set theAlias to alias WatchFolder
+				set theName to name of theAlias
+				set theList to attached scripts WatchFolder
+				try
+					set numberofitems to number of items of theList
+				on error
+					-- there are no attached scripts
+					set numberofitems to 0
+				end try
+				try
+					tell folder action theName
+						set theScripts to scripts
+					end tell
+				end try
+				if numberofitems > 0 then
+					set i to 1
+					repeat until i > numberofitems
+						if (name of item i of theScripts) = "convert - video to iTunes (Breakfast).scpt" then
+							remove action from WatchFolder using action name "convert - video to iTunes (Breakfast).scpt"
+						end if
+						set i to i + 1
+					end repeat
+				end if
+			end tell
+			
+			-- Now, add it.
+			tell application "System Events"
+				make new folder action at the end of folder actions with properties {path:(WatchFolder as text)}
+				tell folder action theName
+					make new script at the end of scripts with properties {name:"convert - video to iTunes (Breakfast).scpt"}
+				end tell
+			end tell
+			
+			tell user defaults
+				set contents of default entry "OutFolder" to OutFolder
+				set contents of default entry "EncodingOptions" to EncodingOptions
+				set contents of default entry "ExtensionList" to ExtensionList
+				set contents of default entry "WatchFolder" to WatchFolder
+			end tell
+			call method "synchronize" of object user defaults
+			
+		end if
+		
+		set (state of button "saveButton" of window "PrefWindow") to on state
+		set (enabled of button "saveButton" of window "PrefWindow") to false
+		set OldOutFolder to OutFolder
+		set OldWatchFolder to WatchFolder
+		set OldEncodingOptions to EncodingOptions
+		set OldExtensionList to ExtensionList
 	end if
 	
 	(* Buttons for the Progress Window *)
@@ -222,6 +360,45 @@ on clicked theObject
 	end if
 	
 end clicked
+
+on changed theObject
+	(*This handler is called when a user tries to begin editing, but before the edit is allowed to happen.*)
+	if (name of theObject is "OutFolderText") then
+		-- If the save button has been pressed, unpress it.
+		if (state of button "saveButton" of window "PrefWindow") = 1 then
+			set (state of button "saveButton" of window "PrefWindow") to 0
+			set (enabled of button "saveButton" of window "PrefWindow") to true
+		end if
+		return true
+	end if
+	
+	if (name of theObject is "WatchFolderText") then
+		-- If the save button has been pressed, unpress it.
+		if (state of button "saveButton" of window "PrefWindow") = 1 then
+			set (state of button "saveButton" of window "PrefWindow") to 0
+			set (enabled of button "saveButton" of window "PrefWindow") to true
+		end if
+		return true
+	end if
+	
+	if (name of theObject is "ExListText") then
+		-- If the save button has been pressed, unpress it.
+		if (state of button "saveButton" of window "PrefWindow") = 1 then
+			set (state of button "saveButton" of window "PrefWindow") to 0
+			set (enabled of button "saveButton" of window "PrefWindow") to true
+		end if
+		return true
+	end if
+	
+	if (name of theObject is "encodeOptions") then
+		-- If the save button has been pressed, unpress it.
+		if (state of button "saveButton" of window "PrefWindow") = 1 then
+			set (state of button "saveButton" of window "PrefWindow") to 0
+			set (enabled of button "saveButton" of window "PrefWindow") to true
+		end if
+		return true
+	end if
+end changed
 
 on idle theObject
 	(*The handler that runs whenever nothing else is going on. There's no need to loop here - the program will
