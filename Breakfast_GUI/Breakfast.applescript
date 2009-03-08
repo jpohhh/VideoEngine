@@ -361,6 +361,19 @@ on clicked theObject
 	
 end clicked
 
+on choose menu item theObject
+	(*The handler that is called when a User chooses a menu item.*)
+	if name of theObject is "pullDown" then
+		set EncodingOptions to title of popup button "pullDown" of window "PrefWindow"
+		set encodeTemp to "-Z '" & EncodingOptions & "'"
+		set content of text field "EncodeOptions" of window "PrefWindow" to encodeTemp
+		if (state of button "saveButton" of window "PrefWindow") = 1 then
+			set (state of button "saveButton" of window "PrefWindow") to 0
+			set (enabled of button "saveButton" of window "PrefWindow") to true
+		end if
+	end if
+end choose menu item
+
 on changed theObject
 	(*This handler is called when a user tries to begin editing, but before the edit is allowed to happen.*)
 	if (name of theObject is "OutFolderText") then
