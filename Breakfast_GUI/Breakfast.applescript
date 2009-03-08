@@ -52,7 +52,8 @@ property theCounter : missing value
 property pid : missing value
 property isPaused : false
 property AppPath : missing value
-
+property countdown : "--h--m--s"
+property donePercentage : 0
 
 
 on will finish launching theObject
@@ -69,7 +70,6 @@ on will finish launching theObject
 		make new default entry at end of default entries with properties {name:"QueuePath", contents:"missing"}
 		make new default entry at end of default entries with properties {name:"AppPath", contents:"missing"}
 		make new default entry at end of default entries with properties {name:"ResourcePath", contents:missing value}
-		make new default entry at end of default entries with properties {name:"EncodingFile", contents:"/Users/"}
 		make new default entry at end of default entries with properties {name:"TrimFileState", contents:off state}
 		make new default entry at end of default entries with properties {name:"Tags.Stik", contents:10}
 		
@@ -89,43 +89,28 @@ on will finish launching theObject
 		set EncodingOptions to contents of default entry "EncodingOptions"
 		set BreakfastShortLog to contents of default entry "BreakfastShortLog"
 		set BreakfastLongLog to contents of default entry "BreakfastLongLog"
+		set EncodingFile to "Preparing..."
 		set OldFolder to OutFolder
 		
-		-- EncodingFile is quoted in order to be placed in User Defaults. Take out the quotes.
-		set EncodingFile to (contents of default entry "EncodingFile" as string)
-		set OldDelimiters to AppleScript's text item delimiters
-		set AppleScript's text item delimiters to "'"
-		set itemList to every text item of EncodingFile
-		set AppleScript's text item delimiters to OldDelimiters
-		set EncodingFile to the itemList as string
 	end tell
-	
-	-- Get the path names for queue.txt, engine.sh, and the general resource path
-	(*tell main bundle
-		set QueuePath to path for resource "queue" extension "txt"
-		set EnginePath to path for resource "engine" extension "sh"
-		set ResourcePath to resource path
-	end tell*)
 	
 end will finish launching
 
-on launched theObject
-	(*The event handler that is called after the app finished launching.*)
+on awake from nib theObject
+	(*This handler is called during launch, when the app is being unpacked from its nib.*)
 	
+	-- Get the path names for queue.txt, engine.sh, and the general resource path
+	tell main bundle
+		set QueuePath to path for resource "queue" extension "txt"
+		set EnginePath to path for resource "engine" extension "sh"
+		set ResourcePath to resource path
+	end tell
+	
+	set AppPath to POSIX path of (path to me) as string
 	(* If the app was called by the user, we set up preferences. If the app was called
 				from the watcher script, we do the deal *)
 	
 	if CalledByScript = false then
-		-- Trying something else...
-		(*set QueuePath to (POSIX path of (path to me)) & "Contents/Resources/queue.txt"
-		set EnginePath to (POSIX path of (path to me)) & "Contents/Resources/engine.sh"
-		set ResourcePath to (POSIX path of (path to me)) & "Contents/Resources"*)
-		
-		tell main bundle
-			set QueuePath to path for resource "queue" extension "txt"
-			set ResourcePath to resource path
-			set AppPath to (path to me)
-		end tell
 		
 		-- Show the preference window
 		set visible of window "PrefWindow" to true
@@ -134,12 +119,6 @@ on launched theObject
 	
 	if CalledByScript = true then
 		try
-			-- Trying something else
-			tell user defaults
-				set ResourcePath to contents of default entry "ResourcePath"
-				set QueuePath to contents of default entry "QueuePath"
-				set AppPath to contents of default entry "AppPath"
-			end tell
 			-- Make the status window visible.
 			set visible of window "ProgressWindow" to true
 			
@@ -149,6 +128,9 @@ on launched theObject
 			-- Set up threaded animation of the progress bar. 
 			tell window "ProgressWindow"
 				set uses threaded animation of progress indicator "ProgressBar" to true
+				-- Set contents of the EncodeFileText text field to a known temporary value (we set this above
+				-- so that we'll know later whether the engine.sh has updated it.
+				set content of text field "EncodeFileText" to EncodingFile
 			end tell
 			
 			--Tell the program we're about to start encoding
@@ -166,7 +148,8 @@ on launched theObject
 			end tell
 		end try
 	end if
-end launched
+	
+end awake from nib
 
 on clicked theObject
 	(*The event handler that is called whenever any button is clicked.*)
@@ -244,41 +227,55 @@ on idle theObject
 	(*The handler that runs whenever nothing else is going on. There's no need to loop here - the program will
 	call this handler repeatedly so long as nothing else is happening.*)
 	
-	(* Whenever we're idle, we update the progress bar. *)
+	-- Whenever we're idle, we update the progress bar.
+	-- First, make sure we're supposed to be encoding (if we're in Preferences mode, no reason to waste
+	-- processor cycles doing all of this stuff...)
 	if IsEncoding then
 		try
-			-- Figure out where we're gonna be looking to get the LogFile.
-			set LogFile to (the reverse of every character of EncodingFile) as string
-			set x to the offset of "." in LogFile
-			set LogFile to (text (x + 1) thru -1 of LogFile)
-			set LogFile to (the reverse of every character of LogFile) as string
-			set LogFile to ((LogFile) & ".txt")
 			
-			try
+			-- The basic process for getting the encoding file is: 
+			-- 1) Set a known temporary string to the text field ("Processing...")
+			-- 2) Run engine.sh - eventually, it will use osascript to change the text field
+			--      to the file it is currently encoding. 
+			-- 3) Once that has happened, we pull the content of the text field (which will now
+			-- 4)   be the file that engine.sh is encoding, do some processing to figure out
+			-- 5)   its .txt equivilent (which is the logfile), and then do what we need to do.
+			
+			-- First, get the content of the text field.
+			set EncodingFile to content of text field "EncodeFileText" of window "ProgressWindow"
+			-- If it's still our temporary placeholder string, don't do anything.
+			if EncodingFile is not equal to "Preparing..." then
+				
+				-- Figure out where we're gonna be looking to get the LogFile.
+				set LogFile to (the reverse of every character of EncodingFile) as string
+				set x to the offset of "." in LogFile
+				set LogFile to (text (x + 1) thru -1 of LogFile)
+				set LogFile to (the reverse of every character of LogFile) as string
+				set LogFile to ((LogFile) & ".txt")
+				
 				-- Parse the last line of the LogFile to pull out the percentage done.
-				set donePercentage to (do shell script "tail -c 74 " & quoted form of LogFile & " | sed 's/.*\\(.[0-9]\\.[0-9][0-9]\\)\\ \\%.*/\\1/' | sed 's/\\ \\([0-9]\\.[0-9][0-9]\\)/\\1/'") as number
-			on error
-				-- Just in case Handbrake is slow to start...
-				set donePercentage to 0
-			end try
-			
-			try
+				try
+					set donePercentage to (do shell script "tail -c 74 " & quoted form of LogFile & " | sed 's/.*\\(.[0-9]\\.[0-9][0-9]\\)\\ \\%.*/\\1/' | sed 's/\\ \\([0-9]\\.[0-9][0-9]\\)/\\1/'") as number
+				end try
+				
 				-- Parse the last line of the LogFile to pull out the time remaining.
-				set countdown to (do shell script "tail -c 74 " & quoted form of LogFile & " | sed 's/.*\\([0-9][0-9]h[0-9][0-9]m[0-9][0-9]s\\).*/\\1/'") as string
-				if (offset of "h" in countdown) is not equal to 3 then
-					if (offset of "m" in countdown) is not equal to 6 then
-						if (offset of "s" in countdown) is not equal to 9 then
-							set countdown to "--h--m--s"
+				try
+					set countdown to (do shell script "tail -c 74 " & quoted form of LogFile & " | sed 's/.*\\([0-9][0-9]h[0-9][0-9]m[0-9][0-9]s\\).*/\\1/'") as string
+					-- Do some complicated checks to make sure we've got what we want.
+					-- (These are done because HandbrakeCLI's output is different before it calculates the time
+					-- remaining.)
+					if (offset of "h" in countdown) is not equal to 3 then
+						if (offset of "m" in countdown) is not equal to 6 then
+							if (offset of "s" in countdown) is not equal to 9 then
+								set countdown to "--h--m--s"
+							end if
 						end if
 					end if
-				end if
-			on error
-				-- Just in case Handbrake is slow to start...
-				set countdown to "--h--m--s"
-			end try
+				end try
+			end if
 			
 			-- Check to see if we're done yet. Use 99 %, rather than 100 %, to ensure that we don't reach the end 
-			-- of the LogFile, and make a mess because our expected input is wrong.
+			-- of the LogFile, and make a mess because our expected input from HandbrakeCLI is wrong.
 			if donePercentage = 99 then
 				set IsEncoding to false
 				-- If for some reason the last 1% takes some time, change to an indeterminate progress bar, and start it.
@@ -286,9 +283,9 @@ on idle theObject
 				start progress indicator "ProgressBar" of window "ProgressWindow"
 			end if
 			
-			-- Update the countdown box. Ideally, the first few lines wouldn't get screwed up as HandbrakeCLI is
-			-- trying to figure out the estimated time. But for now don't worry about it.
+			-- Update the countdown box text field and the Encoding File text field.
 			set content of text field "timeBox" of window "ProgressWindow" to countdown
+			set content of text field "EncodeFileText" of window "ProgressWindow" to EncodingFile
 			
 			-- Cycle the progress bar using our percentage.
 			set content of progress indicator "ProgressBar" of window "ProgressWindow" to donePercentage
@@ -306,15 +303,14 @@ on idle theObject
 		end try
 	end if
 	-- This number is the number of seconds later the next call to the idle handler will be made (assuming nothing
-	-- else happens.)
-	return 0.5
+	-- else happens. 1 is sufficient.)
+	return 1
 end idle
 
 on will quit theObject
 	(*The program is closing. Clean up.*)
 	tell user defaults
 		set contents of default entry "QueuePath" to QueuePath
-		set contents of default entry "EncodingFile" to the quoted form of EncodingFile
 		set contents of default entry "ResourcePath" to ResourcePath
 		set contents of default entry "CalledByScript" to false
 		set contents of default entry "AppPath" to AppPath
