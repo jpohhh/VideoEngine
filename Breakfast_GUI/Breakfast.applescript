@@ -113,11 +113,9 @@ on awake from nib theObject
 		end tell
 		
 		set AppPath to POSIX path of (path to me) as string
-		(* If the app was called by the user, we set up preferences. If the app was called
-				from the watcher script, we do the deal *)
 		
+		(* If the app was called by the user, we set up preferences. If the app was called from the watcher script, we do the deal *)
 		if CalledByScript = false then
-			
 			-- Show the preference window
 			set visible of window "PrefWindow" to true
 			set content of text field "outFolderText" of window "PrefWindow" to OutFolder
