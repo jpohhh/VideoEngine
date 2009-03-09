@@ -233,10 +233,13 @@ on clicked theObject
 		-- If the user has specified a new watching folder, set that up.
 		if OldWatchFolder is not equal to WatchFolder then
 			-- See if our watcher script has been copied to the Folder Actions folder already.
-			set thePath to "file://localhost/Library/Scripts/Folder%20Action%20Scripts/"
+			set thePath to "/Library/Scripts/Folder\\ Action\\ Scripts/"
 			set theWatcherScript to thePath & "folder_action.scpt"
-			if (theWatcherScript exists) is not equal to true then
-				do shell script "cp " & quoted form of watcherScript & " file://localhost/Library/Scripts/Folder%20Action%20Scripts/"
+			tell application "Finder"
+				set watcherInstalled to theWatcherScript exists
+			end tell
+			if watcherInstalled is not equal to true then
+				do shell script "cp " & AppPath & "Contents/Resources/Scripts/folder_action.scpt " & thePath & " >> /copylog.txt"
 				do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Folder Action not found. Copying. >> " & BreakfastLongLog
 			end if
 			
