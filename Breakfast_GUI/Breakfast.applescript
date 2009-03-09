@@ -55,109 +55,123 @@ property SaveButtonState : off state
 
 
 on will finish launching theObject
-	(*The event handler for the application finishing launching. We set up our user defaults here.*)
-	
-	(*This section creates the user defaults on the first run of the program. Otherwise it does nothing.*)
-	tell user defaults
-		make new default entry at end of default entries with properties {name:"ExtensionList", contents:"avi"}
-		make new default entry at end of default entries with properties {name:"CalledByScript", contents:"false"}
-		make new default entry at end of default entries with properties {name:"OutFolder", contents:"-"}
-		make new default entry at end of default entries with properties {name:"WatchFolder", contents:"-"}
-		make new default entry at end of default entries with properties {name:"EncodingOptions", contents:"-"}
-		make new default entry at end of default entries with properties {name:"BreakfastShortLog", contents:"$HOME/Library/Logs/Breakfast.log"}
-		make new default entry at end of default entries with properties {name:"BreakfastLongLog", contents:"$HOME/Library/Logs/Breakfast_debug.log"}
-		make new default entry at end of default entries with properties {name:"QueuePath", contents:"missing"}
-		make new default entry at end of default entries with properties {name:"AppPath", contents:"missing"}
-		make new default entry at end of default entries with properties {name:"ResourcePath", contents:missing value}
-		make new default entry at end of default entries with properties {name:"TrimFileState", contents:off state}
-		make new default entry at end of default entries with properties {name:"Tags.Stik", contents:10}
-	end tell
-	
-	(*This section sets up our local variables using the default list.*)
-	tell user defaults
-		set CalledByScript to (contents of default entry "CalledByScript" as boolean)
-		set ExtensionList to contents of default entry "ExtensionList"
-		set OldExtensionList to ExtensionList
-		set OutFolder to contents of default entry "OutFolder"
-		set OldOutFolder to OutFolder
-		set WatchFolder to contents of default entry "WatchFolder"
-		set OldWatchFolder to WatchFolder
-		set EncodingOptions to contents of default entry "EncodingOptions"
-		set OldEncodingOptions to EncodingOptions
-		set BreakfastShortLog to contents of default entry "BreakfastShortLog"
-		set BreakfastLongLog to contents of default entry "BreakfastLongLog"
-		set EncodingFile to "Preparing..."
+	try
+		(*The event handler for the application finishing launching. We set up our user defaults here.*)
 		
+		(*This section creates the user defaults on the first run of the program. Otherwise it does nothing.*)
+		tell user defaults
+			make new default entry at end of default entries with properties {name:"ExtensionList", contents:"avi"}
+			make new default entry at end of default entries with properties {name:"CalledByScript", contents:"false"}
+			make new default entry at end of default entries with properties {name:"OutFolder", contents:"-"}
+			make new default entry at end of default entries with properties {name:"WatchFolder", contents:"-"}
+			make new default entry at end of default entries with properties {name:"EncodingOptions", contents:"-"}
+			make new default entry at end of default entries with properties {name:"BreakfastShortLog", contents:"$HOME/Library/Logs/Breakfast.log"}
+			make new default entry at end of default entries with properties {name:"BreakfastLongLog", contents:"$HOME/Library/Logs/Breakfast_debug.log"}
+			make new default entry at end of default entries with properties {name:"QueuePath", contents:"missing"}
+			make new default entry at end of default entries with properties {name:"AppPath", contents:"missing"}
+			make new default entry at end of default entries with properties {name:"ResourcePath", contents:missing value}
+			make new default entry at end of default entries with properties {name:"TrimFileState", contents:off state}
+			make new default entry at end of default entries with properties {name:"Tags.Stik", contents:10}
+		end tell
 		
-	end tell
-	
+		(*This section sets up our local variables using the default list.*)
+		tell user defaults
+			set CalledByScript to (contents of default entry "CalledByScript" as boolean)
+			set ExtensionList to contents of default entry "ExtensionList"
+			set OldExtensionList to ExtensionList
+			set OutFolder to contents of default entry "OutFolder"
+			set OldOutFolder to OutFolder
+			set WatchFolder to contents of default entry "WatchFolder"
+			set OldWatchFolder to WatchFolder
+			set EncodingOptions to contents of default entry "EncodingOptions"
+			set OldEncodingOptions to EncodingOptions
+			set BreakfastShortLog to contents of default entry "BreakfastShortLog"
+			set BreakfastLongLog to contents of default entry "BreakfastLongLog"
+			set EncodingFile to "Preparing..."
+			
+			
+		end tell
+	on error ErrorMessage number ErrorNumber
+		do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time " & ErrorMessage & " >> " & BreakfastLongLog
+		tell application "Finder"
+			activate
+			display dialog ErrorMessage buttons {"Cancel"} default button 1 giving up after 120
+		end tell
+	end try
 end will finish launching
 
 on awake from nib theObject
-	(*This handler is called during launch, when the app is being unpacked from its nib.*)
-	
-	-- Get the path names for queue.txt, engine.sh, and the general resource path
-	tell main bundle
-		set QueuePath to path for resource "queue" extension "txt"
-		set EnginePath to path for resource "engine" extension "sh"
-		set watcherScript to path for resource "convert - video to iTunes (Breakfast)" extension "scpt"
-		set ResourcePath to resource path
-	end tell
-	
-	set AppPath to POSIX path of (path to me) as string
-	(* If the app was called by the user, we set up preferences. If the app was called
-				from the watcher script, we do the deal *)
-	
-	if CalledByScript = false then
+	try
+		(*This handler is called during launch, when the app is being unpacked from its nib.*)
 		
-		-- Show the preference window
-		set visible of window "PrefWindow" to true
-		set content of text field "outFolderText" of window "PrefWindow" to OutFolder
-		set content of text field "ExListText" of window "PrefWindow" to ExtensionList
-		set content of text field "encodeOptions" of window "PrefWindow" to EncodingOptions
-		set content of text field "WatchFolderText" of window "PrefWindow" to WatchFolder
-	end if
-	
-	if CalledByScript = true then
-		try
-			-- Hide the unneeded menus.
-			set menuItem to second menu item of main menu
-			set saveMenu to first menu item of sub menu of menuItem
-			set resetMenu to second menu item of sub menu of menuItem
+		-- Get the path names for queue.txt, engine.sh, and the general resource path
+		tell main bundle
+			set QueuePath to path for resource "queue" extension "txt"
+			set EnginePath to path for resource "engine" extension "sh"
+			set watcherScript to path for resource "convert - video to iTunes (Breakfast)" extension "scpt"
+			set ResourcePath to resource path
+		end tell
+		
+		set AppPath to POSIX path of (path to me) as string
+		(* If the app was called by the user, we set up preferences. If the app was called
+				from the watcher script, we do the deal *)
+		
+		if CalledByScript = false then
 			
-			set enabled of saveMenu to false
-			set enabled of resetMenu to false
-			
-			-- Make the progress window visible.
-			set visible of window "ProgressWindow" to true
-			
-			-- Show the status window.
-			show window "ProgressWindow"
-			
-			-- Set up threaded animation of the progress bar. 
-			tell window "ProgressWindow"
-				set uses threaded animation of progress indicator "ProgressBar" to true
-				-- Set contents of the EncodeFileText text field to a known temporary value (we set this above
-				-- so that we'll know later whether the engine.sh has updated it.
-				set content of text field "EncodeFileText" to EncodingFile
-			end tell
-			
-			--Tell the program we're about to start encoding
-			set IsEncoding to true
-			
-			-- Let's do this.
-			do shell script ResourcePath & "/engine.sh &> /dev/null & echo $!"
-			
-			
-		on error ErrorMessage number ErrorNumber
-			do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time " & ErrorMessage & " >> " & BreakfastLongLog
-			tell application "Finder"
-				activate
-				display dialog ErrorMessage buttons {"Cancel"} default button 1 giving up after 120
-			end tell
-		end try
-	end if
-	
+			-- Show the preference window
+			set visible of window "PrefWindow" to true
+			set content of text field "outFolderText" of window "PrefWindow" to OutFolder
+			set content of text field "ExListText" of window "PrefWindow" to ExtensionList
+			set content of text field "encodeOptions" of window "PrefWindow" to EncodingOptions
+			set content of text field "WatchFolderText" of window "PrefWindow" to WatchFolder
+		end if
+		
+		if CalledByScript = true then
+			try
+				-- Hide the unneeded menus.
+				set menuItem to second menu item of main menu
+				set saveMenu to first menu item of sub menu of menuItem
+				set resetMenu to second menu item of sub menu of menuItem
+				
+				set enabled of saveMenu to false
+				set enabled of resetMenu to false
+				
+				-- Make the progress window visible.
+				set visible of window "ProgressWindow" to true
+				
+				-- Show the status window.
+				show window "ProgressWindow"
+				
+				-- Set up threaded animation of the progress bar. 
+				tell window "ProgressWindow"
+					set uses threaded animation of progress indicator "ProgressBar" to true
+					-- Set contents of the EncodeFileText text field to a known temporary value (we set this above
+					-- so that we'll know later whether the engine.sh has updated it.
+					set content of text field "EncodeFileText" to EncodingFile
+				end tell
+				
+				--Tell the program we're about to start encoding
+				set IsEncoding to true
+				
+				-- Let's do this.
+				do shell script ResourcePath & "/engine.sh &> /dev/null & echo $!"
+				
+				
+			on error ErrorMessage number ErrorNumber
+				do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time " & ErrorMessage & " >> " & BreakfastLongLog
+				tell application "Finder"
+					activate
+					display dialog ErrorMessage buttons {"Cancel"} default button 1 giving up after 120
+				end tell
+			end try
+		end if
+	on error ErrorMessage number ErrorNumber
+		do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time " & ErrorMessage & " >> " & BreakfastLongLog
+		tell application "Finder"
+			activate
+			display dialog ErrorMessage buttons {"Cancel"} default button 1 giving up after 120
+		end tell
+	end try
 end awake from nib
 
 on clicked theObject
