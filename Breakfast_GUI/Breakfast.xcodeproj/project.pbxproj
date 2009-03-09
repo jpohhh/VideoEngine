@@ -13,9 +13,8 @@
 			contextName = "";
 			files = (
 				257572C5072881A4000BE9CA /* Breakfast.applescript in AppleScript */,
-				A60979F90F64ECC6008D05E9 /* addtoitunes.applescript in AppleScript */,
-				A60979FA0F64ECC6008D05E9 /* addtoitunes_notag.applescript in AppleScript */,
 				A60979FE0F64EDF9008D05E9 /* convert - video to iTunes (Breakfast).scpt in AppleScript */,
+				A6097A750F64F74A008D05E9 /* addtoitunes.applescript in AppleScript */,
 			);
 			isSharedContext = 0;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -36,9 +35,8 @@
 		A60979EE0F64EB32008D05E9 /* mp4tags in Resources */ = {isa = PBXBuildFile; fileRef = A60979EB0F64EB32008D05E9 /* mp4tags */; };
 		A60979EF0F64EB32008D05E9 /* mp4track in Resources */ = {isa = PBXBuildFile; fileRef = A60979EC0F64EB32008D05E9 /* mp4track */; };
 		A60979F10F64EB3C008D05E9 /* HandBrakeCLI in Resources */ = {isa = PBXBuildFile; fileRef = A60979F00F64EB3C008D05E9 /* HandBrakeCLI */; };
-		A60979F90F64ECC6008D05E9 /* addtoitunes.applescript in AppleScript */ = {isa = PBXBuildFile; fileRef = A60979F70F64ECC6008D05E9 /* addtoitunes.applescript */; settings = {ATTRIBUTES = (Debug, ); }; };
-		A60979FA0F64ECC6008D05E9 /* addtoitunes_notag.applescript in AppleScript */ = {isa = PBXBuildFile; fileRef = A60979F80F64ECC6008D05E9 /* addtoitunes_notag.applescript */; settings = {ATTRIBUTES = (Debug, ); }; };
 		A60979FE0F64EDF9008D05E9 /* convert - video to iTunes (Breakfast).scpt in AppleScript */ = {isa = PBXBuildFile; fileRef = A60979FD0F64EDF9008D05E9 /* convert - video to iTunes (Breakfast).scpt */; settings = {ATTRIBUTES = (Debug, ); }; };
+		A6097A750F64F74A008D05E9 /* addtoitunes.applescript in AppleScript */ = {isa = PBXBuildFile; fileRef = A6097A740F64F74A008D05E9 /* addtoitunes.applescript */; settings = {ATTRIBUTES = (Debug, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,9 +56,8 @@
 		A60979EB0F64EB32008D05E9 /* mp4tags */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = mp4tags; path = ../BIN/mp4tags; sourceTree = SOURCE_ROOT; };
 		A60979EC0F64EB32008D05E9 /* mp4track */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = mp4track; path = ../BIN/mp4track; sourceTree = SOURCE_ROOT; };
 		A60979F00F64EB3C008D05E9 /* HandBrakeCLI */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = HandBrakeCLI; path = ../BIN/HandBrakeCLI; sourceTree = SOURCE_ROOT; };
-		A60979F70F64ECC6008D05E9 /* addtoitunes.applescript */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.applescript; name = addtoitunes.applescript; path = ../SCPT/addtoitunes.applescript; sourceTree = SOURCE_ROOT; };
-		A60979F80F64ECC6008D05E9 /* addtoitunes_notag.applescript */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.applescript; name = addtoitunes_notag.applescript; path = ../SCPT/addtoitunes_notag.applescript; sourceTree = SOURCE_ROOT; };
 		A60979FD0F64EDF9008D05E9 /* convert - video to iTunes (Breakfast).scpt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.scpt; path = "convert - video to iTunes (Breakfast).scpt"; sourceTree = "<group>"; };
+		A6097A740F64F74A008D05E9 /* addtoitunes.applescript */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.applescript; name = addtoitunes.applescript; path = ../SCPT/addtoitunes.applescript; sourceTree = SOURCE_ROOT; };
 		DA206CF1015C4E2903C91932 /* AppleScriptKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppleScriptKit.framework; path = /System/Library/Frameworks/AppleScriptKit.framework; sourceTree = "<absolute>"; };
 		DA206CF3015C4E8B03C91932 /* Breakfast.applescript */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.applescript; path = Breakfast.applescript; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -136,9 +133,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A6097A740F64F74A008D05E9 /* addtoitunes.applescript */,
 				A60979FD0F64EDF9008D05E9 /* convert - video to iTunes (Breakfast).scpt */,
-				A60979F70F64ECC6008D05E9 /* addtoitunes.applescript */,
-				A60979F80F64ECC6008D05E9 /* addtoitunes_notag.applescript */,
 				A60979F00F64EB3C008D05E9 /* HandBrakeCLI */,
 				A60979EA0F64EB32008D05E9 /* mp4art */,
 				A60979EB0F64EB32008D05E9 /* mp4tags */,

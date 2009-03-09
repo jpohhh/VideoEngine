@@ -248,10 +248,6 @@ do
 		${resource_path}/mp4tags "$1" -n $season 1>>"$logfile" 2>>"$logfile"
 		${resource_path}/mp4tags "$1" -o $tven 1>>"$logfile" 2>>"$logfile"
 		
-		#Save stik to User Defaults so that addtoitunes script can pick it up later.
-		defaults write com.Breakfast.engine Tags.Stik -int $stik
-		
-		
 		#begin art logic
 		last_covr_index=$(mp4art --list "$1" | tail -1 | awk '{print $1}')
 		#if there's no covr-box, add one with pulled art
@@ -280,8 +276,8 @@ do
 		fi
 		
 		# Call the applescript that will put all of this stuff into iTunes.
-		time=$(date +%Y%m%d-%H%M%S); echo $time "Trying to call the applescript_notags..." >> "$logfile"
-		osascript ${resource_path}/Scripts/addtoitunes_notag.scpt "$1" >> $logfile 2>> $logfile
+		time=$(date +%Y%m%d-%H%M%S); echo $time "Calling addtoitunes.scpt..." >> "$logfile"
+		osascript ${resource_path}/Scripts/addtoitunes.scpt "$1" >> $logfile 2>> $logfile
 	
 	time=$(date +%Y%m%d-%H%M%S); echo $time Tagged $cart-$season$episode to "$1" >> "$shortlog"
 	#go to next file

@@ -59,10 +59,6 @@ do
 	rm queue.txt-e
 	queue_item=$(head -n1 ${resource_path}/queue.txt)
 done
-# This isn't a good place to sync the iPod, because this script often finished before the detail.sh scraper, which makes
-# the sync useless. But I'm leaving this here until I figure out what to do with it.
-#osascript -e 'tell application "iTunes"' -e "repeat with s in sources" -e "if (kind of s is iPod) then update s" -e "end repeat" -e "end tell"
-#
-#
+
 # We don't need the progress bar anymore. Close Breakfast.
 osascript -e 'tell application "Breakfast"' -e "quit" -e 'end tell'
