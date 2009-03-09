@@ -108,7 +108,7 @@ on awake from nib theObject
 		tell main bundle
 			set QueuePath to path for resource "queue" extension "txt"
 			set EnginePath to path for resource "engine" extension "sh"
-			set watcherScript to path for resource "convert - video to iTunes (Breakfast)" extension "scpt"
+			set watcherScript to path for resource "folder_action" extension "scpt"
 			set ResourcePath to resource path
 		end tell
 		
@@ -236,7 +236,7 @@ on clicked theObject
 		if OldWatchFolder is not equal to WatchFolder then
 			-- See if our watcher script has been copied to the Folder Actions folder already.
 			set thePath to "file://localhost/Library/Scripts/Folder%20Action%20Scripts/"
-			set theWatcherScript to thePath & "convert%20-%20video%20to%20iTunes%20(Breakfast).scpt"
+			set theWatcherScript to thePath & "folder_action.scpt"
 			if (theWatcherScript exists) is not equal to true then
 				do shell script "cp " & quoted form of watcherScript & " file://localhost/Library/Scripts/Folder%20Action%20Scripts/"
 				do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Folder Action not found. Copying. >> " & BreakfastLongLog
@@ -265,8 +265,8 @@ on clicked theObject
 					if numberofitems > 0 then
 						set i to 1
 						repeat until i > numberofitems
-							if (name of item i of theScripts) = "convert - video to iTunes (Breakfast).scpt" then
-								remove action from OldWatchFolder using action name "convert - video to iTunes (Breakfast).scpt"
+							if (name of item i of theScripts) = "folder_action.scpt" then
+								remove action from OldWatchFolder using action name "folder_action.scpt"
 							end if
 							set i to i + 1
 						end repeat
@@ -294,8 +294,8 @@ on clicked theObject
 				if numberofitems > 0 then
 					set i to 1
 					repeat until i > numberofitems
-						if (name of item i of theScripts) = "convert - video to iTunes (Breakfast).scpt" then
-							remove action from WatchFolder using action name "convert - video to iTunes (Breakfast).scpt"
+						if (name of item i of theScripts) = "folder_action.scpt" then
+							remove action from WatchFolder using action name "folder_action.scpt"
 						end if
 						set i to i + 1
 					end repeat
@@ -306,7 +306,7 @@ on clicked theObject
 			tell application "System Events"
 				make new folder action at the end of folder actions with properties {path:(WatchFolder as text)}
 				tell folder action theName
-					make new script at the end of scripts with properties {name:"convert - video to iTunes (Breakfast).scpt"}
+					make new script at the end of scripts with properties {name:"folder_action.scpt"}
 				end tell
 			end tell
 			
