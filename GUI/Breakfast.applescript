@@ -88,8 +88,6 @@ on will finish launching theObject
 			set BreakfastShortLog to contents of default entry "BreakfastShortLog"
 			set BreakfastLongLog to contents of default entry "BreakfastLongLog"
 			set EncodingFile to "Preparing..."
-			
-			
 		end tell
 	on error ErrorMessage number ErrorNumber
 		do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time " & ErrorMessage & " >> " & BreakfastLongLog
@@ -108,7 +106,7 @@ on awake from nib theObject
 		tell main bundle
 			set QueuePath to path for resource "queue" extension "txt"
 			set EnginePath to path for resource "engine" extension "sh"
-			set watcherScript to path for resource "folder_action" extension "scpt"
+			set watcherScript to path for script "folder_action" extension "scpt"
 			set ResourcePath to resource path
 		end tell
 		
