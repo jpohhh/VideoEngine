@@ -13,8 +13,8 @@
 			contextName = "";
 			files = (
 				257572C5072881A4000BE9CA /* Breakfast.applescript in AppleScript */,
-				27F017E60F60AA0600328CB6 /* addtoitunes.scpt in AppleScript */,
-				27A0D16C0F63371300C7E917 /* addtoitunes_notag.scpt in AppleScript */,
+				A60979F90F64ECC6008D05E9 /* addtoitunes.applescript in AppleScript */,
+				A60979FA0F64ECC6008D05E9 /* addtoitunes_notag.applescript in AppleScript */,
 			);
 			isSharedContext = 0;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -28,8 +28,6 @@
 		257572CA072881A4000BE9CA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		257572CC072881A4000BE9CA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		257572CD072881A4000BE9CA /* AppleScriptKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA206CF1015C4E2903C91932 /* AppleScriptKit.framework */; };
-		27A0D16C0F63371300C7E917 /* addtoitunes_notag.scpt in AppleScript */ = {isa = PBXBuildFile; fileRef = 27A0D16B0F63371300C7E917 /* addtoitunes_notag.scpt */; settings = {ATTRIBUTES = (Debug, ); }; };
-		27F017E60F60AA0600328CB6 /* addtoitunes.scpt in AppleScript */ = {isa = PBXBuildFile; fileRef = 27F017E50F60AA0600328CB6 /* addtoitunes.scpt */; settings = {ATTRIBUTES = (Debug, ); }; };
 		27F017EA0F60AA2700328CB6 /* engine.sh in Resources */ = {isa = PBXBuildFile; fileRef = 27F017E70F60AA2600328CB6 /* engine.sh */; };
 		27F017EB0F60AA2700328CB6 /* detail.sh in Resources */ = {isa = PBXBuildFile; fileRef = 27F017E80F60AA2600328CB6 /* detail.sh */; };
 		27F017EC0F60AA2700328CB6 /* queue.txt in Resources */ = {isa = PBXBuildFile; fileRef = 27F017E90F60AA2700328CB6 /* queue.txt */; };
@@ -37,6 +35,8 @@
 		A60979EE0F64EB32008D05E9 /* mp4tags in Resources */ = {isa = PBXBuildFile; fileRef = A60979EB0F64EB32008D05E9 /* mp4tags */; };
 		A60979EF0F64EB32008D05E9 /* mp4track in Resources */ = {isa = PBXBuildFile; fileRef = A60979EC0F64EB32008D05E9 /* mp4track */; };
 		A60979F10F64EB3C008D05E9 /* HandBrakeCLI in Resources */ = {isa = PBXBuildFile; fileRef = A60979F00F64EB3C008D05E9 /* HandBrakeCLI */; };
+		A60979F90F64ECC6008D05E9 /* addtoitunes.applescript in AppleScript */ = {isa = PBXBuildFile; fileRef = A60979F70F64ECC6008D05E9 /* addtoitunes.applescript */; settings = {ATTRIBUTES = (Debug, ); }; };
+		A60979FA0F64ECC6008D05E9 /* addtoitunes_notag.applescript in AppleScript */ = {isa = PBXBuildFile; fileRef = A60979F80F64ECC6008D05E9 /* addtoitunes_notag.applescript */; settings = {ATTRIBUTES = (Debug, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,8 +44,6 @@
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		257572D5072881A4000BE9CA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		257572D6072881A4000BE9CA /* Breakfast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Breakfast.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		27A0D16B0F63371300C7E917 /* addtoitunes_notag.scpt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.scpt; path = addtoitunes_notag.scpt; sourceTree = "<group>"; };
-		27F017E50F60AA0600328CB6 /* addtoitunes.scpt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.scpt; path = addtoitunes.scpt; sourceTree = "<group>"; };
 		27F017E70F60AA2600328CB6 /* engine.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = engine.sh; sourceTree = "<group>"; };
 		27F017E80F60AA2600328CB6 /* detail.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = detail.sh; sourceTree = "<group>"; };
 		27F017E90F60AA2700328CB6 /* queue.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = queue.txt; sourceTree = "<group>"; };
@@ -58,6 +56,8 @@
 		A60979EB0F64EB32008D05E9 /* mp4tags */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = mp4tags; path = ../BIN/mp4tags; sourceTree = SOURCE_ROOT; };
 		A60979EC0F64EB32008D05E9 /* mp4track */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = mp4track; path = ../BIN/mp4track; sourceTree = SOURCE_ROOT; };
 		A60979F00F64EB3C008D05E9 /* HandBrakeCLI */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = HandBrakeCLI; path = ../BIN/HandBrakeCLI; sourceTree = SOURCE_ROOT; };
+		A60979F70F64ECC6008D05E9 /* addtoitunes.applescript */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.applescript; name = addtoitunes.applescript; path = ../SCPT/addtoitunes.applescript; sourceTree = SOURCE_ROOT; };
+		A60979F80F64ECC6008D05E9 /* addtoitunes_notag.applescript */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.applescript; name = addtoitunes_notag.applescript; path = ../SCPT/addtoitunes_notag.applescript; sourceTree = SOURCE_ROOT; };
 		DA206CF1015C4E2903C91932 /* AppleScriptKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppleScriptKit.framework; path = /System/Library/Frameworks/AppleScriptKit.framework; sourceTree = "<absolute>"; };
 		DA206CF3015C4E8B03C91932 /* Breakfast.applescript */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.applescript; path = Breakfast.applescript; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -133,12 +133,12 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A60979F70F64ECC6008D05E9 /* addtoitunes.applescript */,
+				A60979F80F64ECC6008D05E9 /* addtoitunes_notag.applescript */,
 				A60979F00F64EB3C008D05E9 /* HandBrakeCLI */,
 				A60979EA0F64EB32008D05E9 /* mp4art */,
 				A60979EB0F64EB32008D05E9 /* mp4tags */,
 				A60979EC0F64EB32008D05E9 /* mp4track */,
-				27A0D16B0F63371300C7E917 /* addtoitunes_notag.scpt */,
-				27F017E50F60AA0600328CB6 /* addtoitunes.scpt */,
 				27F017E70F60AA2600328CB6 /* engine.sh */,
 				27F017E80F60AA2600328CB6 /* detail.sh */,
 				27F017E90F60AA2700328CB6 /* queue.txt */,
