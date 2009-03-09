@@ -9,8 +9,5 @@ on run filePath
 		repeat while (exists of theTrack) = false
 			delay 1
 		end repeat
-		if ((do shell script "defaults read com.Breakfast.engine Tags.Stik") as integer) = 10 then
-			set video kind of theTrack to TV show
-		end if
 	end tell
 end run

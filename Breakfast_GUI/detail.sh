@@ -241,7 +241,7 @@ do
 		${resource_path}/mp4tags "$1" -y $cday 1>>"$logfile" 2>>"$logfile"
 		${resource_path}/mp4tags "$1" -m "$desc" 1>>"$logfile" 2>>"$logfile"
 		${resource_path}/mp4tags "$1" -l "$desc" 1>>"$logfile" 2>>"$logfile"
-		#${resource_path}/mp4tags "$1" -i "TV show" 1>>"$logfile" 2>>"$logfile"
+		${resource_path}/mp4tags "$1" -i tvshow 1>>"$logfile" 2>>"$logfile"
 		${resource_path}/mp4tags "$1" -S "$cart" 1>>"$logfile" 2>>"$logfile"
 		${resource_path}/mp4tags "$1" -M $episode 1>>"$logfile" 2>>"$logfile"
 		${resource_path}/mp4tags "$1" -N $tvnn 1>>"$logfile" 2>>"$logfile"

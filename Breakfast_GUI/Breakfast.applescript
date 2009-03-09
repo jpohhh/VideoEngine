@@ -180,9 +180,9 @@ on clicked theObject
 	-- If the user clicks on the Choose Path button...
 	if name of theObject is "choosePathButton" then
 		-- If the save button has been pressed, unpress it.
-		if (state of button "saveButton" of window "PrefWindow") = 1 then
-			set (state of button "saveButton" of window "PrefWindow") to 0
-			set (enabled of button "saveButton" of window "PrefWindow") to true
+		if (state of button "savePathButton" of window "PrefWindow") = 1 then
+			set (state of button "savePathButton" of window "PrefWindow") to 0
+			set (enabled of button "savePathButton" of window "PrefWindow") to true
 		end if
 		-- Save the previous folder so we can reset if the user wants to later.
 		set OldOutFolder to OutFolder
@@ -207,7 +207,7 @@ on clicked theObject
 	end if
 	
 	-- If the resetPathButton was clicked...
-	if name of theObject is "resetButton" then
+	if name of theObject is "resetPathButton" then
 		-- Set the variables back to what they were.
 		set OutFolder to OldOutFolder
 		set WatchFolder to OldWatchFolder
