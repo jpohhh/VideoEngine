@@ -29,30 +29,22 @@
 		257572CC072881A4000BE9CA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		257572CD072881A4000BE9CA /* AppleScriptKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA206CF1015C4E2903C91932 /* AppleScriptKit.framework */; };
 		27A0D16C0F63371300C7E917 /* addtoitunes_notag.scpt in AppleScript */ = {isa = PBXBuildFile; fileRef = 27A0D16B0F63371300C7E917 /* addtoitunes_notag.scpt */; settings = {ATTRIBUTES = (Debug, ); }; };
-		27A0D16E0F63372600C7E917 /* mp4art in Resources */ = {isa = PBXBuildFile; fileRef = 27A0D16D0F63372600C7E917 /* mp4art */; };
-		27A0D1700F63372C00C7E917 /* mp4tags in Resources */ = {isa = PBXBuildFile; fileRef = 27A0D16F0F63372C00C7E917 /* mp4tags */; };
-		27A0D1720F63373100C7E917 /* mp4track in Resources */ = {isa = PBXBuildFile; fileRef = 27A0D1710F63373100C7E917 /* mp4track */; };
 		27F017E60F60AA0600328CB6 /* addtoitunes.scpt in AppleScript */ = {isa = PBXBuildFile; fileRef = 27F017E50F60AA0600328CB6 /* addtoitunes.scpt */; settings = {ATTRIBUTES = (Debug, ); }; };
 		27F017EA0F60AA2700328CB6 /* engine.sh in Resources */ = {isa = PBXBuildFile; fileRef = 27F017E70F60AA2600328CB6 /* engine.sh */; };
 		27F017EB0F60AA2700328CB6 /* detail.sh in Resources */ = {isa = PBXBuildFile; fileRef = 27F017E80F60AA2600328CB6 /* detail.sh */; };
 		27F017EC0F60AA2700328CB6 /* queue.txt in Resources */ = {isa = PBXBuildFile; fileRef = 27F017E90F60AA2700328CB6 /* queue.txt */; };
-		27F018910F60E2C000328CB6 /* HandBrakeCLI in Resources */ = {isa = PBXBuildFile; fileRef = 27F018900F60E2C000328CB6 /* HandBrakeCLI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
-		257572D5072881A4000BE9CA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
+		257572D5072881A4000BE9CA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		257572D6072881A4000BE9CA /* Breakfast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Breakfast.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		27A0D16B0F63371300C7E917 /* addtoitunes_notag.scpt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.scpt; path = addtoitunes_notag.scpt; sourceTree = "<group>"; };
-		27A0D16D0F63372600C7E917 /* mp4art */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = mp4art; sourceTree = "<group>"; };
-		27A0D16F0F63372C00C7E917 /* mp4tags */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = mp4tags; sourceTree = "<group>"; };
-		27A0D1710F63373100C7E917 /* mp4track */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = mp4track; sourceTree = "<group>"; };
 		27F017E50F60AA0600328CB6 /* addtoitunes.scpt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.scpt; path = addtoitunes.scpt; sourceTree = "<group>"; };
 		27F017E70F60AA2600328CB6 /* engine.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = engine.sh; sourceTree = "<group>"; };
 		27F017E80F60AA2600328CB6 /* detail.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = detail.sh; sourceTree = "<group>"; };
 		27F017E90F60AA2700328CB6 /* queue.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = queue.txt; sourceTree = "<group>"; };
-		27F018900F60E2C000328CB6 /* HandBrakeCLI */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = HandBrakeCLI; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		29B97319FDCFA39411CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
@@ -134,10 +126,6 @@
 			isa = PBXGroup;
 			children = (
 				27A0D16B0F63371300C7E917 /* addtoitunes_notag.scpt */,
-				27F018900F60E2C000328CB6 /* HandBrakeCLI */,
-				27A0D16D0F63372600C7E917 /* mp4art */,
-				27A0D16F0F63372C00C7E917 /* mp4tags */,
-				27A0D1710F63373100C7E917 /* mp4track */,
 				27F017E50F60AA0600328CB6 /* addtoitunes.scpt */,
 				27F017E70F60AA2600328CB6 /* engine.sh */,
 				27F017E80F60AA2600328CB6 /* detail.sh */,
@@ -218,10 +206,6 @@
 				27F017EA0F60AA2700328CB6 /* engine.sh in Resources */,
 				27F017EB0F60AA2700328CB6 /* detail.sh in Resources */,
 				27F017EC0F60AA2700328CB6 /* queue.txt in Resources */,
-				27F018910F60E2C000328CB6 /* HandBrakeCLI in Resources */,
-				27A0D16E0F63372600C7E917 /* mp4art in Resources */,
-				27A0D1700F63372C00C7E917 /* mp4tags in Resources */,
-				27A0D1720F63373100C7E917 /* mp4track in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

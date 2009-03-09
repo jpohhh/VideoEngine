@@ -1,9 +1,3 @@
--- Breakfast.applescript
--- Breakfast
-
---  Created by Michael Dockery on 2/24/09.
---  Copyright 2009, J. Michael Dockery. All rights reserved.
-
 (*
 #   This file is part of Video Engine - A broadcatching system for Mac OS X.
 #
