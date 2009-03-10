@@ -49,7 +49,7 @@ do
 	echo Encoding options: "$encodingoptions" >> "$logname"
 	
 	#start encoding
-	$resource_path/HandBrakeCLI -i "$sourcename" -o "$outputname" $encodingoptions -v 1>> "$logname" 2>> "$logname"
+	nice $resource_path/HandBrakeCLI -i "$sourcename" -o "$outputname" $encodingoptions -v 1>> "$logname" 2>> "$logname"
 	time=$(date +%Y%m%d-%H%M%S); echo $time Finished encoding "$sourcename" >> "$shortlog"
 	time=$(date +%Y%m%d-%H%M%S); echo $time Finished encoding "$sourcename" >> "$logfile"
 	
