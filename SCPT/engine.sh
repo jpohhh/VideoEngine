@@ -32,12 +32,14 @@ resource_path=$(defaults read com.Breakfast.engine ResourcePath)
 queue_item=$(head -n1 ${resource_path}/queue.txt)
 until [ "$queue_item" = "" ]
 do
+	#grab info from queue
 	sourcename=$(echo $queue_item | awk -F\; '{print $1}')
 	outputname=$(echo $queue_item | awk -F\; '{print $2}')
 	encodingoptions=$(echo $queue_item | awk -F\; '{print $3}')
 	logname=$(echo $queue_item | awk -F\; '{print $4}')
+	
+	#Tell the GUI's main script what we're working on, log all this 
 	time=$(date +%Y%m%d-%H%M%S); echo $time ENGINE.SH Will try to call osacript >> "$logfile"
-	#Tell the GUI's main script what we're working on. 
 	osascript -e "tell application \"""$mainscript""\"" -e "set content of text field \"EncodeFileText\" of window \"ProgressWindow\" to \"""$outputname""\"" -e 'end tell' 1>> "$logfile" 2>> "$logfile"
 	echo "BEGINNING ENCODE WORK" > "$logname"
 	time=$(date +%Y%m%d-%H%M%S); echo $time Starting to encode "$sourcename" >> "$shortlog"
@@ -45,17 +47,23 @@ do
 	echo Source: "$sourcename" >> "$logname"
 	echo Output: "$outputname" >> "$logname"
 	echo Encoding options: "$encodingoptions" >> "$logname"
+	
+	#start encoding
 	$resource_path/HandBrakeCLI -i "$sourcename" -o "$outputname" $encodingoptions -v 1>> "$logname" 2>> "$logname"
 	time=$(date +%Y%m%d-%H%M%S); echo $time Finished encoding "$sourcename" >> "$shortlog"
 	time=$(date +%Y%m%d-%H%M%S); echo $time Finished encoding "$sourcename" >> "$logfile"
+	
+	#check to make sure encode completed nicely, if it didn't do not pass to detail
 	endMessage=$(tail -c 22 "$logname" | sed 's/\ //g')
 	time=$(date +%Y%m%d-%H%M%S); echo $time Received endMessage "$endMessage" >> "$logfile"
 	if [ $endMessage == "HandBrakehasexited." ]
 		then
 			${resource_path}/detail.sh "$outputname" &> /dev/null & sed -i -e "1d" ${resource_path}/queue.txt
 		else
-			time=$(date +%Y%m%d-%H%M%S); echo $time Handbrake did not finish. Exiting without running detail.sh >> "$logfile" & sed -i -e "1d" ${resource_path}/queue.txt
+			time=$(date +%Y%m%d-%H%M%S); echo $time Handbrake did not finish. Exiting without running detail.sh >> "$logfile"; sed -i -e "1d" ${resource_path}/queue.txt
 	fi
+	
+	#clean up from sed
 	rm queue.txt-e
 	queue_item=$(head -n1 ${resource_path}/queue.txt)
 done
