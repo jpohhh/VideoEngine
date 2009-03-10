@@ -244,7 +244,8 @@ on clicked theObject
 				set watcherInstalled to false
 			end try
 			if watcherInstalled is not equal to true then
-				do shell script "cp " & AppPath & "Contents/Resources/Scripts/folder_action.scpt " & quoted form of thePath & " >> /copylog.txt"
+				-- do shell script "cp " & AppPath & "Contents/Resources/Scripts/folder_action.scpt " & quoted form of thePath & " >> /copylog.txt"
+				do shell script "osacompile -o " & quoted form of thePath & "folder_action.scpt " & resourcePath & "/folder_action.txt"
 				do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Folder Action not found. Copying. >> " & BreakfastLongLog
 			end if
 			
