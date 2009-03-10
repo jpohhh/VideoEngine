@@ -133,17 +133,17 @@
 			isa = PBXGroup;
 			children = (
 				91342E520F662E25004805C7 /* detail.sh */,
-				91342E280F660524004805C7 /* folder_action.txt */,
 				A6097AA50F64FA15008D05E9 /* engine.sh */,
+				91342E280F660524004805C7 /* folder_action.txt */,
 				A6097A740F64F74A008D05E9 /* addtoitunes.applescript */,
-				A60979F00F64EB3C008D05E9 /* HandBrakeCLI */,
-				A60979EA0F64EB32008D05E9 /* mp4art */,
-				A60979EB0F64EB32008D05E9 /* mp4tags */,
-				A60979EC0F64EB32008D05E9 /* mp4track */,
 				27F017E90F60AA2700328CB6 /* queue.txt */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				65359356078DD41800E8BB2F /* AppleScriptKit.sdef */,
+				A60979F00F64EB3C008D05E9 /* HandBrakeCLI */,
+				A60979EA0F64EB32008D05E9 /* mp4art */,
+				A60979EB0F64EB32008D05E9 /* mp4tags */,
+				A60979EC0F64EB32008D05E9 /* mp4track */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
