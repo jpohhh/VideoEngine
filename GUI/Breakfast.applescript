@@ -117,9 +117,13 @@ on awake from nib theObject
 			-- Show the preference window
 			set visible of window "PrefWindow" to true
 			set content of text field "outFolderText" of window "PrefWindow" to OutFolder
+			set OldOutFolder to content of text field "outFolderText" of window "PrefWindow"
 			set content of text field "ExListText" of window "PrefWindow" to ExtensionList
+			set OldExtensionList to content of text field "ExListText" of window "PrefWindow"
 			set content of text field "encodeOptions" of window "PrefWindow" to EncodingOptions
+			set oldEncodeOptions to content of text field "encodeOptions" of window "PrefWindow"
 			set content of text field "WatchFolderText" of window "PrefWindow" to WatchFolder
+			set OldExtensionList to content of text field "WatchFolderText" of window "PrefWindow"
 		end if
 		
 		if CalledByScript = true then
@@ -237,12 +241,15 @@ on clicked theObject
 			set theWatcherScript to POSIX file "/Library/Scripts/Folder Action Scripts/folder_action.scpt"
 			try
 				tell application "Finder"
-					set dataSize to data size of file theFile
+					set dataSize to data size of file theWatcherScript
 					set watcherInstalled to true
 				end tell
 			on error
 				set watcherInstalled to false
 			end try
+			
+			do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: WatcherInstalled: " & watcherInstalled & " >> " & BreakfastLongLog
+			
 			if watcherInstalled is not equal to true then
 				-- do shell script "cp " & AppPath & "Contents/Resources/Scripts/folder_action.scpt " & quoted form of thePath & " >> /copylog.txt"
 				do shell script "osacompile -o " & quoted form of thePath & "folder_action.scpt " & resourcePath & "/folder_action.txt"
@@ -281,12 +288,16 @@ on clicked theObject
 				end tell
 			end if
 			
+			do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Finished removing script from OldWatchFolder >> " & BreakfastLongLog
+			
 			-- Add the script to the new watch folder.
 			-- First, if it's already there just pull it off.
 			tell application "System Events"
 				set theAlias to alias WatchFolder
 				set theName to name of theAlias
-				set theList to attached scripts WatchFolder
+				try
+					set theList to attached scripts WatchFolder
+				end try
 				try
 					set numberofitems to number of items of theList
 				on error
@@ -309,6 +320,8 @@ on clicked theObject
 				end if
 			end tell
 			
+			do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Finished removing script from new WatchFolder >> " & BreakfastLongLog
+			
 			-- Now, add it.
 			tell application "System Events"
 				make new folder action at the end of folder actions with properties {path:(WatchFolder as text)}
@@ -316,6 +329,8 @@ on clicked theObject
 					make new script at the end of scripts with properties {name:"folder_action.scpt"}
 				end tell
 			end tell
+			
+			do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Finished removing adding Folder Action >> " & BreakfastLongLog
 			
 			tell user defaults
 				set contents of default entry "OutFolder" to OutFolder
