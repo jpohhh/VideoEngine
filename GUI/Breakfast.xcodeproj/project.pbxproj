@@ -14,7 +14,6 @@
 			files = (
 				257572C5072881A4000BE9CA /* Breakfast.applescript in AppleScript */,
 				A6097A750F64F74A008D05E9 /* addtoitunes.applescript in AppleScript */,
-				A643BEAF0F64FB1C0079501E /* folder_action.applescript in AppleScript */,
 			);
 			isSharedContext = 0;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -29,6 +28,7 @@
 		257572CC072881A4000BE9CA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		257572CD072881A4000BE9CA /* AppleScriptKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA206CF1015C4E2903C91932 /* AppleScriptKit.framework */; };
 		27F017EC0F60AA2700328CB6 /* queue.txt in Resources */ = {isa = PBXBuildFile; fileRef = 27F017E90F60AA2700328CB6 /* queue.txt */; };
+		91342E290F660524004805C7 /* folder_action.txt in Resources */ = {isa = PBXBuildFile; fileRef = 91342E280F660524004805C7 /* folder_action.txt */; };
 		A60979ED0F64EB32008D05E9 /* mp4art in Resources */ = {isa = PBXBuildFile; fileRef = A60979EA0F64EB32008D05E9 /* mp4art */; };
 		A60979EE0F64EB32008D05E9 /* mp4tags in Resources */ = {isa = PBXBuildFile; fileRef = A60979EB0F64EB32008D05E9 /* mp4tags */; };
 		A60979EF0F64EB32008D05E9 /* mp4track in Resources */ = {isa = PBXBuildFile; fileRef = A60979EC0F64EB32008D05E9 /* mp4track */; };
@@ -36,7 +36,6 @@
 		A6097A750F64F74A008D05E9 /* addtoitunes.applescript in AppleScript */ = {isa = PBXBuildFile; fileRef = A6097A740F64F74A008D05E9 /* addtoitunes.applescript */; settings = {ATTRIBUTES = (Debug, ); }; };
 		A6097AA40F64FA09008D05E9 /* detail.sh in Resources */ = {isa = PBXBuildFile; fileRef = A6097AA30F64FA09008D05E9 /* detail.sh */; };
 		A6097AA60F64FA15008D05E9 /* engine.sh in Resources */ = {isa = PBXBuildFile; fileRef = A6097AA50F64FA15008D05E9 /* engine.sh */; };
-		A643BEAF0F64FB1C0079501E /* folder_action.applescript in AppleScript */ = {isa = PBXBuildFile; fileRef = A643BEAE0F64FB1C0079501E /* folder_action.applescript */; settings = {ATTRIBUTES = (Debug, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +49,7 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		65359356078DD41800E8BB2F /* AppleScriptKit.sdef */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.sdef; name = AppleScriptKit.sdef; path = /System/Library/Frameworks/AppleScriptKit.framework/Versions/A/Resources/AppleScriptKit.sdef; sourceTree = "<absolute>"; };
+		91342E280F660524004805C7 /* folder_action.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = folder_action.txt; path = ../SCPT/folder_action.txt; sourceTree = SOURCE_ROOT; };
 		A60979EA0F64EB32008D05E9 /* mp4art */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = mp4art; path = ../BIN/mp4art; sourceTree = SOURCE_ROOT; };
 		A60979EB0F64EB32008D05E9 /* mp4tags */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = mp4tags; path = ../BIN/mp4tags; sourceTree = SOURCE_ROOT; };
 		A60979EC0F64EB32008D05E9 /* mp4track */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = mp4track; path = ../BIN/mp4track; sourceTree = SOURCE_ROOT; };
@@ -57,7 +57,6 @@
 		A6097A740F64F74A008D05E9 /* addtoitunes.applescript */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.applescript; name = addtoitunes.applescript; path = ../SCPT/addtoitunes.applescript; sourceTree = SOURCE_ROOT; };
 		A6097AA30F64FA09008D05E9 /* detail.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = detail.sh; path = ../SCPT/detail.sh; sourceTree = SOURCE_ROOT; };
 		A6097AA50F64FA15008D05E9 /* engine.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = engine.sh; path = ../SCPT/engine.sh; sourceTree = SOURCE_ROOT; };
-		A643BEAE0F64FB1C0079501E /* folder_action.applescript */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.applescript; name = folder_action.applescript; path = ../SCPT/folder_action.applescript; sourceTree = SOURCE_ROOT; };
 		DA206CF1015C4E2903C91932 /* AppleScriptKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppleScriptKit.framework; path = /System/Library/Frameworks/AppleScriptKit.framework; sourceTree = "<absolute>"; };
 		DA206CF3015C4E8B03C91932 /* Breakfast.applescript */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.applescript; path = Breakfast.applescript; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -133,7 +132,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				A643BEAE0F64FB1C0079501E /* folder_action.applescript */,
+				91342E280F660524004805C7 /* folder_action.txt */,
 				A6097AA50F64FA15008D05E9 /* engine.sh */,
 				A6097AA30F64FA09008D05E9 /* detail.sh */,
 				A6097A740F64F74A008D05E9 /* addtoitunes.applescript */,
@@ -222,6 +221,7 @@
 				A60979F10F64EB3C008D05E9 /* HandBrakeCLI in Resources */,
 				A6097AA40F64FA09008D05E9 /* detail.sh in Resources */,
 				A6097AA60F64FA15008D05E9 /* engine.sh in Resources */,
+				91342E290F660524004805C7 /* folder_action.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
