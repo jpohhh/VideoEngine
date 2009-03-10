@@ -230,7 +230,17 @@ do
 		cover_art_url=$(grep 'filename' < "$episode_data" | awk -F\< '{print $2}' | awk -F\> '{print $2}')
 		curl http://images.thetvdb.com/banners/$cover_art_url > $resource_path/coverart.jpg 2>>/dev/null
 		
-		# List tags we got.
+		#check if video has width > 1270, if so, tag it as HD with mp4tags
+		res=$(${resource_path}/mp4track --list "$1" | grep -m 1 width | awk '{print $3}' | awk -F. '{print $1}')
+		if (($res>490))
+		then
+			hdvd="1"
+		else
+			hdvd="0"
+		fi
+		cnid=$(echo "$series_id""$season""$episode")
+		
+		# List tags we got, and tag using mp4tags
 		time=$(date +%Y%m%d-%H%M%S); echo $time "8) PULLED TAGS Show name:"$cart "Episode number:"$episode "SeasonNumber:"$season "Episode name:"$cnam "Aired:"$cday "Description:"$desc "Stik:"$stik "tven:"$tven "tvnn:"$tvnn "cover_art_url:"$cover_art_url "hdvd":$hdvd "cnid:"$cnid >> "$logfile"	
 
 		#Tag using mp4
