@@ -71,7 +71,6 @@ on will finish launching theObject
 			make new default entry at end of default entries with properties {name:"AppPath", contents:"missing"}
 			make new default entry at end of default entries with properties {name:"ResourcePath", contents:missing value}
 			make new default entry at end of default entries with properties {name:"TrimFileState", contents:off state}
-			make new default entry at end of default entries with properties {name:"Tags.Stik", contents:10}
 		end tell
 		
 		(*This section sets up our local variables using the default list.*)
@@ -252,7 +251,7 @@ on clicked theObject
 			
 			if watcherInstalled is not equal to true then
 				-- do shell script "cp " & AppPath & "Contents/Resources/Scripts/folder_action.scpt " & quoted form of thePath & " >> /copylog.txt"
-				do shell script "osacompile -o " & quoted form of thePath & "folder_action.scpt " & resourcePath & "/folder_action.txt"
+				do shell script "osacompile -o " & quoted form of thePath & "folder_action.scpt " & ResourcePath & "/folder_action.txt"
 				do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Folder Action not found. Copying. >> " & BreakfastLongLog
 			end if
 			
