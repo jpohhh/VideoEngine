@@ -13,7 +13,6 @@
 			contextName = "";
 			files = (
 				257572C5072881A4000BE9CA /* Breakfast.applescript in AppleScript */,
-				A6097A750F64F74A008D05E9 /* addtoitunes.applescript in AppleScript */,
 			);
 			isSharedContext = 0;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -28,23 +27,50 @@
 		257572CC072881A4000BE9CA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		257572CD072881A4000BE9CA /* AppleScriptKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA206CF1015C4E2903C91932 /* AppleScriptKit.framework */; };
 		27B4DDE40F67FEEC0024F0C4 /* ProgressBar.nib in Resources */ = {isa = PBXBuildFile; fileRef = 27B4DDE30F67FEEC0024F0C4 /* ProgressBar.nib */; };
+		27B6850E0F68588200BBD7A8 /* convert - video to mp4 using Breakfast.scpt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27B685090F6857DF00BBD7A8 /* convert - video to mp4 using Breakfast.scpt */; };
+		27B6850F0F68588200BBD7A8 /* addtoitunes.scpt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27B685060F6857CB00BBD7A8 /* addtoitunes.scpt */; };
 		27F017EC0F60AA2700328CB6 /* queue.txt in Resources */ = {isa = PBXBuildFile; fileRef = 27F017E90F60AA2700328CB6 /* queue.txt */; };
 		91342E530F662E25004805C7 /* detail.sh in Resources */ = {isa = PBXBuildFile; fileRef = 91342E520F662E25004805C7 /* detail.sh */; };
-		91B38C660F6729170047FB61 /* convert - video to mp4 using Breakfast.txt in Resources */ = {isa = PBXBuildFile; fileRef = 91B38C650F6729170047FB61 /* convert - video to mp4 using Breakfast.txt */; };
 		A60979ED0F64EB32008D05E9 /* mp4art in Resources */ = {isa = PBXBuildFile; fileRef = A60979EA0F64EB32008D05E9 /* mp4art */; };
 		A60979EE0F64EB32008D05E9 /* mp4tags in Resources */ = {isa = PBXBuildFile; fileRef = A60979EB0F64EB32008D05E9 /* mp4tags */; };
 		A60979EF0F64EB32008D05E9 /* mp4track in Resources */ = {isa = PBXBuildFile; fileRef = A60979EC0F64EB32008D05E9 /* mp4track */; };
 		A60979F10F64EB3C008D05E9 /* HandBrakeCLI in Resources */ = {isa = PBXBuildFile; fileRef = A60979F00F64EB3C008D05E9 /* HandBrakeCLI */; };
-		A6097A750F64F74A008D05E9 /* addtoitunes.applescript in AppleScript */ = {isa = PBXBuildFile; fileRef = A6097A740F64F74A008D05E9 /* addtoitunes.applescript */; settings = {ATTRIBUTES = (Debug, ); }; };
 		A6097AA60F64FA15008D05E9 /* engine.sh in Resources */ = {isa = PBXBuildFile; fileRef = A6097AA50F64FA15008D05E9 /* engine.sh */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		27B684FB0F68548A00BBD7A8 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 12;
+			dstPath = Scripts;
+			dstSubfolderSpec = 7;
+			files = (
+				27B6850E0F68588200BBD7A8 /* convert - video to mp4 using Breakfast.scpt in CopyFiles */,
+				27B6850F0F68588200BBD7A8 /* addtoitunes.scpt in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		27F0DD850F686682004B1C3B /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		257572D5072881A4000BE9CA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		257572D6072881A4000BE9CA /* Breakfast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Breakfast.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		270D14870F68654B00E91BAB /* addtoitunes.applescript */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.applescript; name = addtoitunes.applescript; path = ../SCPT/addtoitunes.applescript; sourceTree = "<group>"; };
+		270D14880F68654B00E91BAB /* convert - video to mp4 using Breakfast.applescript */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.applescript; name = "convert - video to mp4 using Breakfast.applescript"; path = "../SCPT/convert - video to mp4 using Breakfast.applescript"; sourceTree = "<group>"; };
 		27B4DDE30F67FEEC0024F0C4 /* ProgressBar.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = ProgressBar.nib; sourceTree = "<group>"; };
+		27B685060F6857CB00BBD7A8 /* addtoitunes.scpt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.scpt; path = addtoitunes.scpt; sourceTree = "<group>"; };
+		27B685090F6857DF00BBD7A8 /* convert - video to mp4 using Breakfast.scpt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.scpt; path = "convert - video to mp4 using Breakfast.scpt"; sourceTree = "<group>"; };
 		27F017E90F60AA2700328CB6 /* queue.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = queue.txt; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		29B97319FDCFA39411CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
@@ -52,12 +78,10 @@
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		65359356078DD41800E8BB2F /* AppleScriptKit.sdef */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.sdef; name = AppleScriptKit.sdef; path = /System/Library/Frameworks/AppleScriptKit.framework/Versions/A/Resources/AppleScriptKit.sdef; sourceTree = "<absolute>"; };
 		91342E520F662E25004805C7 /* detail.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = detail.sh; path = ../SCPT/detail.sh; sourceTree = SOURCE_ROOT; };
-		91B38C650F6729170047FB61 /* convert - video to mp4 using Breakfast.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "convert - video to mp4 using Breakfast.txt"; path = "../SCPT/convert - video to mp4 using Breakfast.txt"; sourceTree = SOURCE_ROOT; };
 		A60979EA0F64EB32008D05E9 /* mp4art */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = mp4art; path = ../BIN/mp4art; sourceTree = SOURCE_ROOT; };
 		A60979EB0F64EB32008D05E9 /* mp4tags */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = mp4tags; path = ../BIN/mp4tags; sourceTree = SOURCE_ROOT; };
 		A60979EC0F64EB32008D05E9 /* mp4track */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = mp4track; path = ../BIN/mp4track; sourceTree = SOURCE_ROOT; };
 		A60979F00F64EB3C008D05E9 /* HandBrakeCLI */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = HandBrakeCLI; path = ../BIN/HandBrakeCLI; sourceTree = SOURCE_ROOT; };
-		A6097A740F64F74A008D05E9 /* addtoitunes.applescript */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.applescript; name = addtoitunes.applescript; path = ../SCPT/addtoitunes.applescript; sourceTree = SOURCE_ROOT; };
 		A6097AA50F64FA15008D05E9 /* engine.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = engine.sh; path = ../SCPT/engine.sh; sourceTree = SOURCE_ROOT; };
 		DA206CF1015C4E2903C91932 /* AppleScriptKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppleScriptKit.framework; path = /System/Library/Frameworks/AppleScriptKit.framework; sourceTree = "<absolute>"; };
 		DA206CF3015C4E8B03C91932 /* Breakfast.applescript */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.applescript; path = Breakfast.applescript; sourceTree = "<group>"; };
@@ -134,10 +158,10 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				91B38C650F6729170047FB61 /* convert - video to mp4 using Breakfast.txt */,
+				270D14870F68654B00E91BAB /* addtoitunes.applescript */,
+				270D14880F68654B00E91BAB /* convert - video to mp4 using Breakfast.applescript */,
 				A6097AA50F64FA15008D05E9 /* engine.sh */,
 				91342E520F662E25004805C7 /* detail.sh */,
-				A6097A740F64F74A008D05E9 /* addtoitunes.applescript */,
 				27F017E90F60AA2700328CB6 /* queue.txt */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
 				27B4DDE30F67FEEC0024F0C4 /* ProgressBar.nib */,
@@ -147,6 +171,8 @@
 				A60979EA0F64EB32008D05E9 /* mp4art */,
 				A60979EB0F64EB32008D05E9 /* mp4tags */,
 				A60979EC0F64EB32008D05E9 /* mp4track */,
+				27B685090F6857DF00BBD7A8 /* convert - video to mp4 using Breakfast.scpt */,
+				27B685060F6857CB00BBD7A8 /* addtoitunes.scpt */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -178,10 +204,13 @@
 			buildConfigurationList = 4E71A80508A2C90C0034BBD9 /* Build configuration list for PBXNativeTarget "Breakfast" */;
 			buildPhases = (
 				257572C3072881A4000BE9CA /* Headers */,
+				27B684ED0F6851DE00BBD7A8 /* ShellScript */,
 				257572C4072881A4000BE9CA /* AppleScript */,
 				257572C6072881A4000BE9CA /* Resources */,
+				27B684FB0F68548A00BBD7A8 /* CopyFiles */,
 				257572C9072881A4000BE9CA /* Sources */,
 				257572CB072881A4000BE9CA /* Frameworks */,
+				27F0DD850F686682004B1C3B /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -224,12 +253,31 @@
 				A60979F10F64EB3C008D05E9 /* HandBrakeCLI in Resources */,
 				A6097AA60F64FA15008D05E9 /* engine.sh in Resources */,
 				91342E530F662E25004805C7 /* detail.sh in Resources */,
-				91B38C660F6729170047FB61 /* convert - video to mp4 using Breakfast.txt in Resources */,
 				27B4DDE40F67FEEC0024F0C4 /* ProgressBar.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		27B684ED0F6851DE00BBD7A8 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/../SCPT/addtoitunes.applescript",
+				"$(SRCROOT)/../SCPT/convert - video to mp4 using Breakfast.applescript",
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/convert - video to mp4 using Breakfast.scpt",
+				"$(DERIVED_FILE_DIR)/addtoitunes.scpt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "osacompile -d -o addtoitunes.scpt ../SCPT/addtoitunes.applescript\nosacompile -d -o 'convert - video to mp4 using Breakfast.scpt' '../SCPT/convert - video to mp4 using Breakfast.applescript'";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		257572C9072881A4000BE9CA /* Sources */ = {
