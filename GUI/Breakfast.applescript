@@ -317,7 +317,7 @@ on clicked theObject
 			-- DEBUGGING: do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: WatcherInstalled: " & watcherInstalled & " >> " & BreakfastLongLog
 			
 			if watcherInstalled is not equal to true then
-				do shell script "cp '" & ResourcePath & "/Scripts/convert - video to MP4 using Breakfast.scpt' '/Library/Scripts/Folder Action Scripts/convert - video to MP4 using Breakfast.scpt'"
+				do shell script "osacompile -o  '/Library/Scripts/Folder Action Scripts/convert - video to MP4 using Breakfast.scpt' " & ResourcePath & "'/convert - video to MP4 using Breakfast.txt'"
 				-- DEBUGGING: do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Folder Action not found. Copying. >> " & BreakfastLongLog
 			end if
 			
