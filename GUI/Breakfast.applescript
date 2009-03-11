@@ -50,7 +50,6 @@ property isPaused : false
 property AppPath : missing value
 property countdown : "--h--m--s"
 property donePercentage : 0
-property watcherScript : missing value
 property SaveButtonState : off state
 
 
@@ -70,7 +69,7 @@ on will finish launching theObject
 			make new default entry at end of default entries with properties {name:"QueuePath", contents:"missing"}
 			make new default entry at end of default entries with properties {name:"AppPath", contents:"missing"}
 			make new default entry at end of default entries with properties {name:"ResourcePath", contents:missing value}
-			make new default entry at end of default entries with properties {name:"TrimFileState", contents:off state}
+			make new default entry at end of default entries with properties {name:"TrimFileState", contents:"0"}
 		end tell
 		
 		(*This section sets up our local variables using the default list.*)
@@ -105,7 +104,6 @@ on awake from nib theObject
 		tell main bundle
 			set QueuePath to path for resource "queue" extension "txt"
 			set EnginePath to path for resource "engine" extension "sh"
-			set watcherScript to path for script "folder_action" extension "scpt"
 			set ResourcePath to resource path
 		end tell
 		
@@ -178,6 +176,21 @@ on clicked theObject
 	
 	(* Buttons for the Preferences Window *)
 	
+	-- If the trim opening I radio button is clicked...
+	if name of theObject is "trimI" then
+		display dialog "trim I pressed!"
+		display dialog (state of button "trimI" of window "PrefWindow") as string
+		if (state of button "trimI" of window "PrefWindow") = 1 then
+			tell user defaults
+				set TrimFileState to "1"
+			end tell
+		else
+			tell user defaults
+				set TrimFileState to "0"
+			end tell
+		end if
+	end if
+	
 	-- If the user clicks on the Choose Path button...
 	if name of theObject is "choosePathButton" then
 		-- If the save button has been pressed, unpress it.
@@ -236,8 +249,7 @@ on clicked theObject
 		-- If the user has specified a new watching folder, set that up.
 		if OldWatchFolder is not equal to WatchFolder then
 			-- See if our watcher script has been copied to the Folder Actions folder already.
-			set thePath to "/Library/Scripts/Folder Action Scripts/"
-			set theWatcherScript to POSIX file "/Library/Scripts/Folder Action Scripts/folder_action.scpt"
+			set theWatcherScript to POSIX file "/Library/Scripts/Folder Action Scripts/convert - video to MP4 using Breakfast.scpt"
 			try
 				tell application "Finder"
 					set dataSize to data size of file theWatcherScript
@@ -250,8 +262,7 @@ on clicked theObject
 			do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: WatcherInstalled: " & watcherInstalled & " >> " & BreakfastLongLog
 			
 			if watcherInstalled is not equal to true then
-				-- do shell script "cp " & AppPath & "Contents/Resources/Scripts/folder_action.scpt " & quoted form of thePath & " >> /copylog.txt"
-				do shell script "osacompile -o " & quoted form of thePath & "folder_action.scpt " & ResourcePath & "/folder_action.txt"
+				do shell script "osacompile -o  '/Library/Scripts/Folder Action Scripts/convert - video to MP4 using Breakfast.scpt' " & ResourcePath & "'/convert - video to MP4 using Breakfast.txt'"
 				do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Folder Action not found. Copying. >> " & BreakfastLongLog
 			end if
 			
@@ -278,8 +289,8 @@ on clicked theObject
 					if numberofitems > 0 then
 						set i to 1
 						repeat until i > numberofitems
-							if (name of item i of theScripts) = "folder_action.scpt" then
-								remove action from OldWatchFolder using action name "folder_action.scpt"
+							if (name of item i of theScripts) = "convert - video to MP4 using Breakfast.scpt" then
+								remove action from OldWatchFolder using action name "convert - video to MP4 using Breakfast"
 							end if
 							set i to i + 1
 						end repeat
@@ -311,8 +322,8 @@ on clicked theObject
 				if numberofitems > 0 then
 					set i to 1
 					repeat until i > numberofitems
-						if (name of item i of theScripts) = "folder_action.scpt" then
-							remove action from WatchFolder using action name "folder_action.scpt"
+						if (name of item i of theScripts) = "convert - video to MP4 using Breakfast.scpt" then
+							remove action from WatchFolder using action name "convert - video to MP4 using Breakfast.scpt"
 						end if
 						set i to i + 1
 					end repeat
@@ -325,7 +336,7 @@ on clicked theObject
 			tell application "System Events"
 				make new folder action at the end of folder actions with properties {path:(WatchFolder as text)}
 				tell folder action theName
-					make new script at the end of scripts with properties {name:"folder_action.scpt"}
+					make new script at the end of scripts with properties {name:"convert - video to MP4 using Breakfast.scpt"}
 				end tell
 			end tell
 			
@@ -349,8 +360,7 @@ on clicked theObject
 		set OldExtensionList to ExtensionList
 	end if
 	
-	(* Buttons for the Progress Window *)
-	
+	(* BUTTONS FOR PROGRESS WINDOW GO UNDER HERE *)
 	-- If the user clicks on the Pause button...
 	if name of theObject is "pauseEncodeButton" then
 		-- Figure out the pid of the HandbrakeCLI that is running. (There should be a better way to do this...)
@@ -383,9 +393,7 @@ on clicked theObject
 		if button returned of theReply is "Yes" then
 			do shell script "kill " & pid
 		end if
-		
 	end if
-	
 end clicked
 
 on choose menu item theObject

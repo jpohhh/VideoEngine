@@ -28,8 +28,8 @@
 		257572CC072881A4000BE9CA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		257572CD072881A4000BE9CA /* AppleScriptKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA206CF1015C4E2903C91932 /* AppleScriptKit.framework */; };
 		27F017EC0F60AA2700328CB6 /* queue.txt in Resources */ = {isa = PBXBuildFile; fileRef = 27F017E90F60AA2700328CB6 /* queue.txt */; };
-		91342E290F660524004805C7 /* folder_action.txt in Resources */ = {isa = PBXBuildFile; fileRef = 91342E280F660524004805C7 /* folder_action.txt */; };
 		91342E530F662E25004805C7 /* detail.sh in Resources */ = {isa = PBXBuildFile; fileRef = 91342E520F662E25004805C7 /* detail.sh */; };
+		91B38C660F6729170047FB61 /* convert - video to mp4 using Breakfast.txt in Resources */ = {isa = PBXBuildFile; fileRef = 91B38C650F6729170047FB61 /* convert - video to mp4 using Breakfast.txt */; };
 		A60979ED0F64EB32008D05E9 /* mp4art in Resources */ = {isa = PBXBuildFile; fileRef = A60979EA0F64EB32008D05E9 /* mp4art */; };
 		A60979EE0F64EB32008D05E9 /* mp4tags in Resources */ = {isa = PBXBuildFile; fileRef = A60979EB0F64EB32008D05E9 /* mp4tags */; };
 		A60979EF0F64EB32008D05E9 /* mp4track in Resources */ = {isa = PBXBuildFile; fileRef = A60979EC0F64EB32008D05E9 /* mp4track */; };
@@ -49,8 +49,8 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		65359356078DD41800E8BB2F /* AppleScriptKit.sdef */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.sdef; name = AppleScriptKit.sdef; path = /System/Library/Frameworks/AppleScriptKit.framework/Versions/A/Resources/AppleScriptKit.sdef; sourceTree = "<absolute>"; };
-		91342E280F660524004805C7 /* folder_action.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = folder_action.txt; path = ../SCPT/folder_action.txt; sourceTree = SOURCE_ROOT; };
 		91342E520F662E25004805C7 /* detail.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = detail.sh; path = ../SCPT/detail.sh; sourceTree = SOURCE_ROOT; };
+		91B38C650F6729170047FB61 /* convert - video to mp4 using Breakfast.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "convert - video to mp4 using Breakfast.txt"; path = "../SCPT/convert - video to mp4 using Breakfast.txt"; sourceTree = SOURCE_ROOT; };
 		A60979EA0F64EB32008D05E9 /* mp4art */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = mp4art; path = ../BIN/mp4art; sourceTree = SOURCE_ROOT; };
 		A60979EB0F64EB32008D05E9 /* mp4tags */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = mp4tags; path = ../BIN/mp4tags; sourceTree = SOURCE_ROOT; };
 		A60979EC0F64EB32008D05E9 /* mp4track */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = mp4track; path = ../BIN/mp4track; sourceTree = SOURCE_ROOT; };
@@ -132,9 +132,9 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				91B38C650F6729170047FB61 /* convert - video to mp4 using Breakfast.txt */,
 				91342E520F662E25004805C7 /* detail.sh */,
 				A6097AA50F64FA15008D05E9 /* engine.sh */,
-				91342E280F660524004805C7 /* folder_action.txt */,
 				A6097A740F64F74A008D05E9 /* addtoitunes.applescript */,
 				27F017E90F60AA2700328CB6 /* queue.txt */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
@@ -220,8 +220,8 @@
 				A60979EF0F64EB32008D05E9 /* mp4track in Resources */,
 				A60979F10F64EB3C008D05E9 /* HandBrakeCLI in Resources */,
 				A6097AA60F64FA15008D05E9 /* engine.sh in Resources */,
-				91342E290F660524004805C7 /* folder_action.txt in Resources */,
 				91342E530F662E25004805C7 /* detail.sh in Resources */,
+				91B38C660F6729170047FB61 /* convert - video to mp4 using Breakfast.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
