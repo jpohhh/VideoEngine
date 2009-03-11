@@ -133,8 +133,8 @@
 			isa = PBXGroup;
 			children = (
 				91B38C650F6729170047FB61 /* convert - video to mp4 using Breakfast.txt */,
-				91342E520F662E25004805C7 /* detail.sh */,
 				A6097AA50F64FA15008D05E9 /* engine.sh */,
+				91342E520F662E25004805C7 /* detail.sh */,
 				A6097A740F64F74A008D05E9 /* addtoitunes.applescript */,
 				27F017E90F60AA2700328CB6 /* queue.txt */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
