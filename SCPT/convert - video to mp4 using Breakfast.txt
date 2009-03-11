@@ -9,6 +9,8 @@ property EncodingOptions : missing value
 property QueuePath : missing value
 property resourcePath : missing value
 property AppPath : missing value
+property UseGUI : missing value
+property BreakfastIsWatching : false
 
 
 
@@ -19,7 +21,8 @@ on adding folder items to thisFolder after receiving addedItems
 	set BreakfastLongLog to (do shell script "defaults read com.Breakfast.engine BreakfastLongLog")
 	set AppPath to (do shell script "defaults read com.Breakfast.engine AppPath")
 	set resourcePath to (do shell script "defaults read com.Breakfast.engine ResourcePath")
-	
+	set UseGUI to ((do shell script "defaults read com.Breakfast.engine UsingGUI") as number) as boolean
+	do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time FOLDER_ACTION The variable UseGUI: " & UseGUI & " >> " & BreakfastLongLog
 	
 	-- First we go after the extensions, because they're the most complicated.
 	set ExtensionTemp to (do shell script "defaults read com.Breakfast.engine ExtensionList")
@@ -139,6 +142,21 @@ on adding folder items to thisFolder after receiving addedItems
 					--we're not currently encoding, log it, give the encoding script a kick in the arse
 					do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time " & isHandbrakeRunning & " instances reporting running, so asking encoder to start... >> " & BreakfastLongLog
 					do shell script "cd " & resourcePath & "; ./engine.sh &> /dev/null &"
+					
+					-- See if the user is using the GUI
+					if UseGUI then
+						-- If the app is already running, it will take care of itself. If it's not running, we need to kick it
+						do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time Entered UseGUI block... >> " & BreakfastLongLog
+						if application AppPath is not running then
+							do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time Entered Breakfast is not running block... >> " & BreakfastLongLog
+							tell application AppPath
+								Run
+								activate
+								-- We also need to tell it to hide the Preferences Window.
+								set visible of window "PrefWindow" to false
+							end tell
+						end if
+					end if
 				else
 					--already encoding, quietly log this
 					do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time " & isHandbrakeRunning & " instances reporting running, so not asking encoder to start... >> " & BreakfastLongLog
