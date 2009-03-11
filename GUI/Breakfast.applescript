@@ -40,6 +40,7 @@ property OldEncodingOptions : missing value
 property BreakfastShortLog : missing value
 property BreakfastLongLog : missing value
 property QueuePath : missing value
+property queueSize : missing value
 property ResourcePath : missing value
 property EncodingFile : missing value
 property IsEncoding : false
@@ -51,6 +52,10 @@ property AppPath : missing value
 property countdown : "--h--m--s"
 property donePercentage : 0
 property SaveButtonState : off state
+property TrimFileState : false
+property OldTrimFileState : false
+property UsingGUIState : true
+property OldUsingGUIState : true
 
 
 on will finish launching theObject
@@ -70,12 +75,17 @@ on will finish launching theObject
 			make new default entry at end of default entries with properties {name:"AppPath", contents:"missing"}
 			make new default entry at end of default entries with properties {name:"ResourcePath", contents:missing value}
 			make new default entry at end of default entries with properties {name:"TrimFileState", contents:"0"}
+			make new default entry at end of default entries with properties {name:"UsingGUI", contents:"true"}
 		end tell
 		
 		(*This section sets up our local variables using the default list.*)
 		tell user defaults
 			set ExtensionList to contents of default entry "ExtensionList"
 			set OldExtensionList to ExtensionList
+			set TrimFileState to contents of default entry "TrimFileState"
+			set OldTrimFileState to TrimFileState
+			set UsingGUIState to contents of default entry "UsingGUI"
+			set OldUsingGUIState to UsingGUIState
 			set OutFolder to contents of default entry "OutFolder"
 			set OldOutFolder to OutFolder
 			set WatchFolder to contents of default entry "WatchFolder"
@@ -84,7 +94,6 @@ on will finish launching theObject
 			set OldEncodingOptions to EncodingOptions
 			set BreakfastShortLog to contents of default entry "BreakfastShortLog"
 			set BreakfastLongLog to contents of default entry "BreakfastLongLog"
-			set EncodingFile to "Preparing..."
 		end tell
 	on error ErrorMessage number ErrorNumber
 		do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time " & ErrorMessage & " >> " & BreakfastLongLog
@@ -95,10 +104,9 @@ on will finish launching theObject
 	end try
 end will finish launching
 
-on awake from nib theObject
+on launched theObject
+	(*This handler is called when the Application finishes launching.*)
 	try
-		(*This handler is called during launch, when the app is being unpacked from its nib.*)
-		
 		-- Get the path names for queue.txt, engine.sh, and the general resource path
 		tell main bundle
 			set QueuePath to path for resource "queue" extension "txt"
@@ -107,35 +115,6 @@ on awake from nib theObject
 		end tell
 		
 		set AppPath to POSIX path of (path to me) as string
-		
-		(* Determine if we should be encoding based on the size of queue.txt *)
-		set queueSize to (do shell script "ls -l " & (path for resource "queue" extension "txt") & " | awk '{print $5}'")
-		if (queueSize = "0") then
-			set shouldBeEncoding to false
-			set IsEncoding to false
-		else
-			set shouldBeEncoding to true
-		end if
-		
-		(* If we should be encoding, is HandBrakeCLI running? If not, wait 10 seconds and check again. If it still isn't, kick Engine, check again. If still not, give the user a prize *)
-		if shouldBeEncoding = true then
-			set isHandbrakeRunning to do shell script "ps ax | grep HandBrakeCLI | grep -v grep | wc -l | cut -d ' ' -f8"
-			if isHandbrakeRunning is equal to "0" then
-				--we're not currently encoding, log it, give the encoding script a kick in the arse
-				do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time " & isHandbrakeRunning & " instances reporting running, and we should be running because the queue is " & queueSize & " bytes big. >> " & BreakfastLongLog
-				do shell script "cd " & ResourcePath & "; ./engine.sh &> /dev/null &"
-				delay 10
-				set isHandbrakeRunning to do shell script "ps ax | grep HandBrakeCLI | grep -v grep | wc -l | cut -d ' ' -f8"
-				if isHandbrakeRunning is equal to "0" then
-					display dialog "Something is horribly broken, and nothing short of trashing this app will save you (most likely)."
-					set IsEncoding to false
-				else
-					set IsEncoding to true
-				end if
-			else
-				set IsEncoding to true
-			end if
-		end if
 		
 		(* If the app was called by the user, we set up preferences. If the app was called from the watcher script, we do the deal *)
 		if IsEncoding = false then
@@ -149,40 +128,12 @@ on awake from nib theObject
 			set oldEncodeOptions to content of text field "encodeOptions" of window "PrefWindow"
 			set content of text field "WatchFolderText" of window "PrefWindow" to WatchFolder
 			set OldExtensionList to content of text field "WatchFolderText" of window "PrefWindow"
+			set state of button "TrimStateButton" of window "PrefWindow" to TrimFileState
+			set OldTrimFileState to (state of button "TrimStateButton" of window "PrefWindow") as boolean
+			set state of button "UseGUIButton" of window "PrefWindow" to UsingGUIState
+			set OldUsingGUIState to (state of button "UseGUIButton" of window "PrefWindow") as boolean
 		end if
 		
-		if IsEncoding = true then
-			try
-				-- Hide the unneeded menus.
-				set menuItem to second menu item of main menu
-				set saveMenu to first menu item of sub menu of menuItem
-				set resetMenu to second menu item of sub menu of menuItem
-				
-				set enabled of saveMenu to false
-				set enabled of resetMenu to false
-				
-				-- Make the progress window visible.
-				set visible of window "ProgressWindow" to true
-				
-				-- Show the status window.
-				show window "ProgressWindow"
-				
-				-- Set up threaded animation of the progress bar. 
-				tell window "ProgressWindow"
-					set uses threaded animation of progress indicator "ProgressBar" to true
-					-- Set contents of the EncodeFileText text field to a known temporary value (we set this above
-					-- so that we'll know later whether the engine.sh has updated it.
-					set content of text field "EncodeFileText" to EncodingFile
-				end tell
-				
-			on error ErrorMessage number ErrorNumber
-				do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time " & ErrorMessage & " >> " & BreakfastLongLog
-				tell application "Finder"
-					activate
-					display dialog ErrorMessage buttons {"Cancel"} default button 1 giving up after 120
-				end tell
-			end try
-		end if
 	on error ErrorMessage number ErrorNumber
 		do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time " & ErrorMessage & " >> " & BreakfastLongLog
 		tell application "Finder"
@@ -190,26 +141,105 @@ on awake from nib theObject
 			display dialog ErrorMessage buttons {"Cancel"} default button 1 giving up after 120
 		end tell
 	end try
+end launched
+
+on awake from nib theObject
+	(*This handler is called whenever an object is being unpacked from its nib.*)
+	(* The only object connected to this handler is the ProgressBar.nib... if this handler is called, then
+	the progress bar has been started. *)
+	
+	set isHandbrakeRunning to do shell script "ps ax | grep HandBrakeCLI | grep -v grep | wc -l | cut -d ' ' -f8"
+	if isHandbrakeRunning is equal to "0" then
+		--we're not currently encoding, log it, give the encoding script a kick in the arse
+		do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time AWAKE_FROM_NIB: " & isHandbrakeRunning & " instances reporting running, and we should be running because the queue is " & queueSize & " bytes big. >> " & BreakfastLongLog
+		do shell script "cd " & ResourcePath & "; ./engine.sh &> /dev/null &"
+		delay 10
+		set isHandbrakeRunning to do shell script "ps ax | grep HandBrakeCLI | grep -v grep | wc -l | cut -d ' ' -f8"
+		if isHandbrakeRunning is equal to "0" then
+			display dialog "Something is horribly broken, and nothing short of trashing this app will save you (most likely)."
+			set IsEncoding to false
+		else
+			set IsEncoding to true
+		end if
+	else
+		set IsEncoding to true
+	end if
+	
+	-- DEBUGGING: do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time AWAKE_FROM_NIB handler: Finished isHandbrakeRunning check. IsEncoding variable: " & IsEncoding & " >> " & BreakfastLongLog
+	
+	if IsEncoding = true then
+		try
+			-- Hide the unneeded menus.
+			set menuItem to second menu item of main menu
+			set saveMenu to first menu item of sub menu of menuItem
+			set resetMenu to second menu item of sub menu of menuItem
+			
+			set enabled of saveMenu to false
+			set enabled of resetMenu to false
+			
+			-- Make the progress window visible.
+			set visible of window "ProgressWindow" to true
+			
+			-- Show the status window.
+			show window "ProgressWindow"
+			
+			-- Set up threaded animation of the progress bar. 
+			tell window "ProgressWindow"
+				set uses threaded animation of progress indicator "ProgressBar" to true
+				-- Set contents of the EncodeFileText text field to a known temporary value (we set this above
+				-- so that we'll know later whether the engine.sh has updated it.
+				set content of text field "EncodeFileText" to EncodingFile
+			end tell
+			
+		on error ErrorMessage number ErrorNumber
+			do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time AWAKE_FROM_NIB_HANDLER: " & ErrorMessage & " >> " & BreakfastLongLog
+			tell application "Finder"
+				activate
+				display dialog ErrorMessage buttons {"Cancel"} default button 1 giving up after 120
+			end tell
+		end try
+	end if
+	
+	
 end awake from nib
 
 on clicked theObject
 	(*The event handler that is called whenever any button is clicked.*)
 	
 	(* Buttons for the Preferences Window *)
-	
-	-- If the trim opening I radio button is clicked...
-	if name of theObject is "trimI" then
-		display dialog "trim I pressed!"
-		display dialog (state of button "trimI" of window "PrefWindow") as string
-		if (state of button "trimI" of window "PrefWindow") = 1 then
-			tell user defaults
-				set TrimFileState to "1"
-			end tell
-		else
-			tell user defaults
-				set TrimFileState to "0"
-			end tell
+	if name of theObject is "trimStateButton" then
+		-- If the save button has been pressed, unpress it.
+		if (state of button "saveButton" of window "PrefWindow") = 1 then
+			set (state of button "saveButton" of window "PrefWindow") to 0
+			set (enabled of button "saveButton" of window "PrefWindow") to true
 		end if
+		-- Save the old TrimFileState so we can reset later if needed.
+		set OldTrimFileState to TrimFileState
+		-- Set our new state.
+		set TrimFileState to (state of button "TrimStateButton" of window "PrefWindow") as boolean
+		-- Save immediately to User Defaults (no real reason to wait for a save click)
+		tell user defaults
+			set contents of default entry "TrimFileState" to TrimFileState
+		end tell
+		call method "synchronize" of object user defaults
+		
+	end if
+	
+	if name of theObject is "UseGUIButton" then
+		-- If the save button has been pressed, unpress it.
+		if (state of button "saveButton" of window "PrefWindow") = 1 then
+			set (state of button "saveButton" of window "PrefWindow") to 0
+			set (enabled of button "saveButton" of window "PrefWindow") to true
+		end if
+		-- Save the old state so we can reset later if needed.
+		set OldUsingGUIState to UsingGUIState
+		-- Set out new state.
+		set UsingGUIState to (state of button "UseGUIButton" of window "PrefWindow") as boolean
+		-- Save immediately to User Defaults (no real reason to wait for save click)
+		tell user defaults
+			set contents of default entry "UsingGUI" to UsingGUIState
+		end tell
+		call method "synchronize" of object user defaults
 	end if
 	
 	-- If the user clicks on the Choose Path button...
@@ -263,8 +293,8 @@ on clicked theObject
 	-- If the user clicks on the Save button, save the variables to the User Defaults. 
 	if name of theObject is "saveButton" then
 		-- the below two lines are for development only and should be disabled for release. intended to make sure any changes of the folder action can be debugged properly
-		do shell script "osacompile -o  '/Library/Scripts/Folder Action Scripts/convert - video to MP4 using Breakfast.scpt' " & ResourcePath & "'/convert - video to MP4 using Breakfast.txt'"
-		do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Folder Action not found. Copying. >> " & BreakfastLongLog
+		--do shell script "osacompile -o  '/Library/Scripts/Folder Action Scripts/convert - video to MP4 using Breakfast.scpt' " & ResourcePath & "'/convert - video to MP4 using Breakfast.txt'"
+		--do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Folder Action not found. Copying. >> " & BreakfastLongLog
 		
 		set OutFolder to content of text field "outFolderText" of window "PrefWindow"
 		set WatchFolder to content of text field "WatchFolderText" of window "PrefWindow"
@@ -284,15 +314,15 @@ on clicked theObject
 				set watcherInstalled to false
 			end try
 			
-			do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: WatcherInstalled: " & watcherInstalled & " >> " & BreakfastLongLog
+			-- DEBUGGING: do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: WatcherInstalled: " & watcherInstalled & " >> " & BreakfastLongLog
 			
 			if watcherInstalled is not equal to true then
 				do shell script "osacompile -o  '/Library/Scripts/Folder Action Scripts/convert - video to MP4 using Breakfast.scpt' " & ResourcePath & "'/convert - video to MP4 using Breakfast.txt'"
-				do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Folder Action not found. Copying. >> " & BreakfastLongLog
+				-- DEBUGGING: do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Folder Action not found. Copying. >> " & BreakfastLongLog
 			end if
 			
 			-- Remove the script from the OldWatchFolder. 
-			do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: OldWatchFolder: " & OldWatchFolder & " >> " & BreakfastLongLog
+			-- DEBUGGING: do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: OldWatchFolder: " & OldWatchFolder & " >> " & BreakfastLongLog
 			-- First, make sure that there was an OldWatchFolder (there won't be on first run.)
 			if OldWatchFolder is not equal to "-" then
 				tell application "System Events"
@@ -324,10 +354,10 @@ on clicked theObject
 				end tell
 			end if
 			
-			do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Finished removing script from OldWatchFolder >> " & BreakfastLongLog
+			-- DEBUGGING: do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Finished removing script from OldWatchFolder >> " & BreakfastLongLog
 			
 			-- Add the script to the new watch folder.
-			do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: new WatchFolder: " & WatchFolder & " >> " & BreakfastLongLog
+			-- DEBUGGING: do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: new WatchFolder: " & WatchFolder & " >> " & BreakfastLongLog
 			-- First, if it's already there just pull it off.
 			tell application "System Events"
 				set theAlias to alias WatchFolder
@@ -357,7 +387,7 @@ on clicked theObject
 				end if
 			end tell
 			
-			do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Finished removing script from new WatchFolder >> " & BreakfastLongLog
+			-- DEBUGGING: do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Finished removing script from new WatchFolder >> " & BreakfastLongLog
 			
 			-- Now, add it.
 			tell application "System Events"
@@ -367,11 +397,13 @@ on clicked theObject
 				end tell
 			end tell
 			
-			do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Finished removing adding Folder Action >> " & BreakfastLongLog
+			-- DEBUGGING: do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Finished removing adding Folder Action >> " & BreakfastLongLog
 			
 		end if
 		
 		tell user defaults
+			set contents of default entry "UsingGUI" to UsingGUIState
+			set contents of default entry "TrimFileState" to TrimFileState
 			set contents of default entry "OutFolder" to OutFolder
 			set contents of default entry "EncodingOptions" to EncodingOptions
 			set contents of default entry "ExtensionList" to ExtensionList
@@ -416,7 +448,7 @@ on clicked theObject
 		--do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time The PID was set to: " & pid & " >> " & BreakfastLongLog
 		
 		-- Make sure the user was serious about quitting.
-		set theReply to display dialog "Really quit?" buttons {"Yes", "No"} default button 2 giving up after 5
+		set theReply to display dialog "Do you wish to stop encoding?" buttons {"Yes", "No"} default button 2 giving up after 5
 		if button returned of theReply is "Yes" then
 			do shell script "kill " & pid
 		end if
@@ -425,6 +457,7 @@ end clicked
 
 on choose menu item theObject
 	(*The handler that is called when a User chooses a menu item.*)
+	(* This handler is connected to the pulldown menu of encoding options. *)
 	if name of theObject is "pullDown" then
 		set EncodingOptions to title of popup button "pullDown" of window "PrefWindow"
 		set encodeTemp to "-Z '" & EncodingOptions & "'"
@@ -480,8 +513,20 @@ on idle theObject
 	call this handler repeatedly so long as nothing else is happening.*)
 	
 	-- Whenever we're idle, we update the progress bar.
-	-- First, make sure we're supposed to be encoding (if we're in Preferences mode, no reason to waste
-	-- processor cycles doing all of this stuff...)
+	-- First, make sure we're supposed to be encoding
+	(* Determine if we should be encoding based on the size of queue.txt *)
+	-- If we're already encoding, there's no need to check to see if we should be. 
+	if not IsEncoding then
+		set queueSize to (do shell script "ls -l " & (path for resource "queue" extension "txt") & " | awk '{print $5}'")
+		-- DEBUGGING: do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time IDLE_LOOP from not IsEncoding block: the queue is " & queueSize & " bytes big. >> " & BreakfastLongLog
+		if (queueSize = "0") then
+			set IsEncoding to false
+		else
+			load nib "ProgressBar"
+		end if
+	end if
+	
+	
 	if IsEncoding then
 		try
 			
@@ -495,8 +540,10 @@ on idle theObject
 			
 			-- First, get the top item from the queue and read what file is being encoded
 			set EncodingFile to (do shell script "head -n1 " & (path for resource "queue" extension "txt") & "| awk -F\";\" {'print $2'}")
-			-- If it's still our temporary placeholder string, don't do anything.
-			if EncodingFile is not equal to "Preparing..." then
+			-- DEBUGGING LOG: do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time IDLE_LOOP from IsEncoding block: the EncodingFile variable is: " & EncodingFile & " >> " & BreakfastLongLog
+			
+			-- If we find something in the queue, watch it. 
+			if EncodingFile is not equal to "" then
 				
 				-- Figure out where we're gonna be looking to get the LogFile.
 				set LogFile to (the reverse of every character of EncodingFile) as string
@@ -524,6 +571,17 @@ on idle theObject
 						end if
 					end if
 				end try
+			else
+				-- If we don't find anything in the queue:
+				
+				-- If the preferences window is open, then leave it alone and close the Progress Bar window. 
+				if (visible of window "PrefWindow" is true) then
+					set IsEncoding to false
+					set visible of window "ProgressWindow" to false
+				else
+					-- If the preferences window is closed, then close the whole application.
+					quit
+				end if
 			end if
 			
 			-- Check to see if we're done yet. Use 99 %, rather than 100 %, to ensure that we don't reach the end 
@@ -547,7 +605,7 @@ on idle theObject
 			
 			
 		on error ErrorMessage number ErrorNumber
-			do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time " & ErrorMessage & " >> " & BreakfastLongLog
+			do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time IDLE_HANDLER: " & ErrorMessage & " >> " & BreakfastLongLog
 			tell application "Finder"
 				activate
 				display dialog ErrorMessage buttons {"Cancel"} default button 1 giving up after 120
