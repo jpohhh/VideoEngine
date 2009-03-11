@@ -292,6 +292,7 @@ on clicked theObject
 			end if
 			
 			-- Remove the script from the OldWatchFolder. 
+			do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: OldWatchFolder: " & OldWatchFolder & " >> " & BreakfastLongLog
 			-- First, make sure that there was an OldWatchFolder (there won't be on first run.)
 			if OldWatchFolder is not equal to "-" then
 				tell application "System Events"
@@ -315,7 +316,7 @@ on clicked theObject
 						set i to 1
 						repeat until i > numberofitems
 							if (name of item i of theScripts) = "convert - video to MP4 using Breakfast.scpt" then
-								remove action from OldWatchFolder using action name "convert - video to MP4 using Breakfast"
+								remove action from OldWatchFolder using action name "convert - video to MP4 using Breakfast.scpt"
 							end if
 							set i to i + 1
 						end repeat
@@ -326,6 +327,7 @@ on clicked theObject
 			do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Finished removing script from OldWatchFolder >> " & BreakfastLongLog
 			
 			-- Add the script to the new watch folder.
+			do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: new WatchFolder: " & WatchFolder & " >> " & BreakfastLongLog
 			-- First, if it's already there just pull it off.
 			tell application "System Events"
 				set theAlias to alias WatchFolder
@@ -367,15 +369,15 @@ on clicked theObject
 			
 			do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Finished removing adding Folder Action >> " & BreakfastLongLog
 			
-			tell user defaults
-				set contents of default entry "OutFolder" to OutFolder
-				set contents of default entry "EncodingOptions" to EncodingOptions
-				set contents of default entry "ExtensionList" to ExtensionList
-				set contents of default entry "WatchFolder" to WatchFolder
-			end tell
-			call method "synchronize" of object user defaults
-			
 		end if
+		
+		tell user defaults
+			set contents of default entry "OutFolder" to OutFolder
+			set contents of default entry "EncodingOptions" to EncodingOptions
+			set contents of default entry "ExtensionList" to ExtensionList
+			set contents of default entry "WatchFolder" to WatchFolder
+		end tell
+		call method "synchronize" of object user defaults
 		
 		set (state of button "saveButton" of window "PrefWindow") to on state
 		set (enabled of button "saveButton" of window "PrefWindow") to false
