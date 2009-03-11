@@ -287,7 +287,7 @@ do
 		
 		# Call the applescript that will put all of this stuff into iTunes.
 		time=$(date +%Y%m%d-%H%M%S); echo $time "Calling addtoitunes.scpt..." >> "$logfile"
-		osascript ${resource_path}/Scripts/addtoitunes.scpt "$1" >> $logfile 2>> $logfile
+		osascript ${resource_path}/Scripts/addtoitunes.scpt "$1" 2>> "$logfile"
 	
 	time=$(date +%Y%m%d-%H%M%S); echo $time Tagged $cart-$season$episode to "$1" >> "$shortlog"
 	#go to next file
