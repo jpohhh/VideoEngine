@@ -27,6 +27,7 @@
 		257572CA072881A4000BE9CA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		257572CC072881A4000BE9CA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		257572CD072881A4000BE9CA /* AppleScriptKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA206CF1015C4E2903C91932 /* AppleScriptKit.framework */; };
+		27B4DDE40F67FEEC0024F0C4 /* ProgressBar.nib in Resources */ = {isa = PBXBuildFile; fileRef = 27B4DDE30F67FEEC0024F0C4 /* ProgressBar.nib */; };
 		27F017EC0F60AA2700328CB6 /* queue.txt in Resources */ = {isa = PBXBuildFile; fileRef = 27F017E90F60AA2700328CB6 /* queue.txt */; };
 		91342E530F662E25004805C7 /* detail.sh in Resources */ = {isa = PBXBuildFile; fileRef = 91342E520F662E25004805C7 /* detail.sh */; };
 		91B38C660F6729170047FB61 /* convert - video to mp4 using Breakfast.txt in Resources */ = {isa = PBXBuildFile; fileRef = 91B38C650F6729170047FB61 /* convert - video to mp4 using Breakfast.txt */; };
@@ -43,6 +44,7 @@
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		257572D5072881A4000BE9CA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		257572D6072881A4000BE9CA /* Breakfast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Breakfast.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		27B4DDE30F67FEEC0024F0C4 /* ProgressBar.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = ProgressBar.nib; sourceTree = "<group>"; };
 		27F017E90F60AA2700328CB6 /* queue.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = queue.txt; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		29B97319FDCFA39411CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
@@ -138,6 +140,7 @@
 				A6097A740F64F74A008D05E9 /* addtoitunes.applescript */,
 				27F017E90F60AA2700328CB6 /* queue.txt */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
+				27B4DDE30F67FEEC0024F0C4 /* ProgressBar.nib */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				65359356078DD41800E8BB2F /* AppleScriptKit.sdef */,
 				A60979F00F64EB3C008D05E9 /* HandBrakeCLI */,
@@ -222,6 +225,7 @@
 				A6097AA60F64FA15008D05E9 /* engine.sh in Resources */,
 				91342E530F662E25004805C7 /* detail.sh in Resources */,
 				91B38C660F6729170047FB61 /* convert - video to mp4 using Breakfast.txt in Resources */,
+				27B4DDE40F67FEEC0024F0C4 /* ProgressBar.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
