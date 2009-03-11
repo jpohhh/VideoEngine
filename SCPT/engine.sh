@@ -38,9 +38,7 @@ do
 	encodingoptions=$(echo $queue_item | awk -F\; '{print $3}')
 	logname=$(echo $queue_item | awk -F\; '{print $4}')
 	
-	#Tell the GUI's main script what we're working on, log all this 
-	time=$(date +%Y%m%d-%H%M%S); echo $time ENGINE.SH Will try to call osacript >> "$logfile"
-	osascript -e "tell application \"""$mainscript""\"" -e "set content of text field \"EncodeFileText\" of window \"ProgressWindow\" to \"""$outputname""\"" -e 'end tell' 1>> "$logfile" 2>> "$logfile"
+	#log that we're beginning an encode
 	echo "BEGINNING ENCODE WORK" > "$logname"
 	time=$(date +%Y%m%d-%H%M%S); echo $time Starting to encode "$sourcename" >> "$shortlog"
 	time=$(date +%Y%m%d-%H%M%S); echo $time Starting to encode "$sourcename" >> "$logfile"
@@ -53,7 +51,7 @@ do
 	time=$(date +%Y%m%d-%H%M%S); echo $time Finished encoding "$sourcename" >> "$shortlog"
 	time=$(date +%Y%m%d-%H%M%S); echo $time Finished encoding "$sourcename" >> "$logfile"
 	
-	#check to make sure encode completed nicely, if it didn't do not pass to detail
+	#check to make sure encode completed nicely, if it did pass to detail
 	endMessage=$(tail -c 22 "$logname" | sed 's/\ //g')
 	time=$(date +%Y%m%d-%H%M%S); echo $time Received endMessage "$endMessage" >> "$logfile"
 	if [ $endMessage == "HandBrakehasexited." ]
@@ -67,6 +65,3 @@ do
 	rm queue.txt-e
 	queue_item=$(head -n1 ${resource_path}/queue.txt)
 done
-
-# We don't need the progress bar anymore. Close Breakfast.
-osascript -e 'tell application "Breakfast"' -e "quit" -e 'end tell'

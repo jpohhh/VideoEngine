@@ -74,7 +74,6 @@ on will finish launching theObject
 		
 		(*This section sets up our local variables using the default list.*)
 		tell user defaults
-			set CalledByScript to (contents of default entry "CalledByScript" as boolean)
 			set ExtensionList to contents of default entry "ExtensionList"
 			set OldExtensionList to ExtensionList
 			set OutFolder to contents of default entry "OutFolder"
@@ -109,8 +108,37 @@ on awake from nib theObject
 		
 		set AppPath to POSIX path of (path to me) as string
 		
+		(* Determine if we should be encoding based on the size of queue.txt *)
+		set queueSize to (do shell script "ls -l " & (path for resource "queue" extension "txt") & " | awk '{print $5}'")
+		if (queueSize = "0") then
+			set shouldBeEncoding to false
+			set IsEncoding to false
+		else
+			set shouldBeEncoding to true
+		end if
+		
+		(* If we should be encoding, is HandBrakeCLI running? If not, wait 10 seconds and check again. If it still isn't, kick Engine, check again. If still not, give the user a prize *)
+		if shouldBeEncoding = true then
+			set isHandbrakeRunning to do shell script "ps ax | grep HandBrakeCLI | grep -v grep | wc -l | cut -d ' ' -f8"
+			if isHandbrakeRunning is equal to "0" then
+				--we're not currently encoding, log it, give the encoding script a kick in the arse
+				do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time " & isHandbrakeRunning & " instances reporting running, and we should be running because the queue is " & queueSize & " bytes big. >> " & BreakfastLongLog
+				do shell script "cd " & ResourcePath & "; ./engine.sh &> /dev/null &"
+				delay 10
+				set isHandbrakeRunning to do shell script "ps ax | grep HandBrakeCLI | grep -v grep | wc -l | cut -d ' ' -f8"
+				if isHandbrakeRunning is equal to "0" then
+					display dialog "Something is horribly broken, and nothing short of trashing this app will save you (most likely)."
+					set IsEncoding to false
+				else
+					set IsEncoding to true
+				end if
+			else
+				set IsEncoding to true
+			end if
+		end if
+		
 		(* If the app was called by the user, we set up preferences. If the app was called from the watcher script, we do the deal *)
-		if CalledByScript = false then
+		if IsEncoding = false then
 			-- Show the preference window
 			set visible of window "PrefWindow" to true
 			set content of text field "outFolderText" of window "PrefWindow" to OutFolder
@@ -123,7 +151,7 @@ on awake from nib theObject
 			set OldExtensionList to content of text field "WatchFolderText" of window "PrefWindow"
 		end if
 		
-		if CalledByScript = true then
+		if IsEncoding = true then
 			try
 				-- Hide the unneeded menus.
 				set menuItem to second menu item of main menu
@@ -146,13 +174,6 @@ on awake from nib theObject
 					-- so that we'll know later whether the engine.sh has updated it.
 					set content of text field "EncodeFileText" to EncodingFile
 				end tell
-				
-				--Tell the program we're about to start encoding
-				set IsEncoding to true
-				
-				-- Let's do this.
-				do shell script ResourcePath & "/engine.sh &> /dev/null & echo $!"
-				
 				
 			on error ErrorMessage number ErrorNumber
 				do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time " & ErrorMessage & " >> " & BreakfastLongLog
@@ -241,6 +262,10 @@ on clicked theObject
 	
 	-- If the user clicks on the Save button, save the variables to the User Defaults. 
 	if name of theObject is "saveButton" then
+		-- the below two lines are for development only and should be disabled for release. intended to make sure any changes of the folder action can be debugged properly
+		do shell script "osacompile -o  '/Library/Scripts/Folder Action Scripts/convert - video to MP4 using Breakfast.scpt' " & ResourcePath & "'/convert - video to MP4 using Breakfast.txt'"
+		do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Folder Action not found. Copying. >> " & BreakfastLongLog
+		
 		set OutFolder to content of text field "outFolderText" of window "PrefWindow"
 		set WatchFolder to content of text field "WatchFolderText" of window "PrefWindow"
 		set ExtensionList to content of text field "ExListText" of window "PrefWindow"
@@ -466,8 +491,8 @@ on idle theObject
 			-- 4)   be the file that engine.sh is encoding, do some processing to figure out
 			-- 5)   its .txt equivilent (which is the logfile), and then do what we need to do.
 			
-			-- First, get the content of the text field.
-			set EncodingFile to content of text field "EncodeFileText" of window "ProgressWindow"
+			-- First, get the top item from the queue and read what file is being encoded
+			set EncodingFile to (do shell script "head -n1 " & (path for resource "queue" extension "txt") & "| awk -F\";\" {'print $2'}")
 			-- If it's still our temporary placeholder string, don't do anything.
 			if EncodingFile is not equal to "Preparing..." then
 				

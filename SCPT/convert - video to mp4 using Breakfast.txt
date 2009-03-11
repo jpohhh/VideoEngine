@@ -18,6 +18,7 @@ on adding folder items to thisFolder after receiving addedItems
 	set BreakfastShortLog to (do shell script "defaults read com.Breakfast.engine BreakfastShortLog")
 	set BreakfastLongLog to (do shell script "defaults read com.Breakfast.engine BreakfastLongLog")
 	set AppPath to (do shell script "defaults read com.Breakfast.engine AppPath")
+	set resourcePath to (do shell script "defaults read com.Breakfast.engine ResourcePath")
 	
 	
 	-- First we go after the extensions, because they're the most complicated.
@@ -131,42 +132,20 @@ on adding folder items to thisFolder after receiving addedItems
 				--dump parsed filenames to queue.txt, I tried writing CSV for easier editing but this doesn't work because CSV parses the , in encoding options as a separate field
 				do shell script "echo " & sourcename & "\\;" & OutputPath & "\\;" & EncodingOptions & "\\;" & OutLogname & " >> " & QueuePath
 				
-				--set isHandbrakeRunning to do shell script "ps ax | grep HandBrakeCLI | grep -v grep | wc -l | cut -d ' ' -f8"
-				-- isHandbrakeRunning returns the number of HandBrakeCLI processes running
+				set isHandbrakeRunning to do shell script "ps ax | grep HandBrakeCLI | grep -v grep | wc -l | cut -d ' ' -f8"
 				
-				-- Try first with the AppPath, then let the script find the program on its own.
-				try
-					if application AppPath is not running then
-						--we're not currently encoding, log it, give the encoding script a kick in the arse
-						do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time Breakfast NOT reporting running, so asking encoder to start... >> " & BreakfastLongLog
-						
-						-- Send it to Breakfast
-						tell application AppPath
-							run
-							activate
-						end tell
-					else
-						--already encoding, quietly log this
-						do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time Breakfast is reporting running, so not asking encoder to start... >> " & BreakfastLongLog
-					end if
-				on error
-					if application "Breakfast" is not running then
-						--we're not currently encoding, log it, give the encoding script a kick in the arse
-						do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time Breakfast NOT reporting running, so asking encoder to start... >> " & BreakfastLongLog
-						
-						-- Send it to Breakfast
-						tell application "Breakfast"
-							run
-							activate
-						end tell
-					else
-						--already encoding, quietly log this
-						do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time Breakfast is reporting running, so not asking encoder to start... >> " & BreakfastLongLog
-					end if
-				end try
+				-- isHandbrakeRunning returns the number of HandBrakeCLI processes running
+				if isHandbrakeRunning is equal to "0" then
+					--we're not currently encoding, log it, give the encoding script a kick in the arse
+					do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time " & isHandbrakeRunning & " instances reporting running, so asking encoder to start... >> " & BreakfastLongLog
+					do shell script "cd " & resourcePath & "; ./engine.sh &> /dev/null &"
+				else
+					--already encoding, quietly log this
+					do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time " & isHandbrakeRunning & " instances reporting running, so not asking encoder to start... >> " & BreakfastLongLog
+				end if			
 			end if
 			
-			--note for the loop that we passed through index 1 of the added files
+			--note for the loop that we passed through one index of the added files
 			set i to i + 1
 		end repeat
 		do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time Exited repeat loop, all files should be handled >> " & BreakfastLongLog
