@@ -244,22 +244,10 @@ do
 		time=$(date +%Y%m%d-%H%M%S); echo $time "8) PULLED TAGS Show name:"$cart "Episode number:"$episode "SeasonNumber:"$season "Episode name:"$cnam "Aired:"$cday "Description:"$desc "Stik:"$stik "tven:"$tven "tvnn:"$tvnn "cover_art_url:"$cover_art_url "hdvd":$hdvd "cnid:"$cnid >> "$logfile"	
 
 		#Tag using mp4
-		${resource_path}/mp4tags "$1" -I $cnid 1>>"$logfile" 2>>"$logfile"
-		${resource_path}/mp4tags "$1" -H $hdvd 1>>"$logfile" 2>>"$logfile"
-		${resource_path}/mp4tags "$1" -song "$cnam" 1>>"$logfile" 2>>"$logfile"
-		${resource_path}/mp4tags "$1" -a "$cart" 1>>"$logfile" 2>>"$logfile"
-		${resource_path}/mp4tags "$1" -y $cday 1>>"$logfile" 2>>"$logfile"
-		${resource_path}/mp4tags "$1" -m "$desc" 1>>"$logfile" 2>>"$logfile"
-		${resource_path}/mp4tags "$1" -l "$desc" 1>>"$logfile" 2>>"$logfile"
-		${resource_path}/mp4tags "$1" -i tvshow 1>>"$logfile" 2>>"$logfile"
-		${resource_path}/mp4tags "$1" -S "$cart" 1>>"$logfile" 2>>"$logfile"
-		${resource_path}/mp4tags "$1" -M $episode 1>>"$logfile" 2>>"$logfile"
-		${resource_path}/mp4tags "$1" -N $tvnn 1>>"$logfile" 2>>"$logfile"
-		${resource_path}/mp4tags "$1" -n $season 1>>"$logfile" 2>>"$logfile"
-		${resource_path}/mp4tags "$1" -o $tven 1>>"$logfile" 2>>"$logfile"
-		
+		${resource_path}/mp4tags "$1" -I $cnid -H $hdvd -song "$cnam" -a "$cart" -y $cday -m "$desc" -l "$desc" -i tvshow -S "$cart" -M $episode -N $tvnn -n $season -o $tven 1>>"$logfile" 2>>"$logfile"
+
 		#begin art logic
-		last_covr_index=$(mp4art --list "$1" | tail -1 | awk '{print $1}')
+		last_covr_index=$(${resource_path}/mp4art --list "$1" | tail -1 | awk '{print $1}')
 		#if there's no covr-box, add one with pulled art
 		if [ "$last_covr_index" = "----------------------------------------------------------------------" ]
 		then
