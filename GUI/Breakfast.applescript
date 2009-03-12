@@ -148,6 +148,7 @@ on awake from nib theObject
 	(* The only object connected to this handler is the ProgressBar.nib... if this handler is called, then
 	the progress bar has been started. *)
 	
+	delay 2 -- was getting too many false engine.sh wasn't running messages
 	set isHandbrakeRunning to do shell script "ps ax | grep HandBrakeCLI | grep -v grep | wc -l | cut -d ' ' -f8"
 	if isHandbrakeRunning is equal to "0" then
 		--we're not currently encoding, log it, give the encoding script a kick in the arse
