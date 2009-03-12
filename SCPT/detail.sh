@@ -232,7 +232,7 @@ do
 		
 		#check if video has width > 1270, if so, tag it as HD with mp4tags
 		res=$(${resource_path}/mp4track --list "$1" | grep -m 1 width | awk '{print $3}' | awk -F. '{print $1}')
-		if (($res>490))
+		if (($res>1270))
 		then
 			hdvd="1"
 		else
