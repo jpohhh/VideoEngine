@@ -26,6 +26,7 @@
 		257572CA072881A4000BE9CA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		257572CC072881A4000BE9CA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		257572CD072881A4000BE9CA /* AppleScriptKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA206CF1015C4E2903C91932 /* AppleScriptKit.framework */; };
+		276365630F6DAE660070F0D0 /* breakfast.icns in Resources */ = {isa = PBXBuildFile; fileRef = 276365620F6DAE660070F0D0 /* breakfast.icns */; };
 		27B4DDE40F67FEEC0024F0C4 /* ProgressBar.nib in Resources */ = {isa = PBXBuildFile; fileRef = 27B4DDE30F67FEEC0024F0C4 /* ProgressBar.nib */; };
 		27B6850E0F68588200BBD7A8 /* convert - video to mp4 using Breakfast.scpt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27B685090F6857DF00BBD7A8 /* convert - video to mp4 using Breakfast.scpt */; };
 		27B6850F0F68588200BBD7A8 /* addtoitunes.scpt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27B685060F6857CB00BBD7A8 /* addtoitunes.scpt */; };
@@ -68,6 +69,7 @@
 		257572D6072881A4000BE9CA /* Breakfast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Breakfast.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		270D14870F68654B00E91BAB /* addtoitunes.applescript */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.applescript; name = addtoitunes.applescript; path = ../SCPT/addtoitunes.applescript; sourceTree = "<group>"; };
 		270D14880F68654B00E91BAB /* convert - video to mp4 using Breakfast.applescript */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.applescript; name = "convert - video to mp4 using Breakfast.applescript"; path = "../SCPT/convert - video to mp4 using Breakfast.applescript"; sourceTree = "<group>"; };
+		276365620F6DAE660070F0D0 /* breakfast.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = breakfast.icns; sourceTree = "<group>"; };
 		27B4DDE30F67FEEC0024F0C4 /* ProgressBar.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = ProgressBar.nib; sourceTree = "<group>"; };
 		27B685060F6857CB00BBD7A8 /* addtoitunes.scpt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.scpt; path = addtoitunes.scpt; sourceTree = "<group>"; };
 		27B685090F6857DF00BBD7A8 /* convert - video to mp4 using Breakfast.scpt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.scpt; path = "convert - video to mp4 using Breakfast.scpt"; sourceTree = "<group>"; };
@@ -158,6 +160,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				276365620F6DAE660070F0D0 /* breakfast.icns */,
 				270D14870F68654B00E91BAB /* addtoitunes.applescript */,
 				270D14880F68654B00E91BAB /* convert - video to mp4 using Breakfast.applescript */,
 				A6097AA50F64FA15008D05E9 /* engine.sh */,
@@ -254,6 +257,7 @@
 				A6097AA60F64FA15008D05E9 /* engine.sh in Resources */,
 				91342E530F662E25004805C7 /* detail.sh in Resources */,
 				27B4DDE40F67FEEC0024F0C4 /* ProgressBar.nib in Resources */,
+				276365630F6DAE660070F0D0 /* breakfast.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
