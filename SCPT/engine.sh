@@ -32,11 +32,11 @@ resource_path=$(defaults read com.Breakfast.engine ResourcePath)
 queue_item=$(head -n1 ${resource_path}/queue.txt)
 until [ "$queue_item" = "" ]
 do
-	#grab info from queue
-	sourcename=$(echo $queue_item | awk -F\; '{print $1}')
-	outputname=$(echo $queue_item | awk -F\; '{print $2}')
-	encodingoptions=$(echo $queue_item | awk -F\; '{print $3}')
-	logname=$(echo $queue_item | awk -F\; '{print $4}')
+	#grab info from queue and format in case of spaces
+	sourcename=$(echo $queue_item | awk -F\; '{print $1}' | sed 's/ /\\ /g')
+	outputname=$(echo $queue_item | awk -F\; '{print $2}' | sed 's/ /\\ /g')
+	encodingoptions=$(echo $queue_item | awk -F\; '{print $3}' | sed 's/ /\\ /g')
+	logname=$(echo $queue_item | awk -F\; '{print $4}' | sed 's/ /\\ /g')
 	
 	#log that we're beginning an encode
 	echo "BEGINNING ENCODE WORK" > "$logname"
@@ -60,7 +60,7 @@ do
 		then
 			${resource_path}/detail.sh "$outputname" &> /dev/null & sed -i -e "1d" ${resource_path}/queue.txt
 		else
-			time=$(date +%Y%m%d-%H%M%S); echo $time Handbrake did not finish. Exiting without running detail.sh >> "$logfile"; sed -i -e "1d" ${resource_path}/queue.txt
+			time=$(date +%Y%m%d-%H%M%S); echo $time Handbrake did not finish. Exiting without running detail.sh >> "$logfile" ; sed -i -e "1d" ${resource_path}/queue.txt
 	fi
 	
 	#clean up from sed
