@@ -302,58 +302,61 @@ on clicked theObject
 		set ExtensionList to content of text field "ExListText" of window "PrefWindow"
 		set EncodingOptions to content of text field "encodeOptions" of window "PrefWindow"
 		
+		-- NOTE: The following used to be in an 'if' block. Should no longer be necessary because
+		-- there should be minimal delay now that Folder Action script is compiled at build, rather
+		-- than at runtime. 'If' block is now commented out. 
 		-- If the user has specified a new watching folder, set that up.
-		if OldWatchFolder is not equal to WatchFolder then
-			-- See if our watcher script has been copied to the Folder Actions folder already.
-			set theWatcherScript to POSIX file "/Library/Scripts/Folder Action Scripts/convert - video to MP4 using Breakfast.scpt"
-			try
-				tell application "Finder"
-					set dataSize to data size of file theWatcherScript
-					set watcherInstalled to true
-				end tell
-			on error
-				set watcherInstalled to false
-			end try
-			
-			-- DEBUGGING: do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: WatcherInstalled: " & watcherInstalled & " >> " & BreakfastLongLog
-			
-			if watcherInstalled is not equal to true then
-				do shell script "cp '" & ResourcePath & "/Scripts/convert - video to MP4 using Breakfast.scpt' '/Library/Scripts/Folder Action Scripts/convert - video to MP4 using Breakfast.scpt'"
-				-- DEBUGGING: do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Folder Action not found. Copying. >> " & BreakfastLongLog
-			end if
-			
-			-- Remove the script from the OldWatchFolder. 
-			-- DEBUGGING: do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: OldWatchFolder: " & OldWatchFolder & " >> " & BreakfastLongLog
-			-- First, make sure that there was an OldWatchFolder (there won't be on first run.)
-			if OldWatchFolder is not equal to "-" then
-				tell application "System Events"
-					set theAlias to alias OldWatchFolder
-					set theName to name of theAlias
-					try
-						set theList to attached scripts OldWatchFolder
-					end try
-					try
-						set numberofitems to number of items of theList
-					on error
-						-- there are no attached scripts
-						set numberofitems to 0
-					end try
-					try
-						tell folder action theName
-							set theScripts to scripts
-						end tell
-					end try
-					if numberofitems > 0 then
-						set i to 1
-						repeat until i > numberofitems
-							if (name of item i of theScripts) = "convert - video to MP4 using Breakfast.scpt" then
-								remove action from OldWatchFolder using action name "convert - video to MP4 using Breakfast.scpt"
-							end if
-							set i to i + 1
-						end repeat
-					end if
-				end tell
-			end if
+		-- if OldWatchFolder is not equal to WatchFolder then
+		-- See if our watcher script has been copied to the Folder Actions folder already.
+		set theWatcherScript to POSIX file "/Library/Scripts/Folder Action Scripts/convert - video to MP4 using Breakfast.scpt"
+		try
+			tell application "Finder"
+				set dataSize to data size of file theWatcherScript
+				set watcherInstalled to true
+			end tell
+		on error
+			set watcherInstalled to false
+		end try
+		
+		-- DEBUGGING: do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: WatcherInstalled: " & watcherInstalled & " >> " & BreakfastLongLog
+		
+		if watcherInstalled is not equal to true then
+			do shell script "cp '" & ResourcePath & "/Scripts/convert - video to MP4 using Breakfast.scpt' '/Library/Scripts/Folder Action Scripts/convert - video to MP4 using Breakfast.scpt'"
+			-- DEBUGGING: do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Folder Action not found. Copying. >> " & BreakfastLongLog
+		end if
+		
+		-- Remove the script from the OldWatchFolder. 
+		-- DEBUGGING: do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: OldWatchFolder: " & OldWatchFolder & " >> " & BreakfastLongLog
+		-- First, make sure that there was an OldWatchFolder (there won't be on first run.)
+		if OldWatchFolder is not equal to "-" then
+			tell application "System Events"
+				set theAlias to alias OldWatchFolder
+				set theName to name of theAlias
+				try
+					set theList to attached scripts OldWatchFolder
+				end try
+				try
+					set numberofitems to number of items of theList
+				on error
+					-- there are no attached scripts
+					set numberofitems to 0
+				end try
+				try
+					tell folder action theName
+						set theScripts to scripts
+					end tell
+				end try
+				if numberofitems > 0 then
+					set i to 1
+					repeat until i > numberofitems
+						if (name of item i of theScripts) = "convert - video to MP4 using Breakfast.scpt" then
+							remove action from OldWatchFolder using action name "convert - video to MP4 using Breakfast.scpt"
+						end if
+						set i to i + 1
+					end repeat
+				end if
+			end tell
+			-- end if
 			
 			-- DEBUGGING: do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Finished removing script from OldWatchFolder >> " & BreakfastLongLog
 			
@@ -461,7 +464,7 @@ on choose menu item theObject
 	(* This handler is connected to the pulldown menu of encoding options. *)
 	if name of theObject is "pullDown" then
 		set EncodingOptions to title of popup button "pullDown" of window "PrefWindow"
-		set encodeTemp to "-Z '" & EncodingOptions & "'"
+		set encodeTemp to "-Z \"" & EncodingOptions & "\""
 		set content of text field "EncodeOptions" of window "PrefWindow" to encodeTemp
 		if (state of button "saveButton" of window "PrefWindow") = 1 then
 			set (state of button "saveButton" of window "PrefWindow") to 0

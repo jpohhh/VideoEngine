@@ -47,7 +47,9 @@ do
 	echo Encoding options: "$encodingoptions" >> "$logname"
 	
 	#start encoding
-	nice $resource_path/HandBrakeCLI -i "$sourcename" -o "$outputname" $encodingoptions -v 1>> "$logname" 2>> "$logname"
+	# workaround for inability to correctly pass the iPhone preset to HandbrakeCLI
+	go_go_gadget_engine=$(echo nice $resource_path/HandBrakeCLI -i "$sourcename" -o "$outputname" "$encodingoptions" '-v 1>> ' "$logname" ' 2>> ' "$logname")
+	eval $go_go_gadget_engine
 	time=$(date +%Y%m%d-%H%M%S); echo $time Finished encoding "$sourcename" >> "$shortlog"
 	time=$(date +%Y%m%d-%H%M%S); echo $time Finished encoding "$sourcename" >> "$logfile"
 	
