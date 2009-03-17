@@ -33,10 +33,10 @@ queue_item=$(head -n1 ${resource_path}/queue.txt)
 until [ "$queue_item" = "" ]
 do
 	#grab info from queue and format in case of spaces
-	sourcename=$(echo $queue_item | awk -F\; '{print $1}' | sed 's/ /\\ /g')
-	outputname=$(echo $queue_item | awk -F\; '{print $2}' | sed 's/ /\\ /g')
-	encodingoptions=$(echo $queue_item | awk -F\; '{print $3}' | sed 's/ /\\ /g')
-	logname=$(echo $queue_item | awk -F\; '{print $4}' | sed 's/ /\\ /g')
+	sourcename=$(echo $queue_item | awk -F\; '{print $1}') #| sed 's/ /\\ /g')
+	outputname=$(echo $queue_item | awk -F\; '{print $2}') # | sed 's/ /\\ /g')
+	encodingoptions=$(echo $queue_item | awk -F\; '{print $3}') # | sed 's/ /\\ /g')
+	logname=$(echo $queue_item | awk -F\; '{print $4}') # | sed 's/ /\\ /g')
 	
 	#log that we're beginning an encode
 	echo "BEGINNING ENCODE WORK" > "$logname"

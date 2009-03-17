@@ -544,7 +544,7 @@ on idle theObject
 			
 			-- First, get the top item from the queue and read what file is being encoded
 			set EncodingFile to (do shell script "head -n1 " & (path for resource "queue" extension "txt") & "| awk -F\";\" {'print $2'}")
-			-- DEBUGGING LOG: do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time IDLE_LOOP from IsEncoding block: the EncodingFile variable is: " & EncodingFile & " >> " & BreakfastLongLog
+			--do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time IDLE_LOOP from IsEncoding block: the EncodingFile variable is: " & EncodingFile & " >> " & BreakfastLongLog
 			
 			-- If we find something in the queue, watch it. 
 			if EncodingFile is not equal to "" then
@@ -554,16 +554,19 @@ on idle theObject
 				set x to the offset of "." in LogFile
 				set LogFile to (text (x + 1) thru -1 of LogFile)
 				set LogFile to (the reverse of every character of LogFile) as string
-				set LogFile to ((LogFile) & ".txt")
+				set LogFile to LogFile & ".txt'"
 				
+				--do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time IDLE_LOOP from IsEncoding block: the LogFile variable is: " & LogFile & " >> " & BreakfastLongLog
 				-- Parse the last line of the LogFile to pull out the percentage done.
 				try
-					set donePercentage to (do shell script "tail -c 74 " & quoted form of LogFile & " | sed 's/.*\\(.[0-9]\\.[0-9][0-9]\\)\\ \\%.*/\\1/' | sed 's/\\ \\([0-9]\\.[0-9][0-9]\\)/\\1/'") as number
+					set donePercentage to (do shell script "tail -c 74 " & LogFile & " | sed 's/.*\\(.[0-9]\\.[0-9][0-9]\\)\\ \\%.*/\\1/' | sed 's/\\ \\([0-9]\\.[0-9][0-9]\\)/\\1/'") as number
+					--do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time IDLE_LOOP from IsEncoding block: the donePercentage variable is: " & donePercentage & " >> " & BreakfastLongLog
+					
 				end try
 				
 				-- Parse the last line of the LogFile to pull out the time remaining.
 				try
-					set countdown to (do shell script "tail -c 74 " & quoted form of LogFile & " | sed 's/.*\\([0-9][0-9]h[0-9][0-9]m[0-9][0-9]s\\).*/\\1/'") as string
+					set countdown to (do shell script "tail -c 74 " & LogFile & " | sed 's/.*\\([0-9][0-9]h[0-9][0-9]m[0-9][0-9]s\\).*/\\1/'") as string
 					-- Do some complicated checks to make sure we've got what we want.
 					-- (These are done because HandbrakeCLI's output is different before it calculates the time
 					-- remaining.)

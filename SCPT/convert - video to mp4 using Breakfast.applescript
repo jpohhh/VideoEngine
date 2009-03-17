@@ -133,7 +133,7 @@ on adding folder items to thisFolder after receiving addedItems
 			--check if we're supposed to encode
 			if DoEncode = 1 then
 				--dump parsed filenames to queue.txt, I tried writing CSV for easier editing but this doesn't work because CSV parses the , in encoding options as a separate field
-				do shell script "echo " & sourcename & "\\;" & OutputPath & "\\;" & quoted form of EncodingOptions & "\\;" & OutLogname & " >> " & QueuePath
+				do shell script "echo " & quoted form of sourcename & "\\;" & quoted form of OutputPath & "\\;" & quoted form of EncodingOptions & "\\;" & quoted form of OutLogname & " >> " & quoted form of QueuePath
 				
 				set isHandbrakeRunning to do shell script "ps ax | grep HandBrakeCLI | grep -v grep | wc -l | cut -d ' ' -f8"
 				
