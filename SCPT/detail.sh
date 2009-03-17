@@ -43,6 +43,10 @@ do
 		[0-9][0-9]\ [0-9][0-9]\ [0-9][0-9][0-9][0-9])
 			time=$(date +%Y%m%d-%H%M%S); echo $time "The filename contains a date in the format MM DD YYYY - working on that assumption" >> "$logfile"
 			episode_date=$(echo $episode_date_check | sed 's/ /\//g')
+			#parse filename
+			tv_show=$(basename "$1" | sed 's/\./ /g' | sed 's/.'"$episode_date_check"'.*//')
+			basename_result=$(basename "$1")
+			time=$(date +%Y%m%d-%H%M%S); echo $time "tv_show RESULT: "$tv_show >> "$logfile"
 		;;
 	esac
 	
@@ -52,6 +56,10 @@ do
 		[0-9][0-9][0-9][0-9]\ [0-9][0-9]\ [0-9][0-9])
 			time=$(date +%Y%m%d-%H%M%S); echo $time "The filename contains a date in the format YYYY MM DD - working on that assumption" >> "$logfile"
 			episode_date=$(echo $episode_date_check | sed 's/ /\-/g')
+			#parse filename
+			tv_show=$(basename "$1" | sed 's/\./ /g' | sed 's/.'"$episode_date_check"'.*//')
+			basename_result=$(basename "$1")
+			time=$(date +%Y%m%d-%H%M%S); echo $time "tv_show RESULT: "$tv_show >> "$logfile"
 		;;
 	esac
 	
@@ -61,6 +69,10 @@ do
 		[0-9][0-9][0-9][0-9][0-9][0-9])
 			time=$(date +%Y%m%d-%H%M%S); echo $time "The filename contains six sequential numerals - working on the assumption MMDDYY" >> "$logfile"
 			episode_date=$(echo $episode_date_check | sed 's/[0-9][0-9]/& /g' | sed 's/\ /\//g' | sed 's/\/$//')
+			#parse filename
+			tv_show=$(basename "$1" | sed 's/\./ /g' | sed 's/.'"$episode_date_check"'.*//')
+			basename_result=$(basename "$1")
+			time=$(date +%Y%m%d-%H%M%S); echo $time "tv_show RESULT: "$tv_show >> "$logfile"
 		;;
 	esac
 	
@@ -77,23 +89,21 @@ do
 					time=$(date +%Y%m%d-%H%M%S); echo $time "Non-MP4 in input, script halted" >> "$logfile"
 					time=$(date +%Y%m%d-%H%M%S); echo $time "$1" ":Non-MP4 in input, script halted" >> "$shortlog"
 					break
-					fi
 				fi
-				#parse filename
-				tv_show=$(basename "$1" | sed 's/\./ /g' | sed 's/.'"$episode_date_check"'.*//')
-				basename_result=$(basename "$1")
-				time=$(date +%Y%m%d-%H%M%S); echo $time "tv_show RESULT: "$tv_show >> "$logfile"
-				#Check to see if we should trim (based on the radio button in preferences)
-				if [ $trim_state == 1 ]
-				then 	
-					#strip i at front of TV show -- I use this to denote my iPhone encodes
-					first_character=$(echo $tv_show | cut -c 1)
-					if [ $first_character == "i" ]
-					then
-						length=${#tv_show}
-						tv_show=$(echo $tv_show | cut -c2-$length)
-					fi
-				fi
+			fi
+		
+		#Check to see if we should trim (based on the radio button in preferences)
+		if [ $trim_state == 1 ]
+		then 	
+		
+		#strip i at front of TV show -- I use this to denote my iPhone encodes
+		first_character=$(echo $tv_show | cut -c 1)
+			if [ $first_character == "i" ]
+			then
+				length=${#tv_show}
+				tv_show=$(echo $tv_show | cut -c2-$length)
+			fi
+		fi
 	fi
 	
 		#parse filename

@@ -596,8 +596,8 @@ on idle theObject
 			if donePercentage = 99 then
 				set IsEncoding to false
 				-- If for some reason the last 1% takes some time, change to an indeterminate progress bar, and start it.
-				set indeterminate of progress indicator "ProgressBar" of window "ProgressWindow" to true
-				start progress indicator "ProgressBar" of window "ProgressWindow"
+				-- set indeterminate of progress indicator "ProgressBar" of window "ProgressWindow" to true
+				-- start progress indicator "ProgressBar" of window "ProgressWindow"
 			end if
 			
 			-- Update the countdown box text field and the Encoding File text field.

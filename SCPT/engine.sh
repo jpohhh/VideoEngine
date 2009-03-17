@@ -54,11 +54,15 @@ do
 	time=$(date +%Y%m%d-%H%M%S); echo $time Finished encoding "$sourcename" >> "$logfile"
 	
 	#check to make sure encode completed nicely, if it did pass to detail
-	endMessage=$(tail -c 22 "$logname" | sed 's/\ //g')
+	# Remove the quotes pulled in from the queue so tail will check correctly.
+	logcheck=$(echo "$logname" | sed "s/\'//g")
+	endMessage=$(tail -c 22 "$logcheck" | sed 's/\ //g')
 	time=$(date +%Y%m%d-%H%M%S); echo $time Received endMessage "$endMessage" >> "$logfile"
 	if [ $endMessage == "HandBrakehasexited." ]
 		then
-			${resource_path}/detail.sh "$outputname" &> /dev/null & sed -i -e "1d" ${resource_path}/queue.txt
+			# Remove the quotes pulled in from the queue so we can pass to detail correctly.
+			outpath_for_detail=$(echo "$outputname" | sed "s/\'//g")
+			${resource_path}/detail.sh "$outpath_for_detail" &> /dev/null ; sed -i -e "1d" ${resource_path}/queue.txt
 		else
 			time=$(date +%Y%m%d-%H%M%S); echo $time Handbrake did not finish. Exiting without running detail.sh >> "$logfile" ; sed -i -e "1d" ${resource_path}/queue.txt
 	fi
