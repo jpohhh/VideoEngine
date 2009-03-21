@@ -144,7 +144,7 @@ do
 		then
 			if [ "$file_extension" != "mp4" ]
 			then
-				time=$(date +%Y%m%d-%H%M%S); echo $time "Non-MP4 in input, script halted" >> "$logfile"
+				time=$(date +%Y%m%d-%H%M%S); echo $time "$1" ":Non-MP4 in input, script halted" >> "$logfile"
 				time=$(date +%Y%m%d-%H%M%S); echo $time "$1" ":Non-MP4 in input, script halted" >> "$shortlog"
 				break
 			fi
@@ -211,7 +211,9 @@ do
 		success=$(cat "$episode_data" | grep "not found")
 		if [ "$success" != "" ]
 		then
-			time=$(date +%Y%m%d-%H%M%S); echo $time "broken episode data, aborting" >> "$logfile"
+			time=$(date +%Y%m%d-%H%M%S); echo $time "broken episode data, so not attempting to tag" >> "$logfile"
+			time=$(date +%Y%m%d-%H%M%S); echo $time "Calling addtoitunes.scpt..." >> "$logfile"
+			osascript ${resource_path}/Scripts/addtoitunes.scpt "$1" 2>> "$logfile"
 			break
 		fi
 		
