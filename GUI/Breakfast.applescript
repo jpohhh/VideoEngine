@@ -302,28 +302,8 @@ on clicked theObject
 		set ExtensionList to content of text field "ExListText" of window "PrefWindow"
 		set EncodingOptions to content of text field "encodeOptions" of window "PrefWindow"
 		
-		-- NOTE: The following used to be in an 'if' block. Should no longer be necessary because
-		-- there should be minimal delay now that Folder Action script is compiled at build, rather
-		-- than at runtime. 'If' block is now commented out. 
-		-- If the user has specified a new watching folder, set that up.
-		-- if OldWatchFolder is not equal to WatchFolder then
-		-- See if our watcher script has been copied to the Folder Actions folder already.
-		set theWatcherScript to POSIX file "/Library/Scripts/Folder Action Scripts/convert - video to MP4 using Breakfast.scpt"
-		try
-			tell application "Finder"
-				set dataSize to data size of file theWatcherScript
-				set watcherInstalled to true
-			end tell
-		on error
-			set watcherInstalled to false
-		end try
+		do shell script "cp '" & ResourcePath & "/Scripts/convert - video to MP4 using Breakfast.scpt' '/Library/Scripts/Folder Action Scripts/convert - video to MP4 using Breakfast.scpt'"
 		
-		-- DEBUGGING: do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: WatcherInstalled: " & watcherInstalled & " >> " & BreakfastLongLog
-		
-		if watcherInstalled is not equal to true then
-			do shell script "cp '" & ResourcePath & "/Scripts/convert - video to MP4 using Breakfast.scpt' '/Library/Scripts/Folder Action Scripts/convert - video to MP4 using Breakfast.scpt'"
-			-- DEBUGGING: do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Folder Action not found. Copying. >> " & BreakfastLongLog
-		end if
 		
 		-- Remove the script from the OldWatchFolder. 
 		-- DEBUGGING: do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: OldWatchFolder: " & OldWatchFolder & " >> " & BreakfastLongLog
@@ -356,54 +336,52 @@ on clicked theObject
 					end repeat
 				end if
 			end tell
-			-- end if
-			
-			-- DEBUGGING: do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Finished removing script from OldWatchFolder >> " & BreakfastLongLog
-			
-			-- Add the script to the new watch folder.
-			-- DEBUGGING: do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: new WatchFolder: " & WatchFolder & " >> " & BreakfastLongLog
-			-- First, if it's already there just pull it off.
-			tell application "System Events"
-				set theAlias to alias WatchFolder
-				set theName to name of theAlias
-				try
-					set theList to attached scripts WatchFolder
-				end try
-				try
-					set numberofitems to number of items of theList
-				on error
-					-- there are no attached scripts
-					set numberofitems to 0
-				end try
-				try
-					tell folder action theName
-						set theScripts to scripts
-					end tell
-				end try
-				if numberofitems > 0 then
-					set i to 1
-					repeat until i > numberofitems
-						if (name of item i of theScripts) = "convert - video to MP4 using Breakfast.scpt" then
-							remove action from WatchFolder using action name "convert - video to MP4 using Breakfast.scpt"
-						end if
-						set i to i + 1
-					end repeat
-				end if
-			end tell
-			
-			-- DEBUGGING: do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Finished removing script from new WatchFolder >> " & BreakfastLongLog
-			
-			-- Now, add it.
-			tell application "System Events"
-				make new folder action at the end of folder actions with properties {path:(WatchFolder as text)}
-				tell folder action theName
-					make new script at the end of scripts with properties {name:"convert - video to MP4 using Breakfast.scpt"}
-				end tell
-			end tell
-			
-			-- DEBUGGING: do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Finished removing adding Folder Action >> " & BreakfastLongLog
-			
 		end if
+		
+		-- DEBUGGING: do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Finished removing script from OldWatchFolder >> " & BreakfastLongLog
+		
+		-- Add the script to the new watch folder.
+		-- DEBUGGING: do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: new WatchFolder: " & WatchFolder & " >> " & BreakfastLongLog
+		-- First, if it's already there just pull it off.
+		tell application "System Events"
+			set theAlias to alias WatchFolder
+			set theName to name of theAlias
+			try
+				set theList to attached scripts WatchFolder
+			end try
+			try
+				set numberofitems to number of items of theList
+			on error
+				-- there are no attached scripts
+				set numberofitems to 0
+			end try
+			try
+				tell folder action theName
+					set theScripts to scripts
+				end tell
+			end try
+			if numberofitems > 0 then
+				set i to 1
+				repeat until i > numberofitems
+					if (name of item i of theScripts) = "convert - video to MP4 using Breakfast.scpt" then
+						remove action from WatchFolder using action name "convert - video to MP4 using Breakfast.scpt"
+					end if
+					set i to i + 1
+				end repeat
+			end if
+		end tell
+		
+		-- DEBUGGING: do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Finished removing script from new WatchFolder >> " & BreakfastLongLog
+		
+		-- Now, add it.
+		tell application "System Events"
+			make new folder action at the end of folder actions with properties {path:(WatchFolder as text)}
+			tell folder action theName
+				make new script at the end of scripts with properties {name:"convert - video to MP4 using Breakfast.scpt"}
+			end tell
+		end tell
+		
+		-- DEBUGGING: do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time BREAKFAST_SAVE button: Finished removing adding Folder Action >> " & BreakfastLongLog
 		
 		tell user defaults
 			set contents of default entry "UsingGUI" to UsingGUIState
@@ -464,7 +442,7 @@ on choose menu item theObject
 	(* This handler is connected to the pulldown menu of encoding options. *)
 	if name of theObject is "pullDown" then
 		set EncodingOptions to title of popup button "pullDown" of window "PrefWindow"
-		set encodeTemp to "-Z \"" & EncodingOptions & "\""
+		set encodeTemp to "\"-Z " & the quoted form of EncodingOptions & "\""
 		set content of text field "EncodeOptions" of window "PrefWindow" to encodeTemp
 		if (state of button "saveButton" of window "PrefWindow") = 1 then
 			set (state of button "saveButton" of window "PrefWindow") to 0
@@ -544,7 +522,7 @@ on idle theObject
 			
 			-- First, get the top item from the queue and read what file is being encoded
 			set EncodingFile to (do shell script "head -n1 " & (path for resource "queue" extension "txt") & "| awk -F\";\" {'print $2'}")
-			--do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time IDLE_LOOP from IsEncoding block: the EncodingFile variable is: " & EncodingFile & " >> " & BreakfastLongLog
+			-- DEBUGGING LOG: do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time IDLE_LOOP from IsEncoding block: the EncodingFile variable is: " & EncodingFile & " >> " & BreakfastLongLog
 			
 			-- If we find something in the queue, watch it. 
 			if EncodingFile is not equal to "" then
@@ -561,7 +539,6 @@ on idle theObject
 				try
 					set donePercentage to (do shell script "tail -c 74 " & LogFile & " | sed 's/.*\\(.[0-9]\\.[0-9][0-9]\\)\\ \\%.*/\\1/' | sed 's/\\ \\([0-9]\\.[0-9][0-9]\\)/\\1/'") as number
 					--do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time IDLE_LOOP from IsEncoding block: the donePercentage variable is: " & donePercentage & " >> " & BreakfastLongLog
-					
 				end try
 				
 				-- Parse the last line of the LogFile to pull out the time remaining.

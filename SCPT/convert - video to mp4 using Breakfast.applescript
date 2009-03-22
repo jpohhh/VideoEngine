@@ -35,7 +35,7 @@ on adding folder items to thisFolder after receiving addedItems
 	
 	-- Now the rest of the properties...
 	set OutFolder to (do shell script "defaults read com.Breakfast.engine OutFolder") & "/"
-	set EncodingOptions to (do shell script "defaults read com.Breakfast.engine EncodingOptions")
+	set EncodingOptions to (do shell script "defaults read com.breakfast.engine EncodingOptions")
 	set QueuePath to (do shell script "defaults read com.Breakfast.engine QueuePath")
 	
 	-- Now we set our own default to let the app know we want it to do the deal. 
@@ -133,7 +133,7 @@ on adding folder items to thisFolder after receiving addedItems
 			--check if we're supposed to encode
 			if DoEncode = 1 then
 				--dump parsed filenames to queue.txt, I tried writing CSV for easier editing but this doesn't work because CSV parses the , in encoding options as a separate field
-				do shell script "echo " & quoted form of sourcename & "\\;" & quoted form of OutputPath & "\\;" & quoted form of EncodingOptions & "\\;" & quoted form of OutLogname & " >> " & quoted form of QueuePath
+				do shell script "echo " & sourcename & "\\;" & OutputPath & "\\;" & EncodingOptions & "\\;" & OutLogname & " >> " & QueuePath
 				
 				set isHandbrakeRunning to do shell script "ps ax | grep HandBrakeCLI | grep -v grep | wc -l | cut -d ' ' -f8"
 				

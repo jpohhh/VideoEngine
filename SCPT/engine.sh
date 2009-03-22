@@ -32,11 +32,11 @@ resource_path=$(defaults read com.Breakfast.engine ResourcePath)
 queue_item=$(head -n1 ${resource_path}/queue.txt)
 until [ "$queue_item" = "" ]
 do
-	#grab info from queue and format in case of spaces
-	sourcename=$(echo $queue_item | awk -F\; '{print $1}') #| sed 's/ /\\ /g')
-	outputname=$(echo $queue_item | awk -F\; '{print $2}') # | sed 's/ /\\ /g')
-	encodingoptions=$(echo $queue_item | awk -F\; '{print $3}') # | sed 's/ /\\ /g')
-	logname=$(echo $queue_item | awk -F\; '{print $4}') # | sed 's/ /\\ /g')
+	#grab info from queue
+	sourcename=$(echo $queue_item | awk -F\; '{print $1}')
+	outputname=$(echo $queue_item | awk -F\; '{print $2}')
+	encodingoptions=$(echo $queue_item | awk -F\; '{print $3}')
+	logname=$(echo $queue_item | awk -F\; '{print $4}')
 	
 	#log that we're beginning an encode
 	echo "BEGINNING ENCODE WORK" > "$logname"
@@ -44,27 +44,21 @@ do
 	time=$(date +%Y%m%d-%H%M%S); echo $time Starting to encode "$sourcename" >> "$logfile"
 	echo Source: "$sourcename" >> "$logname"
 	echo Output: "$outputname" >> "$logname"
-	echo Encoding options: "$encodingoptions" >> "$logname"
+	echo Encoding options: $encodingoptions >> "$logname"
 	
 	#start encoding
-	# workaround for inability to correctly pass the iPhone preset to HandbrakeCLI
-	go_go_gadget_engine=$(echo nice $resource_path/HandBrakeCLI -i "$sourcename" -o "$outputname" "$encodingoptions" '-v 1>> ' "$logname" ' 2>> ' "$logname")
-	eval $go_go_gadget_engine
+	eval $resource_path/HandBrakeCLI -i "'$sourcename'" $encodingoptions -o "'$outputname'" -v1 1>>"$logname" 2>>"$logname"
 	time=$(date +%Y%m%d-%H%M%S); echo $time Finished encoding "$sourcename" >> "$shortlog"
 	time=$(date +%Y%m%d-%H%M%S); echo $time Finished encoding "$sourcename" >> "$logfile"
 	
 	#check to make sure encode completed nicely, if it did pass to detail
-	# Remove the quotes pulled in from the queue so tail will check correctly.
-	logcheck=$(echo "$logname" | sed "s/\'//g")
-	endMessage=$(tail -c 22 "$logcheck" | sed 's/\ //g')
+	endMessage=$(tail -c 22 "$logname" | sed 's/\ //g')
 	time=$(date +%Y%m%d-%H%M%S); echo $time Received endMessage "$endMessage" >> "$logfile"
 	if [ $endMessage == "HandBrakehasexited." ]
 		then
-			# Remove the quotes pulled in from the queue so we can pass to detail correctly.
-			outpath_for_detail=$(echo "$outputname" | sed "s/\'//g")
-			${resource_path}/detail.sh "$outpath_for_detail" &> /dev/null ; sed -i -e "1d" ${resource_path}/queue.txt
+			${resource_path}/detail.sh "$outputname" &> /dev/null & sed -i -e "1d" ${resource_path}/queue.txt
 		else
-			time=$(date +%Y%m%d-%H%M%S); echo $time Handbrake did not finish. Exiting without running detail.sh >> "$logfile" ; sed -i -e "1d" ${resource_path}/queue.txt
+			time=$(date +%Y%m%d-%H%M%S); echo $time Handbrake did not finish. Exiting without running detail.sh >> "$logfile"; sed -i -e "1d" ${resource_path}/queue.txt
 	fi
 	
 	#clean up from sed
