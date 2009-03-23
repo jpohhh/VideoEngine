@@ -270,6 +270,7 @@ do
 				${resource_path}/mp4art --keepgoing --add ${resource_path}/coverart.jpg --art-index 0 "$1"
 			else
 				time=$(date +%Y%m%d-%H%M%S); echo $time "Art is smaller than a kilobyte, highly likely its garbage so skipping." >> "$logfile"
+				${resource_path}/mp4file --optimize "$1"
 			fi
 		#if there's more than one covr-box, remove all and add one with pulled art
 		elif (($last_covr_index>0))
@@ -281,8 +282,10 @@ do
 		elif (($last_covr_index==0))
 		then
 			time=$(date +%Y%m%d-%H%M%S); echo $time "Already art on this file, skipping adding art" >> "$logfile"
+			${resource_path}/mp4file --optimize "$1"
 		else
 			time=$(date +%Y%m%d-%H%M%S); echo $time "Art parsing broken, the value for $last_cover index we got is:" $last_covr_index >> "$logfile" 
+			${resource_path}/mp4file --optimize "$1"
 		fi
 		
 		# Call the applescript that will put all of this stuff into iTunes.

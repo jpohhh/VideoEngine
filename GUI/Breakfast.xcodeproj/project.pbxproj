@@ -32,6 +32,7 @@
 		27B6850F0F68588200BBD7A8 /* addtoitunes.scpt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27B685060F6857CB00BBD7A8 /* addtoitunes.scpt */; };
 		27F017EC0F60AA2700328CB6 /* queue.txt in Resources */ = {isa = PBXBuildFile; fileRef = 27F017E90F60AA2700328CB6 /* queue.txt */; };
 		91342E530F662E25004805C7 /* detail.sh in Resources */ = {isa = PBXBuildFile; fileRef = 91342E520F662E25004805C7 /* detail.sh */; };
+		91B2233B0F77529100FAC28C /* mp4file in Resources */ = {isa = PBXBuildFile; fileRef = 91B2233A0F77529100FAC28C /* mp4file */; };
 		A60979ED0F64EB32008D05E9 /* mp4art in Resources */ = {isa = PBXBuildFile; fileRef = A60979EA0F64EB32008D05E9 /* mp4art */; };
 		A60979EE0F64EB32008D05E9 /* mp4tags in Resources */ = {isa = PBXBuildFile; fileRef = A60979EB0F64EB32008D05E9 /* mp4tags */; };
 		A60979EF0F64EB32008D05E9 /* mp4track in Resources */ = {isa = PBXBuildFile; fileRef = A60979EC0F64EB32008D05E9 /* mp4track */; };
@@ -80,6 +81,7 @@
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		65359356078DD41800E8BB2F /* AppleScriptKit.sdef */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.sdef; name = AppleScriptKit.sdef; path = /System/Library/Frameworks/AppleScriptKit.framework/Versions/A/Resources/AppleScriptKit.sdef; sourceTree = "<absolute>"; };
 		91342E520F662E25004805C7 /* detail.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = detail.sh; path = ../SCPT/detail.sh; sourceTree = SOURCE_ROOT; };
+		91B2233A0F77529100FAC28C /* mp4file */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = mp4file; path = ../BIN/mp4file; sourceTree = SOURCE_ROOT; };
 		A60979EA0F64EB32008D05E9 /* mp4art */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = mp4art; path = ../BIN/mp4art; sourceTree = SOURCE_ROOT; };
 		A60979EB0F64EB32008D05E9 /* mp4tags */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = mp4tags; path = ../BIN/mp4tags; sourceTree = SOURCE_ROOT; };
 		A60979EC0F64EB32008D05E9 /* mp4track */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = mp4track; path = ../BIN/mp4track; sourceTree = SOURCE_ROOT; };
@@ -172,6 +174,7 @@
 				65359356078DD41800E8BB2F /* AppleScriptKit.sdef */,
 				A60979F00F64EB3C008D05E9 /* HandBrakeCLI */,
 				A60979EA0F64EB32008D05E9 /* mp4art */,
+				91B2233A0F77529100FAC28C /* mp4file */,
 				A60979EB0F64EB32008D05E9 /* mp4tags */,
 				A60979EC0F64EB32008D05E9 /* mp4track */,
 				27B685090F6857DF00BBD7A8 /* convert - video to mp4 using Breakfast.scpt */,
@@ -258,6 +261,7 @@
 				91342E530F662E25004805C7 /* detail.sh in Resources */,
 				27B4DDE40F67FEEC0024F0C4 /* ProgressBar.nib in Resources */,
 				276365630F6DAE660070F0D0 /* breakfast.icns in Resources */,
+				91B2233B0F77529100FAC28C /* mp4file in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
