@@ -278,11 +278,20 @@ do
 			time=$(date +%Y%m%d-%H%M%S); echo $time "Multiple artwork on this file, removing all and adding art from TheTVDB" >> "$logfile"
 			${resource_path}/mp4art --keepgoing --remove --art-any "$1"
 			${resource_path}/mp4art --keepgoing --add ${resource_path}/coverart.jpg --art-index 0 "$1"
-		#if there already is cover-art, cool!
+		#if there already is cover-art, check to make sure it's a reasonable size. If it isn't, remove all art and add the art we pulled. Otherwise, cool!
 		elif (($last_covr_index==0))
 		then
-			time=$(date +%Y%m%d-%H%M%S); echo $time "Already art on this file, skipping adding art" >> "$logfile"
-			${resource_path}/mp4file --optimize "$1"
+			time=$(date +%Y%m%d-%H%M%S); echo $time "Already art on this file, checking to make sure it's a decent size." >> "$logfile"
+			art_size=$(${resource_path}/mp4art --list "$1" | grep 0 | awk {'print $2'})
+			if (($art_size>999))
+			then
+				time=$(date +%Y%m%d-%H%M%S); echo $time "We already have art and it's a reasonable size. Optimize." >> "$logfile"
+				${resource_path}/mp4file --optimize "$1"
+			else
+				time=$(date +%Y%m%d-%H%M%S); echo $time "The file already has a covr-box, but it's contents are too small to reasonably be art. Removing all covers and readding art." >> "$logfile"
+				${resource_path}/mp4art --keepgoing --remove --art-any "$1"
+				${resource_path}/mp4art --keepgoing --add ${resource_path}/coverart.jpg --art-index 0 "$1"
+			fi
 		else
 			time=$(date +%Y%m%d-%H%M%S); echo $time "Art parsing broken, the value for $last_cover index we got is:" $last_covr_index >> "$logfile" 
 			${resource_path}/mp4file --optimize "$1"
