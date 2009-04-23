@@ -532,13 +532,11 @@ on idle theObject
 				set x to the offset of "." in LogFile
 				set LogFile to (text (x + 1) thru -1 of LogFile)
 				set LogFile to (the reverse of every character of LogFile) as string
-				set LogFile to LogFile & ".txt'"
+				set LogFile to LogFile & ".txt"
 				
-				--do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time IDLE_LOOP from IsEncoding block: the LogFile variable is: " & LogFile & " >> " & BreakfastLongLog
 				-- Parse the last line of the LogFile to pull out the percentage done.
 				try
 					set donePercentage to (do shell script "tail -c 74 " & LogFile & " | sed 's/.*\\(.[0-9]\\.[0-9][0-9]\\)\\ \\%.*/\\1/' | sed 's/\\ \\([0-9]\\.[0-9][0-9]\\)/\\1/'") as number
-					--do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time IDLE_LOOP from IsEncoding block: the donePercentage variable is: " & donePercentage & " >> " & BreakfastLongLog
 				end try
 				
 				-- Parse the last line of the LogFile to pull out the time remaining.
