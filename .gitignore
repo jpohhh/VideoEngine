@@ -1,0 +1,15 @@
+# shamelessly copied from http://shanesbrain.net/2008/7/9/using-xcode-with-git
+# "Using Xcode with git"
+# thanks to Shane Vitarana
+
+# xcode noise
+build/*
+*.pbxuser
+*.mode1v3
+
+# old skool
+.svn
+
+# osx noise
+.DS_Store
+profile

@@ -1,0 +1,5 @@
+# shamelessly copied from http://shanesbrain.net/2008/7/9/using-xcode-with-git
+# "Using Xcode with git"
+# thanks to Shane Vitarana
+
+*.pbxproj -crlf -diff -merge
