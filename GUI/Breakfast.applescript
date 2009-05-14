@@ -536,12 +536,12 @@ on idle theObject
 				
 				-- Parse the last line of the LogFile to pull out the percentage done.
 				try
-					set donePercentage to (do shell script "tail -c 74 " & LogFile & " | sed 's/.*\\(.[0-9]\\.[0-9][0-9]\\)\\ \\%.*/\\1/' | sed 's/\\ \\([0-9]\\.[0-9][0-9]\\)/\\1/'") as number
+					set donePercentage to (do shell script "tail -c 74 " & the quoted form of LogFile & " | sed 's/.*\\(.[0-9]\\.[0-9][0-9]\\)\\ \\%.*/\\1/' | sed 's/\\ \\([0-9]\\.[0-9][0-9]\\)/\\1/'") as number
 				end try
 				
 				-- Parse the last line of the LogFile to pull out the time remaining.
 				try
-					set countdown to (do shell script "tail -c 74 " & LogFile & " | sed 's/.*\\([0-9][0-9]h[0-9][0-9]m[0-9][0-9]s\\).*/\\1/'") as string
+					set countdown to (do shell script "tail -c 74 " & the quoted form of LogFile & " | sed 's/.*\\([0-9][0-9]h[0-9][0-9]m[0-9][0-9]s\\).*/\\1/'") as string
 					-- Do some complicated checks to make sure we've got what we want.
 					-- (These are done because HandbrakeCLI's output is different before it calculates the time
 					-- remaining.)
