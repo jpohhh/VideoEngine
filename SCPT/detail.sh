@@ -256,7 +256,7 @@ do
 		time=$(date +%Y%m%d-%H%M%S); echo $time "8) PULLED TAGS Show name:"$cart "Episode number:"$episode "SeasonNumber:"$season "Episode name:"$cnam "Aired:"$cday "Description:"$desc "Stik:"$stik "tven:"$tven "tvnn:"$tvnn "cover_art_url:"$cover_art_url "hdvd":$hdvd "cnid:"$cnid >> "$logfile"	
 
 		#Tag using mp4
-		${resource_path}/mp4tags "$1" -I $cnid -H $hdvd -song "$cnam" -a "$cart" -y $cday -m "$desc" -l "$desc" -i tvshow -S "$cart" -M $episode -N $tvnn -n $season -o $tven 1>>"$logfile" 2>>"$logfile"
+		${resource_path}/mp4tags "$1" -I $cnid -H $hdvd -song "$cnam" -a "$cart" -y $cday -m "$desc" -l "$desc" -i tvshow -S "$cart" -t $episode -M $episode -N $tvnn -n $season -d $season -o $tven 1>>"$logfile" 2>>"$logfile"
 
 		#begin art logic
 		last_covr_index=$(${resource_path}/mp4art --list "$1" | tail -1 | awk '{print $1}')

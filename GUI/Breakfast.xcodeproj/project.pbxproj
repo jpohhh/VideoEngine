@@ -145,8 +145,8 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
-				19C28FACFE9D520D11CA2CBB /* Products */,
 				257572D5072881A4000BE9CA /* Info.plist */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
 			name = Breakfast;
 			sourceTree = "<group>";
