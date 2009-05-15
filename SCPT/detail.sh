@@ -31,6 +31,7 @@ do
 	shortlog=$HOME/Library/Logs/Breakfast.log
 	resource_path=$(defaults read com.Breakfast.engine ResourcePath)
 	trim_state=$(defaults read com.Breakfast.engine TrimFileState) #bool returned as integer
+	add_itunes=$(defaults read com.Breakfast.engine UsingItunes)
 	episode_date=$(echo 'no date')
 	tv_show=$(echo 'no show')
 	time=$(date +%Y%m%d-%H%M%S); echo $time "episode_date - RESULT: "$episode_date >> "$logfile"
@@ -298,8 +299,11 @@ do
 		fi
 		
 		# Call the applescript that will put all of this stuff into iTunes.
-		time=$(date +%Y%m%d-%H%M%S); echo $time "Calling addtoitunes.scpt..." >> "$logfile"
-		osascript ${resource_path}/Scripts/addtoitunes.scpt "$1" 2>> "$logfile"
+		if [ $add_itunes == 1 ]
+		then	
+			time=$(date +%Y%m%d-%H%M%S); echo $time "Calling addtoitunes.scpt..." >> "$logfile"
+			osascript ${resource_path}/Scripts/addtoitunes.scpt "$1" 2>> "$logfile"
+		fi
 	
 	time=$(date +%Y%m%d-%H%M%S); echo $time Tagged $cart-$season$episode to "$1" >> "$shortlog"
 	#go to next file

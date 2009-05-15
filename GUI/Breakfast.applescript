@@ -56,6 +56,8 @@ property TrimFileState : false
 property OldTrimFileState : false
 property UsingGUIState : true
 property OldUsingGUIState : true
+property UsingItunesState : true
+property OldUsingItunesState : true
 
 
 on will finish launching theObject
@@ -76,6 +78,7 @@ on will finish launching theObject
 			make new default entry at end of default entries with properties {name:"ResourcePath", contents:missing value}
 			make new default entry at end of default entries with properties {name:"TrimFileState", contents:"0"}
 			make new default entry at end of default entries with properties {name:"UsingGUI", contents:"true"}
+			make new default entry at end of default entries with properties {name:"UsingItunes", contents:"1"}
 		end tell
 		
 		(*This section sets up our local variables using the default list.*)
@@ -94,6 +97,8 @@ on will finish launching theObject
 			set OldEncodingOptions to EncodingOptions
 			set BreakfastShortLog to contents of default entry "BreakfastShortLog"
 			set BreakfastLongLog to contents of default entry "BreakfastLongLog"
+			set UsingItunesState to contents of default entry "UsingItunes"
+			set OldUsingItunesState to UsingItunesState
 		end tell
 	on error ErrorMessage number ErrorNumber
 		do shell script "time=$(date +%Y%m%d-%H%M%S); echo $time " & ErrorMessage & " >> " & BreakfastLongLog
@@ -132,6 +137,8 @@ on launched theObject
 			set OldTrimFileState to (state of button "TrimStateButton" of window "PrefWindow") as boolean
 			set state of button "UseGUIButton" of window "PrefWindow" to UsingGUIState
 			set OldUsingGUIState to (state of button "UseGUIButton" of window "PrefWindow") as boolean
+			set state of button "UseITunesButton" of window "PrefWindow" to UsingItunesState
+			set OldUsingItunesState to (state of button "UseItunesButton" of window "PrefWindow") as boolean
 		end if
 		
 	on error ErrorMessage number ErrorNumber
@@ -208,6 +215,19 @@ on clicked theObject
 	(*The event handler that is called whenever any button is clicked.*)
 	
 	(* Buttons for the Preferences Window *)
+	if name of theObject is "UseItunesButton" then
+		if (state of button "saveButton" of window "PrefWindow") = 1 then
+			set (state of button "saveButton" of window "PrefWindow") to 0
+			set (enabled of button "saveButton" of window "PrefWindow") to true
+		end if
+		set OldUsingItunesState to UsingItunesState
+		set UsingItunesState to (state of button "UseItunesButton" of window "PrefWindow") as boolean
+		tell user defaults
+			set contents of default entry "UsingItunes" to UsingItunesState
+		end tell
+		call method "synchronize" of object user defaults
+	end if
+	
 	if name of theObject is "trimStateButton" then
 		-- If the save button has been pressed, unpress it.
 		if (state of button "saveButton" of window "PrefWindow") = 1 then
